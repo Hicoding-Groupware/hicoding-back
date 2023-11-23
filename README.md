@@ -1,4 +1,4 @@
-![header](https://github.com/Hicoding-Groupware/hicoding-back/assets/138549261/965d3156-b909-4c7d-9588-e0a7c0cf6b5d)
+![header](https://github.com/Hicoding-Groupware/hicoding-back/assets/138549261/127669e1-d922-4c6e-bfad-828bac09a785)
 
 # ✋ Hicoding
 
