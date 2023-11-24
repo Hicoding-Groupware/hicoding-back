@@ -31,7 +31,7 @@ server:
 
   #jwt setting
 jwt:
-  secret: asdfjp298pafo1320efqw0udvnh0er0h412r08byfdq9dsvh02143908hfeqwn80fdqs0nfdqs0n412013rq0nqefn08dfas0das730732g86923
+  secret: 5I41XDKxTtm+5La5Vm/Q5GKhknRKYItGOajdiNzYPhMWOCHaD4HdVzpf2iDhe83kPb5G8kgbe+GLZKOaBj91PX5JUDQTBVLYwOlcCbU0vqrfST0XXzE6z8COxyKW+sF87p3jp1z/TUp+omB+y2xW1UqnBlvM3N96dG1qfdI+My9VDTVLWOL7a4d4rMY1Xha+b/tQvHD2z5UzblcIRJgmFoDEGt3F9z9BN4JaIw==
   access:
     expiration: 3600000
   refresh:
