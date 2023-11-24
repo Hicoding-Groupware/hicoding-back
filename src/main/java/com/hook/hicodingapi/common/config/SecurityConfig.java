@@ -39,6 +39,7 @@
 //    * 1. Token 값이 없거나 잘못 작성 된 경우
 //         GET http://localhost:8001/member/hello  로 token 없이 → 인증되지 않은 요청
 //      2. AccessToken 유효한 경우
+
 //        GET http://localhost:8001/member/hello 로 token 가지고 → 인증 되어 404
 //      3. AccessToken 유효하지 않고 RefreshToken 유효한 경우
 //        accessToken 시간 설정 짧게
