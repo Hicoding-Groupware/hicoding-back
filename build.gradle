@@ -46,4 +46,3 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-*.yml
