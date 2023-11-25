@@ -1,15 +1,11 @@
 package com.hook.hicodingapi.mylecture.domain;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import javax.persistence.*;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
-
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
