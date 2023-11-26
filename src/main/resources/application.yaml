@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/hicoding
+    username: hook
+    password: hook
+
+  # jpa config
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect:
+        MySQLDialect:
+
+  # file upload size
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
+
+# server port
+server:
+  port: 8282
+
+  #image file
+  image:
+    image-url: http://localhost:8001/productimgs/
+    image-dir: src/main/resources/static/productimgs
+
+  #jwt setting
+jwt:
+  secret: 5I41XDKxTtm+5La5Vm/Q5GKhknRKYItGOajdiNzYPhMWOCHaD4HdVzpf2iDhe83kPb5G8kgbe+GLZKOaBj91PX5JUDQTBVLYwOlcCbU0vqrfST0XXzE6z8COxyKW+sF87p3jp1z/TUp+omB+y2xW1UqnBlvM3N96dG1qfdI+My9VDTVLWOL7a4d4rMY1Xha+b/tQvHD2z5UzblcIRJgmFoDEGt3F9z9BN4JaIw==
+  access:
+    expiration: 3600000
+  refresh:
+    expiration: 604800000
