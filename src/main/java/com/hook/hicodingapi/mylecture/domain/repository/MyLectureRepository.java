@@ -13,6 +13,9 @@ public interface MyLectureRepository extends JpaRepository<Course, Long> {
 //    Page<Course> findByTeacherAndCosSdtBeforeAndCosEdtAfter(Pageable pageable, Long teacher, LocalDate cosSdt, LocalDate cosEdt);
 
 
-    /*2. 지난 강의 조회 - 페이징, 종강일이 이미 지난 날짜일 경우 조회 (강사) */
+    /* 2. 지난 강의 조회 - 페이징, 종강 일이 이미 지난 날짜일 경우 조회 (강사) */
     Page<Course> findByTeacherAndCosEdtBefore(Pageable pageable, Long teacher, LocalDate cosEdt);
+
+    /* 3. 예정 강의 조회 - 페이징, 개강 일이 아직 지나지 않은 날짜일 경우 조회 (강사) */
+    Page<Course> findByTeacherAndCosSdtAfter(Pageable pageable, Long teacher, LocalDate cosSdt);
 }

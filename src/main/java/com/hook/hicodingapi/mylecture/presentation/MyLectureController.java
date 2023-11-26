@@ -33,19 +33,35 @@ public class MyLectureController {
 //        return ResponseEntity.ok(pagingResponse);
 //    }
 
-    /*2. 지난 강의 조회 - 페이징, 종강일이 이미 지난 날짜일 경우 조회 (강사) */
+    /*2. 지난 강의 조회 - 페이징, 종강 일이 이미 지난 날짜일 경우 조회 (강사) */
     @GetMapping("/last_lecture")
-    public ResponseEntity<PagingResponse> getTeacherCourse(
+    public ResponseEntity<PagingResponse> getTeacherCourseCosEdt(
             @RequestParam(defaultValue = "1") final Integer page,
             @RequestParam final Long teacher
             ) {
         LocalDate currentDate = LocalDate.now();
 
-        final Page<TeacherCourseResponse> course = myLectureService.getTeacherCourse(page, teacher, currentDate);
+        final Page<TeacherCourseResponse> course = myLectureService.getTeacherCourseCosEdt(page, teacher, currentDate);
         final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(course);
         final PagingResponse pagingResponse = PagingResponse.of(course.getContent(), pagingButtonInfo);
 
         return ResponseEntity.ok(pagingResponse);
     }
+
+    /* 3. 예정 강의 조회 - 페이징, 개강 일이 아직 지나지 않은 날짜일 경우 조회 (강사) */
+    @GetMapping("/scheduled_lecture")
+    public ResponseEntity<PagingResponse> getTeacherCourseCosSdt(
+            @RequestParam(defaultValue = "1") final Integer page,
+            @RequestParam final Long teacher
+            ) {
+        LocalDate currentDate = LocalDate.now();
+
+        final Page<TeacherCourseResponse> course = myLectureService.getTeacherCourseCosSdt(page, teacher, currentDate);
+        final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(course);
+        final PagingResponse pagingResponse = PagingResponse.of(course.getContent(), pagingButtonInfo);
+
+        return ResponseEntity.ok(pagingResponse);
+    }
+
 
 }

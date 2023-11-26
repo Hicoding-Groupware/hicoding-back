@@ -13,11 +13,11 @@ import static lombok.AccessLevel.PROTECTED;
 @Table(name = "tbl_course")
 @NoArgsConstructor(access = PROTECTED)
 @Getter
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(AuditingEntityListener.class) // 엔터티에 대한 변경 사항을 추적하고 기록, 생성일자, 수정일자 자동으로 관리할 때 유용
 public class Course {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+//    @GeneratedValue(strategy = IDENTITY)  데이터 베이스 자동 증가 컬럼 활용
     private Long cosCode;
 
     @Column(nullable = false)
@@ -25,6 +25,11 @@ public class Course {
 
     @Column(nullable = false)
     private Long teacher;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "memberNo")
+    @JoinColumn(name = "teacher", insertable = false, updatable = false)
+    private Member member;
 
     @Column(nullable = false)
     private LocalTime claSt;
