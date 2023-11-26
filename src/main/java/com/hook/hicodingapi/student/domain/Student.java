@@ -89,4 +89,17 @@ public class Student {
                 stdMemo
         );
     }
+
+    public void update(String stdName, String stdGender, Date stdBirth, String stdPhone,
+                       String stdEmail, String postNo, String address, String detailAddress, String stdMemo) {
+        this.stdName = stdName;
+        this.stdGender = stdGender;
+        this.stdBirth = stdBirth;
+        this.stdPhone = stdPhone;
+        this.stdEmail = stdEmail;
+        this.postNo = postNo;
+        this.address = address;
+        this.detailAddress = detailAddress;
+        this.stdMemo = stdMemo;
+    }
 }
