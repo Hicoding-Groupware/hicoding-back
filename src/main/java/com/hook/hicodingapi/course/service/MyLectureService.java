@@ -1,8 +1,8 @@
-package com.hook.hicodingapi.mylecture.service;
+package com.hook.hicodingapi.course.service;
 
-import com.hook.hicodingapi.mylecture.domain.Course;
-import com.hook.hicodingapi.mylecture.domain.repository.MyLectureRepository;
-import com.hook.hicodingapi.mylecture.dto.resposne.TeacherCourseResponse;
+import com.hook.hicodingapi.course.domain.Course;
+import com.hook.hicodingapi.course.domain.repository.MyLectureRepository;
+import com.hook.hicodingapi.course.dto.resposne.TeacherCourseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,9 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Pageable;
-
 import java.time.LocalDate;
-import java.util.Date;
 
 
 @Service
