@@ -10,8 +10,6 @@ public enum ExceptionCode {
 
     NOT_FOUND_STD_CODE(5000, "학생코드에 해당하는 해당 학생이 존재하지 않습니다."),
 
-
-
     NOT_FOUND_COURSE_CODE(5001, "수강코드에 해당하는 해당 강좌가 존재하지 않습니다."),
 
     NOT_FOUND_RECORD_CODE(5002, "수강이력이 존재하지 않습니다."),
