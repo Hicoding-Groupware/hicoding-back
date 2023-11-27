@@ -1,5 +1,6 @@
 package com.hook.hicodingapi.student.presentation;
 
+import com.hook.hicodingapi.record.dto.request.StudentCosRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
 import com.hook.hicodingapi.student.service.StudentService;
@@ -35,4 +36,6 @@ public class StudentController {
 
         return ResponseEntity.created(URI.create("/students/" + stdCode)).build();
     }
+
+
 }

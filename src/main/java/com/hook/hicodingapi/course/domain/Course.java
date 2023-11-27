@@ -3,6 +3,8 @@ package com.hook.hicodingapi.course.domain;
 import com.hook.hicodingapi.member.domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -65,9 +67,11 @@ public class Course {
     @Column(nullable = false)
     private String timeStatus;
 
+    @CreatedDate
     @Column
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
     @Column
     private LocalDateTime modifiedAt;
 
@@ -79,8 +83,13 @@ public class Course {
 
 
 
+    public void updateCurCnt(Long curCnt) {
 
+        this.curCnt += 1;
+    }
 
+    public void downCurcnt(Long curCnt) {
 
-
+        this.curCnt -= 1;
+    }
 }
