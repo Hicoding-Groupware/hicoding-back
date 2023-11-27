@@ -13,8 +13,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-
 import static com.hook.hicodingapi.course.domain.type.CourseStatusType.AVAILABLE;
 import static javax.persistence.EnumType.STRING;
 import static lombok.AccessLevel.PROTECTED;
@@ -41,6 +39,9 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "roomCode")
     private Classroom classroom;
+
+    @Column(nullable = false)
+    private Long lecCode;
 
     @Column(nullable = false)
     private String cosName;
