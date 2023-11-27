@@ -78,8 +78,13 @@ public class Course {
 
 
 
+    public void updateCurCnt(Long curCnt) {
 
+        this.curCnt += 1;
+    }
 
+    public void downCurcnt(Long curCnt) {
 
-
+        this.curCnt -= 1;
+    }
 }
