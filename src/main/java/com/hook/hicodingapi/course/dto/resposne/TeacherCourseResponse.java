@@ -15,28 +15,31 @@ import static lombok.AccessLevel.PRIVATE;
 public class TeacherCourseResponse {
 
     private final Long cosCode;
-    private final String cosName;
-    private final Long teacher;
-    private final String memberName;
-    private final LocalTime claSt;
-    private final LocalTime clsEt;
-    private final String dayStatus;
-    private final Long curCnt;
     private final LocalDate cosSdt;
     private final LocalDate cosEdt;
+    private final LocalTime claSt;
+    private final LocalTime clsEt;
+    private final String cosName;
+    private final Long curCnt;
+    private final Long teacher;
+//    private final Long memberNo;
+    private final String memberName;
+    private final String dayStatus;
+
+
 
     public static TeacherCourseResponse from(Course course) {
         return new TeacherCourseResponse(
                 course.getCosCode(),
-                course.getCosName(),
-                course.getTeacher(),
-                course.getMember().getMemberName(),
+                course.getCosSdt(),
+                course.getCosEdt(),
                 course.getClaSt(),
                 course.getClaEt(),
-                course.getDayStatus(),
+                course.getCosName(),
                 course.getCurCnt(),
-                course.getCosSdt(),
-                course.getCosEdt()
+                course.getMember().getMemberNo(),
+                course.getMember().getMemberName(),
+                course.getDayStatus()
         );
     }
 }

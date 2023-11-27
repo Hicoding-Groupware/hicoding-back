@@ -34,11 +34,11 @@ public class MyLectureController {
     @GetMapping("/last_lecture")
     public ResponseEntity<PagingResponse> getTeacherCourseCosEdt(
             @RequestParam(defaultValue = "1") final Integer page,
-            @RequestParam final Long teacher
+            @RequestParam final Long memberNo
             ) {
         LocalDate currentDate = LocalDate.now();
 
-        final Page<TeacherCourseResponse> course = myLectureService.getTeacherCourseCosEdt(page, teacher, currentDate);
+        final Page<TeacherCourseResponse> course = myLectureService.getTeacherCourseCosEdt(page, memberNo, currentDate);
         final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(course);
         final PagingResponse pagingResponse = PagingResponse.of(course.getContent(), pagingButtonInfo);
 
@@ -49,11 +49,11 @@ public class MyLectureController {
     @GetMapping("/scheduled_lecture")
     public ResponseEntity<PagingResponse> getTeacherCourseCosSdt(
             @RequestParam(defaultValue = "1") final Integer page,
-            @RequestParam final Long teacher
+            @RequestParam final Long memberNo
             ) {
         LocalDate currentDate = LocalDate.now();
 
-        final Page<TeacherCourseResponse> course = myLectureService.getTeacherCourseCosSdt(page, teacher, currentDate);
+        final Page<TeacherCourseResponse> course = myLectureService.getTeacherCourseCosSdt(page, memberNo, currentDate);
         final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(course);
         final PagingResponse pagingResponse = PagingResponse.of(course.getContent(), pagingButtonInfo);
 
