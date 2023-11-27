@@ -41,6 +41,9 @@ public class Course {
     private Classroom classroom;
 
     @Column(nullable = false)
+    private Long lecCode;
+
+    @Column(nullable = false)
     private String cosName;
 
     @Column(nullable = false)
