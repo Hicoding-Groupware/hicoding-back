@@ -1,7 +1,6 @@
 package com.hook.hicodingapi.record.presentation;
 
 import com.hook.hicodingapi.record.dto.request.StudentCosRegistRequest;
-import com.hook.hicodingapi.record.dto.request.RecordUpdateRequest;
 import com.hook.hicodingapi.record.service.RecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,10 +1,15 @@
 package com.hook.hicodingapi.student.presentation;
 
+import com.hook.hicodingapi.common.paging.Pagenation;
+import com.hook.hicodingapi.common.paging.PagingButtonInfo;
+import com.hook.hicodingapi.common.paging.PagingResponse;
 import com.hook.hicodingapi.record.dto.request.StudentCosRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
+import com.hook.hicodingapi.student.dto.response.StudentsResponse;
 import com.hook.hicodingapi.student.service.StudentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,5 +42,15 @@ public class StudentController {
         return ResponseEntity.created(URI.create("/students/" + stdCode)).build();
     }
 
+    /* 수강생 목록 조회 */
+    @GetMapping("/students")
+    public ResponseEntity<PagingResponse> getStudents(@RequestParam(defaultValue = "1") final Integer page
+                                                     ) {
 
+        final Page<StudentsResponse> students = studentService.getStudents(page);
+        final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(students);
+        final PagingResponse pagingResponse = PagingResponse.of(students.getContent(), pagingButtonInfo);
+
+        return ResponseEntity.ok(pagingResponse);
+    }
 }
