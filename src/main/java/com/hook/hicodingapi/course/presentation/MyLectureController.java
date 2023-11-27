@@ -20,15 +20,19 @@ public class MyLectureController {
     private final MyLectureService myLectureService;
 
     /* 1. 진행 중인 강의 조회 - 페이징, 개강일 ~ 종강일 사이의 날짜 포함하여 조회 (강사) */
-//    @GetMapping("/in-progress")
-//    public ResponseEntity<PagingResponse> getTeacherCourse(@RequestParam(defaultValue = "1") final Integer page, Long teacher, LocalDate cosStd, LocalDate cosEtd) {
-//
-//        final Page<TeacherCourseResponse> courses  = myLectureService.getTeacherCourses(page, teacher, cosStd, cosEtd);
-//        final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(courses);
-//        final PagingResponse pagingResponse = PagingResponse.of(courses.getContent(), pagingButtonInfo);
-//
-//        return ResponseEntity.ok(pagingResponse);
-//    }
+    @GetMapping("/in_progress")
+    public ResponseEntity<PagingResponse> getTeacherCourse(
+            @RequestParam(defaultValue = "1") final Integer page,
+            @RequestParam final Long memberNo
+            ) {
+        LocalDate currentDate = LocalDate.now();
+
+        final Page<TeacherCourseResponse> courses  = myLectureService.getTeacherCourseCosSdtAndCosEdt(page, memberNo, currentDate, currentDate);
+        final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(courses);
+        final PagingResponse pagingResponse = PagingResponse.of(courses.getContent(), pagingButtonInfo);
+
+        return ResponseEntity.ok(pagingResponse);
+    }
 
     /*2. 지난 강의 조회 - 페이징, 종강 일이 이미 지난 날짜일 경우 조회 (강사) */
     @GetMapping("/last_lecture")
