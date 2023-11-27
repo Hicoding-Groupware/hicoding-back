@@ -39,18 +39,18 @@ public class MyLectureService {
 
     /* 2. 지난 강의 조회 - 페이징, 종강일이 이미 지난 날짜일 경우 조회 (강사) */
     @Transactional(readOnly = true)
-    public Page<TeacherCourseResponse> getTeacherCourseCosEdt(final Integer page, final Long teacher, LocalDate cosEdt) {
+    public Page<TeacherCourseResponse> getTeacherCourseCosEdt(final Integer page, final Long memberNo, LocalDate cosEdt) {
 
-        Page<Course> courses = myLectureRepository.findByTeacherAndCosEdtBefore(getPageable(page), teacher, cosEdt);
+        Page<Course> courses = myLectureRepository.findByMemberMemberNoAndCosEdtBefore(getPageable(page), memberNo, cosEdt);
 
         return courses.map(course -> TeacherCourseResponse.from(course));
     }
 
     /* 3. 예정 강의 조회 - 페이징, 개강 일이 아직 지나지 않은 날짜일 경우 조회 (강사) */
     @Transactional(readOnly = true)
-    public Page<TeacherCourseResponse> getTeacherCourseCosSdt(final Integer page, final Long teacher, LocalDate cosSdt) {
+    public Page<TeacherCourseResponse> getTeacherCourseCosSdt(final Integer page, final Long memberNo, LocalDate cosSdt) {
 
-        Page<Course> courses = myLectureRepository.findByTeacherAndCosSdtAfter(getPageable(page), teacher, cosSdt);
+        Page<Course> courses = myLectureRepository.findByMemberMemberNoAndCosSdtAfter(getPageable(page), memberNo, cosSdt);
 
         return courses.map(course -> TeacherCourseResponse.from(course));
     }

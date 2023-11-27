@@ -48,6 +48,10 @@ public class Course {
     @Column(nullable = false)
     private Long curCnt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacher")
+    private Member member;
+
     @Column(nullable = false)
     private Long staff;
 
@@ -71,10 +75,7 @@ public class Course {
     @Column(nullable = false)
     private CourseStatusType status = AVAILABLE;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "memberNo")
-    @JoinColumn(name = "teacher", insertable = false, updatable = false)
-    private Member member;
+
 
 
 
