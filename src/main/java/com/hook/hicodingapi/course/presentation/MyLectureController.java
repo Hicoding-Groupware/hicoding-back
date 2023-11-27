@@ -19,7 +19,7 @@ public class MyLectureController {
 
     private final MyLectureService myLectureService;
 
-    /* 1. 진행 중인 강의 조회 - 페이징, 개강일 ~ 종강일 사이의 날짜 포함하여 조회 (강사) */
+    /* 1. 진행 중인 강의 조회 - 페이징, 개강일d ~ 종강일 사이의 날짜 포함하여 조회 (강사) */
 //    @GetMapping("/in-progress")
 //    public ResponseEntity<PagingResponse> getTeacherCourse(@RequestParam(defaultValue = "1") final Integer page, Long teacher, LocalDate cosStd, LocalDate cosEtd) {
 //
