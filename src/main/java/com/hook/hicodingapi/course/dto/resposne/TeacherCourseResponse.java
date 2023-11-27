@@ -1,6 +1,7 @@
-package com.hook.hicodingapi.mylecture.dto.resposne;
+package com.hook.hicodingapi.course.dto.resposne;
 
-import com.hook.hicodingapi.mylecture.domain.Course;
+
+import com.hook.hicodingapi.course.domain.Course;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

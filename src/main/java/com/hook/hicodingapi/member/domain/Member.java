@@ -1,4 +1,4 @@
-package com.hook.hicodingapi.mylecture.domain;
+package com.hook.hicodingapi.member.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

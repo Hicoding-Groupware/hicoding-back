@@ -1,10 +1,12 @@
-package com.hook.hicodingapi.mylecture.domain.repository;
+package com.hook.hicodingapi.course.domain.repository;
 
-import com.hook.hicodingapi.mylecture.domain.Course;
-import org.springframework.data.domain.Page;
-import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.time.LocalDate;
+
+import com.hook.hicodingapi.course.domain.Course;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface MyLectureRepository extends JpaRepository<Course, Long> {
