@@ -3,6 +3,8 @@ package com.hook.hicodingapi.course.domain;
 import com.hook.hicodingapi.member.domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -18,7 +20,6 @@ import static lombok.AccessLevel.PROTECTED;
 public class Course {
 
     @Id
-//    @GeneratedValue(strategy = IDENTITY)  데이터 베이스 자동 증가 컬럼 활용
     private Long cosCode;
 
     @Column(nullable = false)
@@ -52,10 +53,6 @@ public class Course {
     @JoinColumn(name = "teacher")
     private Member member;
 
-   // @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "teacher", insertable = false, updatable = false)
-   // private Member member;
-
     @Column(nullable = false)
     private Long staff;
 
@@ -65,22 +62,15 @@ public class Course {
     @Column(nullable = false)
     private String timeStatus;
 
+    @CreatedDate
     @Column
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
     @Column
     private LocalDateTime modifiedAt;
 
     @Column(nullable = false)
-    private Long registStaff;
-
-    @Column(nullable = false)
     private String Status;
-
-
-
-
-
-
 
 }
