@@ -2,6 +2,7 @@ package com.hook.hicodingapi.course.dto.resposne;
 
 
 import com.hook.hicodingapi.course.domain.Course;
+import com.hook.hicodingapi.course.domain.type.DayStatusType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -18,9 +19,7 @@ public class TeacherCourseResponse {
     private final String cosName;
     private final Long teacher;
     private final String memberName;
-    private final LocalTime claSt;
-    private final LocalTime clsEt;
-    private final String dayStatus;
+    private final DayStatusType dayStatus;
     private final Long curCnt;
     private final LocalDate cosSdt;
     private final LocalDate cosEdt;
@@ -29,10 +28,8 @@ public class TeacherCourseResponse {
         return new TeacherCourseResponse(
                 course.getCosCode(),
                 course.getCosName(),
-                course.getTeacher(),
+                course.getMember().getMemberNo(),
                 course.getMember().getMemberName(),
-                course.getClaSt(),
-                course.getClaEt(),
                 course.getDayStatus(),
                 course.getCurCnt(),
                 course.getCosSdt(),
