@@ -3,12 +3,10 @@ package com.hook.hicodingapi.mylecture.presentation;
 import com.hook.hicodingapi.common.paging.Pagenation;
 import com.hook.hicodingapi.common.paging.PagingButtonInfo;
 import com.hook.hicodingapi.common.paging.PagingResponse;
-import com.hook.hicodingapi.mylecture.dto.response.TeacherCourseResponse;
+import com.hook.hicodingapi.mylecture.dto.resposne.TeacherCourseResponse;
 import com.hook.hicodingapi.mylecture.service.MyLectureService;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.asm.Advice;
 import org.springframework.data.domain.Page;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

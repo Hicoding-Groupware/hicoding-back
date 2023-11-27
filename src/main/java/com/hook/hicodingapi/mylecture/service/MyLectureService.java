@@ -2,7 +2,7 @@ package com.hook.hicodingapi.mylecture.service;
 
 import com.hook.hicodingapi.mylecture.domain.Course;
 import com.hook.hicodingapi.mylecture.domain.repository.MyLectureRepository;
-import com.hook.hicodingapi.mylecture.dto.response.TeacherCourseResponse;
+import com.hook.hicodingapi.mylecture.dto.resposne.TeacherCourseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
