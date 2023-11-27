@@ -22,7 +22,7 @@ public class LectureService {
 
     private Pageable getPageable(final Integer page){
 
-        return PageRequest.of(page-1, 10, Sort.by("lecCode"));
+        return PageRequest.of(page-1,  10, Sort.by("lecCode"));
     }
 
     @Transactional(readOnly = true)
