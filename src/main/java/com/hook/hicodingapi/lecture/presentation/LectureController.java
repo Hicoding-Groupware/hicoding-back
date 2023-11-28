@@ -22,7 +22,7 @@ public class LectureController {
 
     private final LectureService lectureService;
 
-    @GetMapping("/lectures") //전체 강의 조회
+    @GetMapping("/lectures") //전체 강의 조회(강사)
     public ResponseEntity<PagingResponse> getTeacherLectures(@RequestParam(defaultValue = "1") Integer page){
 
         final Page<TeacherLecturesResponse> lectures = lectureService.getTeacherLectures(page);

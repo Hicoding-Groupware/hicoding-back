@@ -32,7 +32,7 @@ public class MyLectureService {
 
 
         Page<Course> courses = myLectureRepository
-                .findByMemberMemberNoAndCosSdtBeforeAndCosEdtAfter(
+                .findByTeacherMemberNoAndCosSdtBeforeAndCosEdtAfter(
                 getPageable(page), memberNo, cosStd.minusDays(1), cosEtd.plusDays(1));
 
         return courses.map(course -> TeacherCourseResponse.from(course));
@@ -43,7 +43,7 @@ public class MyLectureService {
     @Transactional(readOnly = true)
     public Page<TeacherCourseResponse> getTeacherCourseCosEdt(final Integer page, final Long memberNo, LocalDate cosEdt) {
 
-        Page<Course> courses = myLectureRepository.findByMemberMemberNoAndCosEdtBefore(getPageable(page), memberNo, cosEdt);
+        Page<Course> courses = myLectureRepository.findByTeacherMemberNoAndCosEdtBefore(getPageable(page), memberNo, cosEdt);
 
         return courses.map(course -> TeacherCourseResponse.from(course));
     }
@@ -53,7 +53,7 @@ public class MyLectureService {
     @Transactional(readOnly = true)
     public Page<TeacherCourseResponse> getTeacherCourseCosSdt(final Integer page, final Long memberNo, LocalDate cosSdt) {
 
-        Page<Course> courses = myLectureRepository.findByMemberMemberNoAndCosSdtAfter(getPageable(page), memberNo, cosSdt);
+        Page<Course> courses = myLectureRepository.findByTeacherMemberNoAndCosSdtAfter(getPageable(page), memberNo, cosSdt);
 
         return courses.map(course -> TeacherCourseResponse.from(course));
     }
