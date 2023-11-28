@@ -1,7 +1,11 @@
 package com.hook.hicodingapi.student.dto.response;
 
+import com.hook.hicodingapi.course.domain.Course;
+import com.hook.hicodingapi.record.domain.Record;
+import com.hook.hicodingapi.student.domain.Student;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import java.util.Date;
 
@@ -19,4 +23,7 @@ public class StudentsRecordResponse {
     private final Date cosEdt;
     private final String stdPhone;
     private final Date registedDate;
+
+
+
 }

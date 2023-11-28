@@ -54,10 +54,10 @@ public class Course {
     private LocalDate cosEdt;
 
     @Column(nullable = false)
-    private Long capacity;
+    private int capacity;
 
     @Column(nullable = false)
-    private Long curCnt;
+    private int curCnt;
 
     @Enumerated(value = STRING)
     @Column(nullable = false)
@@ -80,12 +80,12 @@ public class Course {
     private LocalDateTime modifiedAt;
 
 
-    public void updateCurCnt(Long curCnt) {
+    public void updateCurCnt(int curCnt) {
 
         this.curCnt += 1;
     }
 
-    public void downCurcnt(Long curCnt) {
+    public void downCurcnt(int curCnt) {
 
         this.curCnt -= 1;
     }

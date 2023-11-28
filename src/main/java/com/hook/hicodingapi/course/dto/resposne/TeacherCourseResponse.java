@@ -17,7 +17,7 @@ public class TeacherCourseResponse {
     private final LocalDate cosSdt;
     private final LocalDate cosEdt;
     private final String cosName;
-    private final Long curCnt;
+    private final int curCnt;
     private final Long memberNo;
     private final String memberName;
     private final DayStatusType dayStatus;

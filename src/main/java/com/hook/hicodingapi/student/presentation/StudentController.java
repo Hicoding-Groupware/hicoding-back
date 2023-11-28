@@ -3,6 +3,7 @@ package com.hook.hicodingapi.student.presentation;
 import com.hook.hicodingapi.common.paging.Pagenation;
 import com.hook.hicodingapi.common.paging.PagingButtonInfo;
 import com.hook.hicodingapi.common.paging.PagingResponse;
+import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
 import com.hook.hicodingapi.student.dto.response.StudentsRecordResponse;
@@ -58,7 +59,9 @@ public class StudentController {
     @GetMapping("/studentsRecord")
     public ResponseEntity<PagingResponse> getStudentsRecord(@RequestParam(defaultValue = "1") final Integer page) {
 
-        final Page<StudentsRecordResponse> studentsRecord = studentService.getStudentsRecord(page);
-        return null;
+        final Page<StudentRepository.StudentRecordSearch> studentsRecord = studentService.getStudentsRecord(page);
+        final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(studentsRecord);
+        final PagingResponse pagingResponse = PagingResponse.of(studentsRecord.getContent(), pagingButtonInfo);
+        return ResponseEntity.ok(pagingResponse);
     }
 }
