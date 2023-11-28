@@ -14,11 +14,11 @@ import org.springframework.data.repository.query.Param;
 public interface MyLectureRepository extends JpaRepository<Course, Long> {
 
     /* 1. 진행 중인 강의 조회 - 페이징, 개강일 ~ 종강일 사이의 날짜 포함 하여 조회 (강사) */
-    Page<Course> findByMemberMemberNoAndCosSdtBeforeAndCosEdtAfter(Pageable pageable, Long memberNo, LocalDate cosSdt, LocalDate cosEdt);
+    Page<Course> findByTeacherMemberNoAndCosSdtBeforeAndCosEdtAfter(Pageable pageable, Long memberNo, LocalDate cosSdt, LocalDate cosEdt);
 
     /* 2. 지난 강의 조회 - 페이징, 종강 일이 이미 지난 날짜일 경우 조회 (강사) */
-    Page<Course> findByMemberMemberNoAndCosEdtBefore(Pageable pageable, Long memberNo, LocalDate cosEdt);
+    Page<Course> findByTeacherMemberNoAndCosEdtBefore(Pageable pageable, Long memberNo, LocalDate cosEdt);
 
     /* 3. 예정 강의 조회 - 페이징, 개강 일이 아직 지나지 않은 날짜일 경우 조회 (강사) */
-    Page<Course> findByMemberMemberNoAndCosSdtAfter(Pageable pageable, Long memberNo, LocalDate cosSdt);
+    Page<Course> findByTeacherMemberNoAndCosSdtAfter(Pageable pageable, Long memberNo, LocalDate cosSdt);
 }

@@ -3,6 +3,7 @@ package com.hook.hicodingapi.course.dto.resposne;
 
 import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.course.domain.type.DayStatusType;
+import com.hook.hicodingapi.member.domain.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import java.time.LocalDate;
@@ -17,7 +18,7 @@ public class TeacherCourseResponse {
     private final LocalDate cosEdt;
     private final String cosName;
     private final Long curCnt;
-    private final Long teacher;
+    private final Long memberNo;
     private final String memberName;
     private final DayStatusType dayStatus;
 
