@@ -28,8 +28,8 @@ public class TeacherCourseResponse {
                 course.getCosEdt(),
                 course.getCosName(),
                 course.getCurCnt(),
-                course.getMember().getMemberNo(),
-                course.getMember().getMemberName(),
+                course.getTeacher().getMemberNo(),
+                course.getTeacher().getMemberName(),
                 course.getDayStatus()
         );
     }
