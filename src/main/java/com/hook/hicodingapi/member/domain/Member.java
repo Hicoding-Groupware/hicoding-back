@@ -32,7 +32,7 @@ public class Member {
     @NotNull
     private String memberPwd;
 
-    @NotNull(message = "이름은 반드시 입력 되어야 합니다.")
+    @NotNull(message = "이름은 반드시 입력되어야 합니다.")
     private String memberName;
 
     private String memberGender;
