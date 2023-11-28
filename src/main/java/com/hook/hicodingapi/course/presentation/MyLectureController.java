@@ -14,13 +14,13 @@ import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/my_lecture")
+@RequestMapping("/hc-app/v1/myLecture")
 public class MyLectureController {
 
     private final MyLectureService myLectureService;
 
     /* 1. 진행 중인 강의 조회 - 페이징, 개강일 ~ 종강일 사이의 날짜 포함하여 조회 (강사) */
-    @GetMapping("/in_progress")
+    @GetMapping("/inProgress")
     public ResponseEntity<PagingResponse> getTeacherCourse(
             @RequestParam(defaultValue = "1") final Integer page,
             @RequestParam final Long memberNo
@@ -35,7 +35,7 @@ public class MyLectureController {
     }
 
     /*2. 지난 강의 조회 - 페이징, 종강 일이 이미 지난 날짜일 경우 조회 (강사) */
-    @GetMapping("/last_lecture")
+    @GetMapping("/lastLecture")
     public ResponseEntity<PagingResponse> getTeacherCourseCosEdt(
             @RequestParam(defaultValue = "1") final Integer page,
             @RequestParam final Long memberNo
@@ -50,7 +50,7 @@ public class MyLectureController {
     }
 
     /* 3. 예정 강의 조회 - 페이징, 개강 일이 아직 지나지 않은 날짜일 경우 조회 (강사) */
-    @GetMapping("/scheduled_lecture")
+    @GetMapping("/scheduledLecture")
     public ResponseEntity<PagingResponse> getTeacherCourseCosSdt(
             @RequestParam(defaultValue = "1") final Integer page,
             @RequestParam final Long memberNo

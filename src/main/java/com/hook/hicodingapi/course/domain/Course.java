@@ -4,6 +4,7 @@ import com.hook.hicodingapi.classroom.Classroom;
 import com.hook.hicodingapi.course.domain.type.CourseStatusType;
 import com.hook.hicodingapi.course.domain.type.DayStatusType;
 import com.hook.hicodingapi.course.domain.type.TimeStatusType;
+import com.hook.hicodingapi.lecture.domain.Lecture;
 import com.hook.hicodingapi.member.domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,8 +41,12 @@ public class Course {
     @JoinColumn(name = "roomCode")
     private Classroom classroom;
 
-    @Column(nullable = false)
-    private Long lecCode;
+//    @Column(nullable = false)
+//    private Long lecCode;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lecCode")
+    private Lecture lecCode;
 
     @Column(nullable = false)
     private String cosName;
@@ -51,10 +56,14 @@ public class Course {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher")
-    private Member member;
+    private Member teacher;
 
-    @Column(nullable = false)
-    private Long staff;
+//    @Column(nullable = false)
+//    private Long staff;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "staff")
+    private Member staff;
 
     @Enumerated(value = STRING)
     @Column(nullable = false)
@@ -76,10 +85,16 @@ public class Course {
     @Column(nullable = false)
     private CourseStatusType status = AVAILABLE;
 
+    public void updateCurCnt(Long curCnt) {
 
+        this.curCnt += 1;
+    }
 
+    public void downCurcnt(Long curCnt) {
 
-
-
-
+        this.curCnt -= 1;
+    }
 }
+
+
+
