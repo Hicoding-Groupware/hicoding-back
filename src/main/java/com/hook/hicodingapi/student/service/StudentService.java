@@ -5,6 +5,7 @@ import com.hook.hicodingapi.student.domain.Student;
 import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
+import com.hook.hicodingapi.student.dto.response.StudentsRecordResponse;
 import com.hook.hicodingapi.student.dto.response.StudentsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -71,5 +72,12 @@ public class StudentService {
         Page<Student> students = studentRepository.findAll(getPageable(page));
 
         return students.map(student -> StudentsResponse.from(student));
+    }
+
+    public Page<StudentsRecordResponse> getStudentsRecord(Integer page) {
+
+        Page<Student> studentsRecord = studentRepository.searchAll(getPageable(page));
+
+        return null;
     }
 }
