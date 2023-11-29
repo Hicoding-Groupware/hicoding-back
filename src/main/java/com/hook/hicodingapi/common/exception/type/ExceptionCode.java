@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 public enum ExceptionCode {
     NOT_FOUND_LEC_CODE(4000,"강의코드에 해당하는 강의가 존재하지 않습니다."),
 
-    NOT_FOUND_MEMBER_CODE(4001,"직원코드에 해당하는 직원이 존재하지 않습니다."),
+    NOT_FOUND_COS_CODE(4001,"과정코드에 해당하는 과정이 존재하지 않습니다."),
+
+    NOT_FOUND_MEMBER_CODE(4002,"직원코드에 해당하는 직원이 존재하지 않습니다."),
 
     NOT_FOUND_ROOM_CODE(4003,"강의실코드에 해당하는 강의실이 존재하지 않습니다."),
 

@@ -113,11 +113,25 @@ public class Course {
                 capacity,
                 dayStatus,
                 timeStatus
-
         );
-
     }
 
+    public void update(String cosName, Lecture lecture, Member teacher, Member staff, Classroom classroom,
+                       LocalDate cosSdt, LocalDate cosEdt, int capacity, int curCnt, DayStatusType dayStatus,
+                       TimeStatusType timeStatus, CourseStatusType status) {
+        this.cosName = cosName;
+        this.lecCode = lecture;
+        this.teacher = teacher;
+        this.staff = staff;
+        this.classroom = classroom;
+        this.cosSdt = cosSdt;
+        this.cosEdt = cosEdt;
+        this.capacity = capacity;
+        this.curCnt = curCnt;
+        this.dayStatus = dayStatus;
+        this.timeStatus = timeStatus;
+        this.status = status;
+    }
 
     public void updateCurCnt(int curCnt) {
 
@@ -128,4 +142,5 @@ public class Course {
 
         this.curCnt -= 1;
     }
+
 }
