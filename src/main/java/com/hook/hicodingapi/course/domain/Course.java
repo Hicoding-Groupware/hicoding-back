@@ -29,41 +29,35 @@ public class Course {
     private Long cosCode;
 
     @Column(nullable = false)
+    private String cosName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lecCode")
+    private Lecture lecCode;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacher")
+    private Member teacher;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "staff")
+    private Member staff;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "roomCode")
+    private Classroom classroom;
+
+    @Column(nullable = false)
     private LocalDate cosSdt;
 
     @Column(nullable = false)
     private LocalDate cosEdt;
 
     @Column(nullable = false)
-    private Long capacity;
-
-    @ManyToOne
-    @JoinColumn(name = "roomCode")
-    private Classroom classroom;
-
-//    @Column(nullable = false)
-//    private Long lecCode;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lecCode")
-    private Lecture lecCode;
+    private int capacity;
 
     @Column(nullable = false)
-    private String cosName;
-
-    @Column(nullable = false)
-    private Long curCnt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "teacher")
-    private Member teacher;
-
-//    @Column(nullable = false)
-//    private Long staff;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "staff")
-    private Member staff;
+    private int curCnt;
 
     @Enumerated(value = STRING)
     @Column(nullable = false)
@@ -73,6 +67,10 @@ public class Course {
     @Column(nullable = false)
     private TimeStatusType timeStatus;
 
+    @Enumerated(value = STRING)
+    @Column(nullable = false)
+    private CourseStatusType status = AVAILABLE;
+
     @CreatedDate
     @Column
     private LocalDateTime createdAt;
@@ -81,9 +79,6 @@ public class Course {
     @Column
     private LocalDateTime modifiedAt;
 
-    @Enumerated(value = STRING)
-    @Column(nullable = false)
-    private CourseStatusType status = AVAILABLE;
 
     public void updateCurCnt(Long curCnt) {
 
@@ -95,6 +90,3 @@ public class Course {
         this.curCnt -= 1;
     }
 }
-
-
-
