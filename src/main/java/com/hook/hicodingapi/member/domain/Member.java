@@ -1,5 +1,6 @@
 package com.hook.hicodingapi.member.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.domain.type.MemberStatus;
 import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
@@ -46,7 +47,7 @@ public class Member {
     private String memberPhone;
     private String memberEmail;
     private String memberProfile;
-    private String post_no;
+    private String postNo;
     private String address;
     private String detailAddress;
 
@@ -116,7 +117,34 @@ public class Member {
         );
     }
 
+
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
+
+public Member(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, String memberBirth, String memberGender) {
+
+        this.memberPwd = memberPwd;
+        this.postNo = postNo;
+        this.address = address;
+        this.detailAddress = detailAddress;
+        this.memberEmail = memberEmail;
+        this.memberPhone = memberPhone;
+        this.memberBirth = memberBirth;
+        this.memberGender = memberGender;
+}
+
+public static Member of(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, String memberBirth, String memberGender) {
+
+        return new Member(
+                memberPwd,
+                postNo,
+                address,
+                detailAddress,
+                memberEmail,
+                memberPhone,
+                memberBirth,
+                memberGender
+        ); //(이렇게 전달된 값을 entity로 만들어주는 메소드)
+}
 }

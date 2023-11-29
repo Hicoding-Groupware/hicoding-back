@@ -6,16 +6,15 @@ import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.record.domain.Record;
 import com.hook.hicodingapi.record.domain.repository.RecordCourseRepository;
 import com.hook.hicodingapi.record.domain.repository.RecordRepository;
-import com.hook.hicodingapi.record.domain.type.SignupStatusType;
 import com.hook.hicodingapi.record.dto.request.StudentCosRegistRequest;
-import com.hook.hicodingapi.record.dto.request.RecordUpdateRequest;
 import com.hook.hicodingapi.student.domain.Student;
 import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.*;
 
@@ -28,10 +27,14 @@ public class RecordService {
     private final RecordRepository recordRepository;
     private final RecordCourseRepository recordCourseRepository;
 
+    private Pageable getPageable(final Integer page) {
+        return PageRequest.of(page - 1, 15, Sort.by("stdCode").descending());
+    }
+
     public void cosRegist(StudentCosRegistRequest studentRequest) {
 
-        Student student = studentRepository.findById(studentRequest.getStdCode())
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_STD_CODE));
+//        Student student = studentRepository.findById(studentRequest.getStdCode())
+//                .orElseThrow(() -> new NotFoundException(NOT_FOUND_STD_CODE));
 
         Course course = recordCourseRepository.findById(studentRequest.getCosCode())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_COURSE_CODE));
@@ -39,13 +42,14 @@ public class RecordService {
         /* 해당 강좌 인원 초과시 throw 시킴 */
         if(course.getCurCnt() >= course.getCapacity()) {
             throw new ConflictException(NOT_ENOUGH_CAPACITY);
+
         }
 
         /* 현재 수강인원 증가 */
         course.updateCurCnt(course.getCurCnt());
 
         final Record newRecord = Record.of(
-                student,
+                studentRequest.getStdCode(),
                 course
         );
 
@@ -67,4 +71,6 @@ public class RecordService {
 
         record.withdraw();
     }
+
+
 }

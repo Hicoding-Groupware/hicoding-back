@@ -1,6 +1,5 @@
 package com.hook.hicodingapi.member.service;
 
-import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.member.domain.repository.MemberRepository;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
@@ -9,8 +8,8 @@ import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
 import com.hook.hicodingapi.member.dto.request.MemberInquiryRequest;
 import com.hook.hicodingapi.member.dto.response.MemberCreationResponse;
 import com.hook.hicodingapi.personalInformation.service.PersonalInformationService;
+import com.hook.hicodingapi.member.dto.request.MemberInformationRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +23,7 @@ import static com.hook.hicodingapi.member.domain.Member.MAX_DEPT_NUM;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -124,7 +124,7 @@ public class MemberService {
 
         // 사용될 등록 번호의 0의 개수
         int caldRegZeoLenCnt = Integer.toString(caldRegdNumber).length() - 1;
-
+      
         // 0의 개수가 하나라도 있다면 최대 인원 0의 개수에서 빼서 추가할 0의 개수에 계산하여 대입한다.
         if (0 < caldRegZeoLenCnt) {
             addedZeroLenCnt = maxZeroLenCnt - caldRegZeoLenCnt;
@@ -141,6 +141,23 @@ public class MemberService {
 
         // 사용될 0의 개수 + 부서 등록 번호와 등록 번호를 보낸다.
         return new MemberDataSender(combinedNumber, caldRegdNumber);
+    }
+  
+    // 1. 회원가입
+    public void information(final MemberInformationRequest memberRequest) {
+        
+        final Member newMember = Member.of(
+                passwordEncoder.encode(memberRequest.getMemberPwd()),
+                memberRequest.getPostNo(),
+                memberRequest.getAddress(),
+                memberRequest.getDetailAddress(),
+                memberRequest.getMemberEmail(),
+                memberRequest.getMemberPhone(),
+                memberRequest.getMemberBirth(),
+                memberRequest.getMemberGender()
+        );
+
+        memberRepository.save(newMember);  //save를 통해 여기다가 엔티티를 저장한다.
     }
 
     // 직원 생성
