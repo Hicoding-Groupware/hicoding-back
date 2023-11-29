@@ -2,7 +2,7 @@ package com.hook.hicodingapi.member.domain;
 
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.domain.type.MemberStatus;
-import com.hook.hicodingapi.member.dto.MemberGenerateRequest;
+import com.hook.hicodingapi.member.dto.request.MemberGenerateRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -11,7 +11,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.Entity;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;

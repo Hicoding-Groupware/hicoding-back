@@ -1,4 +1,4 @@
-package com.hook.hicodingapi.member.dto;
+package com.hook.hicodingapi.member.dto.request;
 
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import lombok.Getter;

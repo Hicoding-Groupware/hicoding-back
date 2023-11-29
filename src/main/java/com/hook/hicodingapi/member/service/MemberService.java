@@ -4,7 +4,8 @@ import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.member.domain.repository.MemberRepository;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
-import com.hook.hicodingapi.member.dto.MemberGenerateRequest;
+import com.hook.hicodingapi.member.dto.request.MemberGenerateRequest;
+import com.hook.hicodingapi.member.dto.response.MemberGenerateResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Year;
+import java.util.List;
 import java.util.Optional;
 
 import static com.hook.hicodingapi.member.domain.Member.MAX_DEPT_NUM;
@@ -26,13 +28,19 @@ public class MemberService {
 
     // 직원 생성
     @Transactional
-    public void create(final MemberGenerateRequest memberGenerateRequest) {
-        for (int i = 0; i < 101; i++) {
+    public void create(final MemberGenerateRequest memberGenerateRequest, List<MemberGenerateResponse> memberGenerateResponseList) {
+        for (int i = 0; i < MAX_DEPT_NUM + 1; i++) {
             // 회원 id는 사번이며, 사번은 규칙에 의거하여 만들어진다.
             MemberDataSender mbrIdAndRegNo = generateId(memberGenerateRequest.getMemberRole());
 
+            // 임시 비밀번호
+            String tempPwd = generatePwd();
+
+            // 응답 아이디와 임시 비밀번호 저장
+            memberGenerateResponseList.add(new MemberGenerateResponse(mbrIdAndRegNo.getMemberId(), tempPwd));
+
             // 비밀번호는 Encoder에 의하여 인코딩 과정이 들어간다.
-            String memberPwd = passwordEncoder.encode(generatePwd());
+            String memberPwd = passwordEncoder.encode(tempPwd);
 
             final Member newMember = Member.of(
                     mbrIdAndRegNo.getMemberId(),
@@ -45,7 +53,8 @@ public class MemberService {
         }
     }
 
-    public String generatePwd() {
+    // 임시 비밀번호 생성
+    private String generatePwd() {
         // 8 ~ 16자의 숫자 + 영문 조합을 생성한다.
         // 임시 비밀번호 객체를 생성한다.
         StringBuilder tempPwd = new StringBuilder();
@@ -99,7 +108,7 @@ public class MemberService {
         // 현재 년도에서 뒤 2자리 가져오기 (입사년도 두자리)
         String caldStrYear = Integer.toString(currentYear).substring(2, 4);
 
-        MemberDataSender mbrIdAndRegNo = generateRegistrationNo(departmentName, 100);
+        MemberDataSender mbrIdAndRegNo = generateRegistrationNo(departmentName);
         registerNo = mbrIdAndRegNo.getMemberId();
 
         // --ret--
@@ -114,7 +123,7 @@ public class MemberService {
     // 직원 등록번호 생성 알고리즘
     // 입사년도 두자리 + 부서코드 + 등록번호 -> ex 2301001
     @Transactional(readOnly = true)
-    public MemberDataSender generateRegistrationNo(final MemberRole departmentName, int maxStaff) {
+    public MemberDataSender generateRegistrationNo(final MemberRole departmentName) {
         // 최대 인원 0의 개수
         final int maxZeroLenCnt = Integer.toString(MAX_DEPT_NUM).length() - 1;
 
