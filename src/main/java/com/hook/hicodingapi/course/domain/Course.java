@@ -8,6 +8,7 @@ import com.hook.hicodingapi.lecture.domain.Lecture;
 import com.hook.hicodingapi.member.domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import static com.hook.hicodingapi.course.domain.type.CourseStatusType.AVAILABLE;
 import static javax.persistence.EnumType.STRING;
+import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
 
 @Entity
@@ -23,9 +25,11 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Getter
 @EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "update tbl_course set status = 'DELETED' where cos_code = ?")
 public class Course {
 
     @Id
+    @GeneratedValue(strategy = IDENTITY)
     private Long cosCode;
 
     @Column(nullable = false)
@@ -54,10 +58,10 @@ public class Course {
     private LocalDate cosEdt;
 
     @Column(nullable = false)
-    private Long capacity;
+    private int capacity;
 
     @Column(nullable = false)
-    private Long curCnt;
+    private int curCnt = 0;
 
     @Enumerated(value = STRING)
     @Column(nullable = false)
@@ -79,14 +83,64 @@ public class Course {
     @Column
     private LocalDateTime modifiedAt;
 
+    public Course(String cosName, Lecture lecture, Member teacher, Member staff, Classroom classroom, LocalDate cosSdt,
+                  LocalDate cosEdt, int capacity, DayStatusType dayStatus, TimeStatusType timeStatus) {
+        this.cosName = cosName;
+        this.lecCode = lecture;
+        this.teacher = teacher;
+        this.staff = staff;
+        this.classroom = classroom;
+        this.cosSdt = cosSdt;
+        this.cosEdt = cosEdt;
+        this.capacity = capacity;
+        this.dayStatus = dayStatus;
+        this.timeStatus = timeStatus;
+    }
 
-    public void updateCurCnt(Long curCnt) {
+    public static Course of(
+            final String cosName, final Lecture lecture, final Member teacher, final Member staff, final Classroom classroom,
+            final LocalDate cosSdt, final LocalDate cosEdt, final int capacity, final DayStatusType dayStatus,
+            final TimeStatusType timeStatus) {
+
+        return new Course(
+                cosName,
+                lecture,
+                teacher,
+                staff,
+                classroom,
+                cosSdt,
+                cosEdt,
+                capacity,
+                dayStatus,
+                timeStatus
+        );
+    }
+
+    public void update(String cosName, Lecture lecture, Member teacher, Member staff, Classroom classroom,
+                       LocalDate cosSdt, LocalDate cosEdt, int capacity, int curCnt, DayStatusType dayStatus,
+                       TimeStatusType timeStatus, CourseStatusType status) {
+        this.cosName = cosName;
+        this.lecCode = lecture;
+        this.teacher = teacher;
+        this.staff = staff;
+        this.classroom = classroom;
+        this.cosSdt = cosSdt;
+        this.cosEdt = cosEdt;
+        this.capacity = capacity;
+        this.curCnt = curCnt;
+        this.dayStatus = dayStatus;
+        this.timeStatus = timeStatus;
+        this.status = status;
+    }
+
+    public void updateCurCnt(int curCnt) {
 
         this.curCnt += 1;
     }
 
-    public void downCurcnt(Long curCnt) {
+    public void downCurcnt(int curCnt) {
 
         this.curCnt -= 1;
     }
+
 }

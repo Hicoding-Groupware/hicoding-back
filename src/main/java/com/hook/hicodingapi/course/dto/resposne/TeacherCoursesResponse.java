@@ -20,8 +20,8 @@ public class TeacherCoursesResponse {
     private final LocalDate cosSdt;
     private final LocalDate cosEdt;
     private final String roomCode;
-    private final Long capacity;
-    private final Long curCnt;
+    private final int capacity;
+    private final int curCnt;
     private final String teacher;
     private final String staff;
     private final DayStatusType dayStatus;
