@@ -1,12 +1,14 @@
 package com.hook.hicodingapi.student.service;
 
 import com.hook.hicodingapi.common.exception.NotFoundException;
+import com.hook.hicodingapi.record.domain.Record;
 import com.hook.hicodingapi.student.domain.Student;
 import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
+import com.hook.hicodingapi.student.dto.response.StudentCourse;
 import com.hook.hicodingapi.student.dto.response.StudentsRecordResponse;
-import com.hook.hicodingapi.student.dto.response.StudentsResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -73,21 +75,30 @@ public class StudentService {
 
 
     @Transactional(readOnly = true)
-    public Page<StudentsResponse> getStudents(final Integer page) {
+    public Page<StudentsRecordResponse> getStudentsRecord(Integer page) {
 
         Page<Student> students = studentRepository.findAll(getPageable(page));
 
-        return students.map(student -> StudentsResponse.from(student));
+        return students.map(student -> StudentsRecordResponse.from(student));
+        //return students;
+        //return null;
     }
 
-    @Transactional(readOnly = true)
-    public Page<StudentRepository.StudentRecordSearch> getStudentsRecord(Integer page) {
-
-        Page<StudentRepository.StudentRecordSearch> students = studentRepository.searchAll(getPageable(page));
-        log.info("students : {}", students.getContent().get(0).getStdName());
-        //log.info("students : {}", students.getContent().get(0).get("STD_NAME"));
-
-        //return students.map(student -> StudentsRecordResponse.from(student));
-        return students;
-    }
+//    @Transactional(readOnly = true)
+//    public Page<StudentRepository.StudentRecordSearch> getStudentsRecordByStudentName(Integer page, String studentName) {
+//
+//        Page<StudentRepository.StudentRecordSearch> students = studentRepository.findByStudentNameContains(getPageable(page), studentName);
+//        log.info("students : {}", students.getContent().get(0).getStdName());
+//        //log.info("students : {}", students.getContent().get(0).get("STD_NAME"));
+//
+//        //return students.map(student -> StudentsRecordResponse.from(student));
+//        return students;
+//    }
+//
+//    public Page<StudentRepository.StudentRecordSearch> getStudentsRecordByDate(Integer page, Date cosSdt, Date cosEdt) {
+//
+//        Page<StudentRepository.StudentRecordSearch> students = studentRepository.findByCosDateBetween(getPageable(page), cosSdt, cosEdt);
+//        log.info("students : {}", students.getContent().get(0).getCosSdt());
+//        return null;
+//    }
 }

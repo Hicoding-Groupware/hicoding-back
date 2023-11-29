@@ -16,7 +16,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    /* 1. 회원가입 */
+    // 1. 회원가입
 
 
     public void information(final MemberInformationRequest memberRequest){
@@ -35,5 +35,4 @@ public class MemberService {
 
         memberRepository.save(newMember);  //save를 통해 여기다가 엔티티를 저장한다.
     }
-
 }

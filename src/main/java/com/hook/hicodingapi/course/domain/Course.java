@@ -96,52 +96,55 @@ public class Course {
         this.dayStatus = dayStatus;
         this.timeStatus = timeStatus;
     }
+    public void updateCurCnt ( int curCnt){
+
+        this.curCnt += 1;
+    }
+
+    public void downCurcnt ( int curCnt){
+
+        this.curCnt -= 1;
+    }
+
 
     public static Course of(
             final String cosName, final Lecture lecture, final Member teacher, final Member staff, final Classroom classroom,
             final LocalDate cosSdt, final LocalDate cosEdt, final int capacity, final DayStatusType dayStatus,
             final TimeStatusType timeStatus) {
 
-    public void updateCurCnt(int curCnt) {
-        return new Course(
-                cosName,
-                lecture,
-                teacher,
-                staff,
-                classroom,
-                cosSdt,
-                cosEdt,
-                capacity,
-                dayStatus,
-                timeStatus
-        );
+
+            return new Course(
+                    cosName,
+                    lecture,
+                    teacher,
+                    staff,
+                    classroom,
+                    cosSdt,
+                    cosEdt,
+                    capacity,
+                    dayStatus,
+                    timeStatus
+            );
+        }
+
+        public void update (String cosName, Lecture lecture, Member teacher, Member staff, Classroom classroom,
+                LocalDate cosSdt, LocalDate cosEdt,int capacity, int curCnt, DayStatusType dayStatus,
+                TimeStatusType timeStatus, CourseStatusType status){
+            this.cosName = cosName;
+            this.lecCode = lecture;
+            this.teacher = teacher;
+            this.staff = staff;
+            this.classroom = classroom;
+            this.cosSdt = cosSdt;
+            this.cosEdt = cosEdt;
+            this.capacity = capacity;
+            this.curCnt = curCnt;
+            this.dayStatus = dayStatus;
+            this.timeStatus = timeStatus;
+            this.status = status;
+        }
+
+
+
     }
 
-    public void update(String cosName, Lecture lecture, Member teacher, Member staff, Classroom classroom,
-                       LocalDate cosSdt, LocalDate cosEdt, int capacity, int curCnt, DayStatusType dayStatus,
-                       TimeStatusType timeStatus, CourseStatusType status) {
-        this.cosName = cosName;
-        this.lecCode = lecture;
-        this.teacher = teacher;
-        this.staff = staff;
-        this.classroom = classroom;
-        this.cosSdt = cosSdt;
-        this.cosEdt = cosEdt;
-        this.capacity = capacity;
-        this.curCnt = curCnt;
-        this.dayStatus = dayStatus;
-        this.timeStatus = timeStatus;
-        this.status = status;
-    }
-
-    public void updateCurCnt(int curCnt) {
-
-        this.curCnt += 1;
-    }
-
-    public void downCurcnt(int curCnt) {
-
-        this.curCnt -= 1;
-    }
-
-}
