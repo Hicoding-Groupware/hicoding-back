@@ -102,6 +102,7 @@ public class Course {
             final LocalDate cosSdt, final LocalDate cosEdt, final int capacity, final DayStatusType dayStatus,
             final TimeStatusType timeStatus) {
 
+    public void updateCurCnt(int curCnt) {
         return new Course(
                 cosName,
                 lecture,
