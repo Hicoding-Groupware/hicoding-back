@@ -19,13 +19,13 @@ public class MemberController {
     private final MemberService memberService;
 
     /* 2. 개인정보 업데이트 */
-//    @PutMapping("information/{memberNo}")
-//    public ResponseEntity<Void> information(@PathVariable final Long memberNo,
-//                                            @RequestPart @Valid final informationUpdateRequest informationRequest,
-//                                            @RequestPart(required = false) final MultipartFile multipartFile){
-//
-//
-//        return ResponseEntity.created(URI.create("/" + memberNo)).build();
-//    }
+    @PutMapping("information/{memberNo}")
+    public ResponseEntity<Void> information(@PathVariable final Long memberNo,
+                                            @RequestPart @Valid final MemberInformationRequest informationRequest,
+                                            @RequestPart(required = false) final MultipartFile multipartFile){
+
+
+        return ResponseEntity.created(URI.create("/" + memberNo)).build();
+    }
 
 }

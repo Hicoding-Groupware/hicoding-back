@@ -33,8 +33,8 @@ public class RecordService {
 
     public void cosRegist(StudentCosRegistRequest studentRequest) {
 
-        Student student = studentRepository.findById(studentRequest.getStdCode())
-                .orElseThrow(() -> new NotFoundException(NOT_FOUND_STD_CODE));
+//        Student student = studentRepository.findById(studentRequest.getStdCode())
+//                .orElseThrow(() -> new NotFoundException(NOT_FOUND_STD_CODE));
 
         Course course = recordCourseRepository.findById(studentRequest.getCosCode())
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_COURSE_CODE));
@@ -42,14 +42,14 @@ public class RecordService {
         /* 해당 강좌 인원 초과시 throw 시킴 */
         if(course.getCurCnt() >= course.getCapacity()) {
             throw new ConflictException(NOT_ENOUGH_CAPACITY);
-            //course.closeStatus(course.getStatus());
+
         }
 
         /* 현재 수강인원 증가 */
         course.updateCurCnt(course.getCurCnt());
 
         final Record newRecord = Record.of(
-                student,
+                studentRequest.getStdCode(),
                 course
         );
 

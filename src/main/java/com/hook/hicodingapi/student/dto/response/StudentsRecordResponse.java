@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -15,15 +17,20 @@ import static lombok.AccessLevel.PRIVATE;
 @RequiredArgsConstructor(access = PRIVATE)
 public class StudentsRecordResponse {
 
+    private final Long stdCode;
     private final String stdName;
-    private final Date stdBirth;
-    private final String cosName;
-    private final String memberName;
-    private final Date cosSdt;
-    private final Date cosEdt;
-    private final String stdPhone;
-    private final Date registedDate;
+    private final List<StudentCourse> courseList;
 
+    public static StudentsRecordResponse from(Student student) {
 
+        List<StudentCourse> courseList = student.getRecordList()
+                .stream().map(record -> StudentCourse.from(record))
+                .collect(Collectors.toList());
 
+        return new StudentsRecordResponse(
+                student.getStdCode(),
+                student.getStdName(),
+                courseList
+        );
+    }
 }
