@@ -26,7 +26,7 @@ public class MemberController {
 
     @GetMapping("/test")
     public ResponseEntity<Void> test() {
-        System.out.println("테스트");
+        System.out.println("테스트2");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
