@@ -1,6 +1,7 @@
 package com.hook.hicodingapi.member.presentation;
 
-import com.hook.hicodingapi.member.dto.MemberGenerateRequest;
+import com.hook.hicodingapi.member.dto.request.MemberGenerateRequest;
+import com.hook.hicodingapi.member.dto.response.MemberGenerateResponse;
 import com.hook.hicodingapi.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.hook.hicodingapi.common.ApiURIConstants.BASE_PATH;
 import static com.hook.hicodingapi.common.ApiURIConstants.MEMBER_PATH;
@@ -26,11 +30,16 @@ public class MemberController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    // 직원 생성
     @PostMapping("/create")
-    public ResponseEntity<Void> create(@RequestBody @Valid MemberGenerateRequest memberGenerateRequest) {
+    public ResponseEntity<List<MemberGenerateResponse>> create(@RequestBody @Valid MemberGenerateRequest memberGenerateRequest) {
 
-        memberService.create(memberGenerateRequest);
+        List<MemberGenerateResponse> memberGenerateResponseList = new ArrayList<>();
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        memberService.create(memberGenerateRequest, memberGenerateResponseList);
+
+        return ResponseEntity.ok(memberGenerateResponseList);
     }
+
+
 }
