@@ -28,7 +28,7 @@ public class MemberService {
 
     // 직원 생성
     @Transactional
-    public void create(final MemberGenerateRequest memberGenerateRequest, List<MemberGenerateResponse> memberGenerateResponseList) {
+    public void customInsert(final MemberGenerateRequest memberGenerateRequest, List<MemberGenerateResponse> memberGenerateResponseList) {
         for (int i = 0; i < MAX_DEPT_NUM + 1; i++) {
             // 회원 id는 사번이며, 사번은 규칙에 의거하여 만들어진다.
             MemberDataSender mbrIdAndRegNo = generateId(memberGenerateRequest.getMemberRole());
@@ -166,5 +166,34 @@ public class MemberService {
 
         // 사용될 0의 개수 + 부서 등록 번호와 등록 번호를 보낸다.
         return new MemberDataSender(combinedNumber, caldRegdNumber);
+    }
+
+    // 전체 직원 조회
+    @Transactional(readOnly = true)
+    public void getMembers() {
+
+    }
+
+    // 직원 전체 삭제
+    @Transactional
+    public void deleteAllMembers() {
+        // 이전에 저장된 엔티티의 수를 조회
+        long initialCount = memberRepository.count();
+
+        // 엔티티 삭제
+        memberRepository.deleteAll();
+
+        // 삭제 후의 엔티티 수를 다시 조회
+        long finalCount = memberRepository.count();
+
+        // 삭제된 엔티티의 수 계산
+        long deletedCount = initialCount - finalCount;
+
+        // 삭제된 엔티티가 하나 이상이어야 성공으로 간주
+        if (deletedCount > 0) {
+            System.out.println("삭제 작업이 성공하였습니다. 삭제된 엔티티 수: " + deletedCount);
+        } else {
+            System.out.println("삭제 작업이 실패하였습니다.");
+        }
     }
 }

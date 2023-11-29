@@ -31,15 +31,29 @@ public class MemberController {
     }
 
     // 직원 생성
-    @PostMapping("/create")
-    public ResponseEntity<List<MemberGenerateResponse>> create(@RequestBody @Valid MemberGenerateRequest memberGenerateRequest) {
+    @PostMapping("/members")
+    public ResponseEntity<List<MemberGenerateResponse>> insert(@RequestBody @Valid MemberGenerateRequest memberGenerateRequest) {
 
         List<MemberGenerateResponse> memberGenerateResponseList = new ArrayList<>();
 
-        memberService.create(memberGenerateRequest, memberGenerateResponseList);
+        memberService.customInsert(memberGenerateRequest, memberGenerateResponseList);
 
         return ResponseEntity.ok(memberGenerateResponseList);
     }
 
+    // 직원 랜덤 생성
+    @PostMapping("/customMembers")
 
+
+    // 직원 전체 조회
+
+
+    // 직원 전체 삭제
+    @DeleteMapping("/allDelete")
+    public ResponseEntity<Void> allDelete() {
+
+        memberService.deleteAllMembers();
+
+        return ResponseEntity.noContent().build();
+    }
 }
