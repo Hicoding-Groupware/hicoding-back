@@ -1,6 +1,7 @@
 package com.hook.hicodingapi.member.service;
 
 import com.hook.hicodingapi.member.domain.Member;
+import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.repository.MemberRepository;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.domain.type.MemberStatus;
@@ -10,6 +11,7 @@ import com.hook.hicodingapi.member.dto.response.MemberCreationResponse;
 import com.hook.hicodingapi.personalInformation.service.PersonalInformationService;
 import com.hook.hicodingapi.member.dto.request.MemberInformationRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

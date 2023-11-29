@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/")
@@ -26,7 +28,10 @@ public class MemberController {
     @PutMapping("information/{memberNo}")
     public ResponseEntity<Void> information(@PathVariable final Long memberNo,
                                             @RequestPart @Valid final MemberInformationRequest informationRequest,
-                                            @RequestPart(required = false) final MultipartFile multipartFile){
+                                            @RequestPart(required = false) final MultipartFile multipartFile) {
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     // 직원 생성
     @PostMapping("/members")
@@ -71,8 +76,8 @@ public class MemberController {
 
         memberService.deleteAllMembers();
 
-        //return ResponseEntity.noContent().build(); 아래 코드 ??
-        return ResponseEntity.created(URI.create("/" + memberNo)).build();
+        return ResponseEntity.noContent().build(); //아래 코드 ??
+        //return ResponseEntity.created(URI.create("/" + memberNo)).build();
     }
 
 }

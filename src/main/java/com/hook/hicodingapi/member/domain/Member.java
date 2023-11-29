@@ -89,7 +89,7 @@ public class Member {
 
     public Member(String memberId, String memberPwd, String memberName,
                   String memberGender, LocalDate memberBirth, String memberPhone,
-                  String memberEmail, String post_no, String address,
+                  String memberEmail, String postNo, String address,
                   String detailAddress, MemberStatus memberStatus, MemberRole memberRole,
                   Integer registrationNo) {
         this.memberId = memberId;
@@ -99,7 +99,7 @@ public class Member {
         this.memberBirth = memberBirth;
         this.memberPhone = memberPhone;
         this.memberEmail = memberEmail;
-        this.post_no = post_no;
+        this.postNo = postNo;
         this.address = address;
         this.detailAddress = detailAddress;
         this.memberStatus = memberStatus;
@@ -122,7 +122,7 @@ public class Member {
         this.refreshToken = refreshToken;
     }
 
-public Member(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, String memberBirth, String memberGender) {
+public Member(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, LocalDate memberBirth, String memberGender) {
 
         this.memberPwd = memberPwd;
         this.postNo = postNo;
@@ -134,7 +134,7 @@ public Member(String memberPwd, String postNo, String address, String detailAddr
         this.memberGender = memberGender;
 }
 
-public static Member of(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, String memberBirth, String memberGender) {
+public static Member of(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, LocalDate memberBirth, String memberGender) {
 
         return new Member(
                 memberPwd,
