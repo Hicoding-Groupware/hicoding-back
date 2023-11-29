@@ -18,37 +18,35 @@ public class PersonalInformationService {
     private final static Random RANDOM_N = new Random();
 
     // 이름 랜덤 생성 알고리즘
-    public static List<String> generateKoreanNames() {
-        List<String> result = new ArrayList<>();
+    public static String generateKoreanName() {
+        //List<String> result = new ArrayList<>();
 
-        while (result.size() < MAX_PI_NUM) {
-            String fullName = KOREAN_SURNAMES.get(RANDOM_N.nextInt(KOREAN_SURNAMES.size())) +
+        //while (result.size() < MAX_PI_NUM) {
+            final String koreanName = KOREAN_SURNAMES.get(RANDOM_N.nextInt(KOREAN_SURNAMES.size())) +
                     KOREAN_GIVEN_NAMES.get(RANDOM_N.nextInt(KOREAN_GIVEN_NAMES.size()));
 
-            if (!result.contains(fullName)) {
-                result.add(fullName);
-            }
-        }
+          //  if (!result.contains(fullName)) {
+                //result.add(fullName);
+            //}
+        //}
 
-        return result;
+        return koreanName;
     }
 
     // 년도 랜덤 생성 알고리즘
-    public static LocalDateTime generateRandomDateTime() {
+    public static LocalDate generateRandomDateTime() {
         // 현재년도
-        int currentYear = Year.now().getValue();
-        // 년도 뒤 두 자리 계산
-        String caldStrYear = Integer.toString(currentYear).substring(2, 4);
-        // 계산된 년도 숫자 변환
-        final int caldYear = Integer.parseInt(caldStrYear);
+        int currentYear = LocalDateTime.now().getYear();
 
-        LocalDateTime startDateTime = LocalDateTime.of(caldYear, 1, 1, 0, 0);
-        LocalDateTime endDateTime = LocalDateTime.now();
+        // 1900년 이후 출생일
+        LocalDateTime startDateTime = LocalDateTime.of(1900, 1, 1, 0, 0);
+        LocalDateTime endDateTime = LocalDateTime.of(currentYear, 12, 31, 23, 59);
 
+        // 랜덤한 초 생성
         long seconds = Duration.between(startDateTime, endDateTime).getSeconds();
         long randomSeconds = ThreadLocalRandom.current().nextLong(seconds + 1);
 
-        return startDateTime.plusSeconds(randomSeconds);
+        return startDateTime.plusSeconds(randomSeconds).toLocalDate();
     }
 
     // 나이 계산 알고리즘
@@ -88,7 +86,7 @@ public class PersonalInformationService {
     public static String generateRandomPostNo() {
         // 랜덤으로 5자리 숫자 생성
         int randomPostNo = RANDOM_N.nextInt(100000);
-        final String randomStrPostNo = Integer.toString(randomPostNo);
+        final String randomStrPostNo = String.format("%05d", randomPostNo);
         return randomStrPostNo;
     }
 

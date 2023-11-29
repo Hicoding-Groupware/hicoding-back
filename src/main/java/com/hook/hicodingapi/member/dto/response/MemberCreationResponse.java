@@ -5,11 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MemberGenerateResponse {
+public class MemberCreationResponse {
     private String memberId;
     private String memberPwd;
 
-    public MemberGenerateResponse(String memberId, String memberPwd) {
+    public MemberCreationResponse(String memberId, String memberPwd) {
         this.memberId = memberId;
         this.memberPwd = memberPwd;
     }

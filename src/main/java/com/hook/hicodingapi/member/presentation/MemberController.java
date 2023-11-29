@@ -1,7 +1,9 @@
 package com.hook.hicodingapi.member.presentation;
 
-import com.hook.hicodingapi.member.dto.request.MemberGenerateRequest;
-import com.hook.hicodingapi.member.dto.response.MemberGenerateResponse;
+import com.hook.hicodingapi.member.domain.Member;
+import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
+import com.hook.hicodingapi.member.dto.request.MemberInquiryRequest;
+import com.hook.hicodingapi.member.dto.response.MemberCreationResponse;
 import com.hook.hicodingapi.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,21 +34,40 @@ public class MemberController {
 
     // 직원 생성
     @PostMapping("/members")
-    public ResponseEntity<List<MemberGenerateResponse>> insert(@RequestBody @Valid MemberGenerateRequest memberGenerateRequest) {
+    public ResponseEntity<List<MemberCreationResponse>> insert(@RequestBody @Valid MemberCreationRequest memberCreationRequest) {
 
-        List<MemberGenerateResponse> memberGenerateResponseList = new ArrayList<>();
+        List<MemberCreationResponse> memberCreationResponseList = new ArrayList<>();
 
-        memberService.customInsert(memberGenerateRequest, memberGenerateResponseList);
+        for (int i = 0; i < memberCreationRequest.getCnt(); i++)
+            memberService.customInsert(memberCreationRequest, memberCreationResponseList);
 
-        return ResponseEntity.ok(memberGenerateResponseList);
+        return ResponseEntity.ok(memberCreationResponseList);
     }
 
     // 직원 랜덤 생성
-    @PostMapping("/customMembers")
+    @GetMapping("/members-random")
+    public ResponseEntity<Void> randomInsert() {
 
+        memberService.randomInsert("1234");
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     // 직원 전체 조회
+    @GetMapping("/members")
+    public ResponseEntity<List<Member>> getAllMembers() {
 
+        List<Member> members = memberService.getAllMembers();
+        return ResponseEntity.ok(members);
+    }
+
+    // 직원 상세 조회
+    @PostMapping("/members-detail")
+    public ResponseEntity<List<Member>> getDetailMembers(@RequestBody final MemberInquiryRequest memberInquiryRequest) {
+
+        List<Member> members = memberService.getDetailMembers(memberInquiryRequest);
+        return ResponseEntity.ok(members);
+    }
 
     // 직원 전체 삭제
     @DeleteMapping("/allDelete")

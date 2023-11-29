@@ -2,7 +2,7 @@ package com.hook.hicodingapi.member.domain;
 
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.domain.type.MemberStatus;
-import com.hook.hicodingapi.member.dto.request.MemberGenerateRequest;
+import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -13,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static com.hook.hicodingapi.member.domain.type.MemberStatus.ACTIVE;
@@ -41,7 +42,7 @@ public class Member {
     private String memberName;
 
     private String memberGender;
-    private String memberBirth;
+    private LocalDate memberBirth;
     private String memberPhone;
     private String memberEmail;
     private String memberProfile;
@@ -85,12 +86,32 @@ public class Member {
         this.registrationNo = registrationNo;
     }
 
-    public static Member of(String memberId, String memberPwd, MemberGenerateRequest memberGenerateRequest, Integer registrationNo) {
+    public Member(String memberId, String memberPwd, String memberName,
+                  String memberGender, LocalDate memberBirth, String memberPhone,
+                  String memberEmail, String post_no, String address,
+                  String detailAddress, MemberStatus memberStatus, MemberRole memberRole,
+                  Integer registrationNo) {
+        this.memberId = memberId;
+        this.memberPwd = memberPwd;
+        this.memberName = memberName;
+        this.memberGender = memberGender;
+        this.memberBirth = memberBirth;
+        this.memberPhone = memberPhone;
+        this.memberEmail = memberEmail;
+        this.post_no = post_no;
+        this.address = address;
+        this.detailAddress = detailAddress;
+        this.memberStatus = memberStatus;
+        this.memberRole = memberRole;
+        this.registrationNo = registrationNo;
+    }
+
+    public static Member of(String memberId, String memberPwd, MemberCreationRequest memberCreationRequest, Integer registrationNo) {
         return new Member(
                 memberId,
                 memberPwd,
-                memberGenerateRequest.getMemberName(),
-                memberGenerateRequest.getMemberRole(),
+                memberCreationRequest.getMemberName(),
+                memberCreationRequest.getMemberRole(),
                 registrationNo
         );
     }
