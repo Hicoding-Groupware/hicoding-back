@@ -4,14 +4,10 @@ import com.hook.hicodingapi.common.exception.type.ExceptionCode;
 import lombok.Getter;
 
 @Getter
-public class BadRequestException extends RuntimeException{
-
-    private final int code;
-    private final String message;
+public class BadRequestException extends CustomException{
 
     public BadRequestException(final ExceptionCode exceptionCode){
-        this.code = exceptionCode.getCode();
-        this.message = exceptionCode.getMessage();
-    }
+        super(exceptionCode);
 
+    }
 }
