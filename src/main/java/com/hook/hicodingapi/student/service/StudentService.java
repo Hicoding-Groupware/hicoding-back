@@ -1,12 +1,15 @@
 package com.hook.hicodingapi.student.service;
 
 import com.hook.hicodingapi.common.exception.NotFoundException;
+import com.hook.hicodingapi.course.domain.Course;
+import com.hook.hicodingapi.course.domain.repository.CourseRepository;
 import com.hook.hicodingapi.record.domain.Record;
 import com.hook.hicodingapi.student.domain.Student;
 import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
 import com.hook.hicodingapi.student.dto.response.StudentCourse;
+import com.hook.hicodingapi.student.dto.response.StudentCourseResponse;
 import com.hook.hicodingapi.student.dto.response.StudentsRecordResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -19,11 +22,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
 import static com.fasterxml.jackson.databind.type.LogicalType.Map;
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_STD_CODE;
+import static com.hook.hicodingapi.course.domain.type.CourseStatusType.AVAILABLE;
 
 @Slf4j
 @Service
@@ -32,8 +39,13 @@ import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    private final CourseRepository courseRepository;
 
-    private Pageable getPageable(final Integer page) {
+
+    private Pageable getStudentPageable(final Integer page) {
+        return PageRequest.of(page - 1, 15, Sort.by("stdCode").descending());
+    }
+    private Pageable getCoursePageable(final Integer page) {
         return PageRequest.of(page - 1, 15);
     }
     public Long regist(StudentRegistRequest registRequest) {
@@ -77,28 +89,46 @@ public class StudentService {
     @Transactional(readOnly = true)
     public Page<StudentsRecordResponse> getStudentsRecord(Integer page) {
 
-        Page<Student> students = studentRepository.findAll(getPageable(page));
+        Page<Student> students = studentRepository.findAll(getStudentPageable(page));
 
         return students.map(student -> StudentsRecordResponse.from(student));
-        //return students;
-        //return null;
     }
 
-//    @Transactional(readOnly = true)
-//    public Page<StudentRepository.StudentRecordSearch> getStudentsRecordByStudentName(Integer page, String studentName) {
-//
-//        Page<StudentRepository.StudentRecordSearch> students = studentRepository.findByStudentNameContains(getPageable(page), studentName);
-//        log.info("students : {}", students.getContent().get(0).getStdName());
-//        //log.info("students : {}", students.getContent().get(0).get("STD_NAME"));
-//
-//        //return students.map(student -> StudentsRecordResponse.from(student));
-//        return students;
-//    }
-//
-//    public Page<StudentRepository.StudentRecordSearch> getStudentsRecordByDate(Integer page, Date cosSdt, Date cosEdt) {
-//
-//        Page<StudentRepository.StudentRecordSearch> students = studentRepository.findByCosDateBetween(getPageable(page), cosSdt, cosEdt);
-//        log.info("students : {}", students.getContent().get(0).getCosSdt());
-//        return null;
-//    }
+    @Transactional(readOnly = true)
+    public Page<StudentsRecordResponse> getStudentName(Integer page, String studentName) {
+
+        Page<Student> students = studentRepository.findByStdNameContaining(getStudentPageable(page), studentName);
+
+        return students.map(student -> StudentsRecordResponse.from(student));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<StudentsRecordResponse> getCreatedAt(Integer page, LocalDate startDate, LocalDate endDate) {
+
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+
+        Page<Student> students = studentRepository.findByCreatedAtBetween(getStudentPageable(page), startDateTime, endDateTime);
+
+        return students.map(student -> StudentsRecordResponse.from(student));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<StudentCourseResponse> getCourse(Integer page) {
+
+        Page<Course> courses = courseRepository.findByStatus(getCoursePageable(page), AVAILABLE);
+
+        return courses.map(course -> StudentCourseResponse.from(course));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<StudentCourseResponse> getCourseName(Integer page, String cosName) {
+
+        Page<Course> courses = courseRepository.findByCosNameContainsAndStatus(getCoursePageable(page), cosName, AVAILABLE);
+
+        return courses.map(course -> StudentCourseResponse.from(course));
+    }
+
+
+
 }
