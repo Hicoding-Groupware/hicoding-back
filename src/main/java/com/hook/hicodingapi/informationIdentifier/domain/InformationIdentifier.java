@@ -1,9 +1,9 @@
-package com.hook.hicodingapi.personalInformation.domain;
+package com.hook.hicodingapi.informationIdentifier.domain;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class PersonalInformation {
+public class InformationIdentifier {
     public static final Integer MAX_PI_NUM = 100;
     public static final List<String> KOREAN_GIVEN_NAMES = Arrays.asList(
             "서영", "민준", "지현", "성우", "미라",

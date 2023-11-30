@@ -3,6 +3,7 @@ package com.hook.hicodingapi.member.presentation;
 import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
 import com.hook.hicodingapi.member.dto.request.MemberInquiryRequest;
+import com.hook.hicodingapi.member.dto.request.MemberRandomCreationRequest;
 import com.hook.hicodingapi.member.dto.response.MemberCreationResponse;
 import com.hook.hicodingapi.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -26,14 +27,24 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/test")
-    public ResponseEntity<Void> test() {
-        System.out.println("테스트2");
-        return new ResponseEntity<>(HttpStatus.OK);
+    // 직원 전체 조회
+    @GetMapping("/search/all")
+    public ResponseEntity<List<Member>> getAllMembers() {
+
+        List<Member> members = memberService.getAllMembers();
+        return ResponseEntity.ok(members);
+    }
+
+    // 직원 상세 조회
+    @GetMapping("/search")
+    public ResponseEntity<List<Member>> getDetailMembers(final MemberInquiryRequest memberInquiryRequest) {
+
+        List<Member> members = memberService.getDetailMembers(memberInquiryRequest);
+        return ResponseEntity.ok(members);
     }
 
     // 직원 생성
-    @PostMapping("/members")
+    @PostMapping("/creation")
     public ResponseEntity<List<MemberCreationResponse>> insert(@RequestBody @Valid MemberCreationRequest memberCreationRequest) {
 
         List<MemberCreationResponse> memberCreationResponseList = new ArrayList<>();
@@ -45,32 +56,27 @@ public class MemberController {
     }
 
     // 직원 랜덤 생성
-    @GetMapping("/members-random")
-    public ResponseEntity<Void> randomInsert() {
+    @PostMapping("/creation/random")
+    public ResponseEntity<Void> randomInsert(@RequestBody @Valid MemberRandomCreationRequest memberRandomCreationRequest) {
 
-        memberService.randomInsert("1234");
+        final String mbrPwd = memberRandomCreationRequest.getMemberPwd();
+        for (int i = 0; i < memberRandomCreationRequest.getMbrCnt(); i++)
+            memberService.randomInsert(mbrPwd);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // 직원 전체 조회
-    @GetMapping("/members")
-    public ResponseEntity<List<Member>> getAllMembers() {
+    // 직원 삭제
+    @DeleteMapping("/deletion/{memberCode}")
+    public ResponseEntity<Void> delete(@PathVariable("memberCode") final Long memberCode) {
 
-        List<Member> members = memberService.getAllMembers();
-        return ResponseEntity.ok(members);
-    }
+        memberService.deleteMember(memberCode);
 
-    // 직원 상세 조회
-    @PostMapping("/members-detail")
-    public ResponseEntity<List<Member>> getDetailMembers(@RequestBody final MemberInquiryRequest memberInquiryRequest) {
-
-        List<Member> members = memberService.getDetailMembers(memberInquiryRequest);
-        return ResponseEntity.ok(members);
+        return ResponseEntity.noContent().build();
     }
 
     // 직원 전체 삭제
-    @DeleteMapping("/allDelete")
+    @DeleteMapping("/deletion/all")
     public ResponseEntity<Void> allDelete() {
 
         memberService.deleteAllMembers();

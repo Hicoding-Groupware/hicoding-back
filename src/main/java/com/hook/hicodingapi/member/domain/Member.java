@@ -1,10 +1,12 @@
 package com.hook.hicodingapi.member.domain;
 
+import com.hook.hicodingapi.informationIdentifier.domain.type.GenderType;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.domain.type.MemberStatus;
 import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -25,6 +27,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @Getter
+@ToString
 public class Member {
     public static final Integer MAX_DEPT_NUM = 100;
 
@@ -40,13 +43,12 @@ public class Member {
 
     @NotNull(message = "이름은 반드시 입력되어야 합니다.")
     private String memberName;
-
     private String memberGender;
     private LocalDate memberBirth;
     private String memberPhone;
     private String memberEmail;
     private String memberProfile;
-    private String post_no;
+    private String postNo;
     private String address;
     private String detailAddress;
 
@@ -98,7 +100,7 @@ public class Member {
         this.memberBirth = memberBirth;
         this.memberPhone = memberPhone;
         this.memberEmail = memberEmail;
-        this.post_no = post_no;
+        this.postNo = postNo;
         this.address = address;
         this.detailAddress = detailAddress;
         this.memberStatus = memberStatus;
