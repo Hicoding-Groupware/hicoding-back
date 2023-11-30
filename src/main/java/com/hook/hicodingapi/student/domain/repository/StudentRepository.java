@@ -1,19 +1,27 @@
 package com.hook.hicodingapi.student.domain.repository;
 
+import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.student.domain.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+
 import java.util.List;
-import java.util.Map;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
+    Page<Student> findByStdNameContaining(Pageable pageable, String studentName);
+    Page<Student> findByCreatedAtBetween(Pageable pageable, LocalDateTime startDate, LocalDateTime endDate);
 
-    @Query(value = "SELECT STD_CODE as StdCode, STD_NAME as StdName, STD_BIRTH as StdBirth, " +
+
+
+
+
+   /* @Query(value = "SELECT STD_CODE as StdCode, STD_NAME as StdName, STD_BIRTH as StdBirth, " +
             "COS_NAME as CosName, MEMBER_NAME as MemberName, COS_SDT as CosSdt, COS_EDT as CosEdt, STD_PHONE as StdPhone, REGISTED_DATE as RegistedDate\n" +
             "FROM (\n" +
             "         SELECT\n" +
@@ -39,7 +47,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
                     "WHERE row_num = 1",
             nativeQuery = true)
     Page<StudentRecordSearch> searchAll(Pageable pageable);
-
     interface StudentRecordSearch {
 
         Long getStdCode();
@@ -51,5 +58,5 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
         Date getCosEdt();
         String getStdPhone();
         Date getRegistedDate();
-    }
+    }*/
 }

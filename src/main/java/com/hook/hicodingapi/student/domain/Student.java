@@ -64,7 +64,7 @@ public class Student {
     @Column(nullable = false)
     private LocalDateTime modifiedAt;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "stdCode")
     private List<Record> recordList;
 

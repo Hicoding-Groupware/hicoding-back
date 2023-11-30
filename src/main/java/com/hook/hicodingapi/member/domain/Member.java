@@ -90,7 +90,7 @@ public class Member {
 
     public Member(String memberId, String memberPwd, String memberName,
                   String memberGender, LocalDate memberBirth, String memberPhone,
-                  String memberEmail, String post_no, String address,
+                  String memberEmail, String postNo, String address,
                   String detailAddress, MemberStatus memberStatus, MemberRole memberRole,
                   Integer registrationNo) {
         this.memberId = memberId;
@@ -126,4 +126,31 @@ public class Member {
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
+
+public Member(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, LocalDate memberBirth, String memberGender) {
+
+        this.memberPwd = memberPwd;
+        this.postNo = postNo;
+        this.address = address;
+        this.detailAddress = detailAddress;
+        this.memberEmail = memberEmail;
+        this.memberPhone = memberPhone;
+        this.memberBirth = memberBirth;
+        this.memberGender = memberGender;
+}
+
+public static Member of(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, LocalDate memberBirth, String memberGender) {
+
+        return new Member(
+                memberPwd,
+                postNo,
+                address,
+                detailAddress,
+                memberEmail,
+                memberPhone,
+                memberBirth,
+                memberGender
+        ); //(이렇게 전달된 값을 entity로 만들어주는 메소드)
+}
+
 }

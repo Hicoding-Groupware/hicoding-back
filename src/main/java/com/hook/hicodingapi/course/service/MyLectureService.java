@@ -1,10 +1,11 @@
 package com.hook.hicodingapi.course.service;
 
+import com.hook.hicodingapi.common.exception.NotFoundException;
 import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.course.domain.repository.MyLectureRepository;
+import com.hook.hicodingapi.course.dto.resposne.DetailCourseLectureResponse;
 import com.hook.hicodingapi.course.dto.resposne.TeacherCourseResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -13,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 
+import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_COURSE_CODE;
+import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_LEC_CODE;
 
 
 @Service
@@ -56,5 +59,16 @@ public class MyLectureService {
         Page<Course> courses = myLectureRepository.findByTeacherMemberNoAndCosSdtAfter(getPageable(page), memberNo, cosSdt);
 
         return courses.map(course -> TeacherCourseResponse.from(course));
+    }
+
+
+    /* 4. 강의 상세 조회 - 조건 없이 해당 강의 상세 목록 모두 조회 가능 (강사) */
+    @Transactional(readOnly = true)
+    public DetailCourseLectureResponse getTeacherCosCode(final Long cosCode) {
+
+        Course course = myLectureRepository.findByCosCode(cosCode)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_COURSE_CODE));
+
+        return DetailCourseLectureResponse.from(course);
     }
 }

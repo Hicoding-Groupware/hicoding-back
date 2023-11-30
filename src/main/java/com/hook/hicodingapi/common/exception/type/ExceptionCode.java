@@ -33,7 +33,6 @@ public enum ExceptionCode {
     ACCESS_DENIED(4003, "허가 되지 않은 요청입니다.");
 
 
-
     private final int code;
     private final String message;
 

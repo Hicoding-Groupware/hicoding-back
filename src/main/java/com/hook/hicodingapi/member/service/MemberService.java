@@ -2,6 +2,7 @@ package com.hook.hicodingapi.member.service;
 
 import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.Member;
+import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.repository.MemberRepository;
 import com.hook.hicodingapi.member.domain.repository.MemberRepositoryCriteria;
 import com.hook.hicodingapi.member.domain.type.MemberRole;

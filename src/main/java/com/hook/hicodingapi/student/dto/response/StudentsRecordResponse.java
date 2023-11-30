@@ -20,6 +20,9 @@ public class StudentsRecordResponse {
     private final Long stdCode;
     private final String stdName;
     private final List<StudentCourse> courseList;
+    private final String stdPhone;
+
+
 
     public static StudentsRecordResponse from(Student student) {
 
@@ -30,7 +33,9 @@ public class StudentsRecordResponse {
         return new StudentsRecordResponse(
                 student.getStdCode(),
                 student.getStdName(),
-                courseList
+                courseList,
+                student.getStdPhone()
+
         );
     }
 }
