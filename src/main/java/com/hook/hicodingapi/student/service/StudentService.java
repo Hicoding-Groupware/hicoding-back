@@ -1,5 +1,7 @@
 package com.hook.hicodingapi.student.service;
 
+import com.hook.hicodingapi.attendance.domain.repository.AttendanceRepository;
+import com.hook.hicodingapi.attendance.dto.response.StudentAttendanceResponse;
 import com.hook.hicodingapi.common.exception.NotFoundException;
 import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.course.domain.repository.CourseRepository;
@@ -25,8 +27,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.fasterxml.jackson.databind.type.LogicalType.Map;
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_STD_CODE;
@@ -40,6 +44,7 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final CourseRepository courseRepository;
+    private final AttendanceRepository attendanceRepository;
 
 
     private Pageable getStudentPageable(final Integer page) {

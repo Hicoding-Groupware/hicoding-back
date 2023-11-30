@@ -10,4 +10,5 @@ import java.util.List;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
+//    List<Student> findAll(Long cosCode);
 }

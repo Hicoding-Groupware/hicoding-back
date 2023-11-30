@@ -1,6 +1,7 @@
 package com.hook.hicodingapi.attendance.service;
 
 import com.hook.hicodingapi.attendance.domain.repository.AttendanceRepository;
+import com.hook.hicodingapi.attendance.dto.response.StudentAttendanceResponse;
 import com.hook.hicodingapi.course.domain.repository.MyLectureRepository;
 import com.hook.hicodingapi.student.domain.Student;
 import com.hook.hicodingapi.student.domain.repository.StudentRepository;
@@ -20,8 +21,6 @@ public class AttendanceService {
     private final StudentRepository studentRepository;
 
 
-
-
 //    /* 일일 출석표 조회 */
 //    @Transactional(readOnly = true)
 //    public List<DayAttendanceResponse> getAttendanceForDay(final Long cosCode, final LocalDate atdDate) {
@@ -38,6 +37,16 @@ public class AttendanceService {
 //
 //        return attendanceList.stream()
 //                .map(DayAttendanceResponse::from)
+//                .collect(Collectors.toList());
+//    }
+
+//    @Transactional
+//    public List<StudentAttendanceResponse> getStudentAttendanceOnTheDay(final Long cosCode) {
+//
+//        List<Student> studentList = attendanceRepository.findAll(cosCode); // findAll 생성? cosCode 생성?
+//
+//        return studentList.stream()
+//                .map(StudentAttendanceResponse::from)
 //                .collect(Collectors.toList());
 //    }
 
