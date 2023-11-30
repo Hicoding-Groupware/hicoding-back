@@ -1,5 +1,6 @@
 package com.hook.hicodingapi.student.domain;
 
+import com.hook.hicodingapi.attendance.domain.Attendance;
 import com.hook.hicodingapi.record.domain.Record;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -67,6 +68,10 @@ public class Student {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "stdCode")
     private List<Record> recordList;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "aStdCode")
+    private List<Attendance> aStdCode;
 
     public Student(String stdName, String stdGender, LocalDate stdBirth, String stdPhone, String stdEmail, String postNo, String address, String detailAddress, String stdMemo) {
         this.stdName = stdName;

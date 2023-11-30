@@ -1,18 +1,12 @@
 package com.hook.hicodingapi.attendance.service;
 
-
-import com.hook.hicodingapi.attendance.domain.Attendance;
 import com.hook.hicodingapi.attendance.domain.repository.AttendanceRepository;
-import com.hook.hicodingapi.attendance.domain.type.AttendanceStatusType;
-import com.hook.hicodingapi.attendance.dto.response.DayAttendanceResponse;
 import com.hook.hicodingapi.course.domain.repository.MyLectureRepository;
+import com.hook.hicodingapi.student.domain.Student;
 import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +19,10 @@ public class AttendanceService {
     private final MyLectureRepository myLectureRepository;
     private final StudentRepository studentRepository;
 
-    /* 일일 출석표 조회 */
+
+
+
+//    /* 일일 출석표 조회 */
 //    @Transactional(readOnly = true)
 //    public List<DayAttendanceResponse> getAttendanceForDay(final Long cosCode, final LocalDate atdDate) {
 //        List<Attendance> attendanceList = attendanceRepository.findByCosCodeCosCodeAndAtdDate(cosCode, atdDate);

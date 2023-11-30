@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.hook.hicodingapi.attendance.domain.Attendance;
 import com.hook.hicodingapi.course.domain.Course;
+import com.hook.hicodingapi.jwt.CustomUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -29,7 +30,7 @@ public interface MyLectureRepository extends JpaRepository<Course, Long> {
     Page<Course> findByTeacherMemberNoAndCosSdtAfter(Pageable pageable, Long memberNo, LocalDate cosSdt);
 
     /* 4. 강의 상세 조회 - 조건 없이 해당 강의 상세 목록 모두 조회 가능 (강사) */
-    /* 5. 일일 출석표 조회 */
+    /* 5. 일일 출석부 조회 */
     @EntityGraph(attributePaths = {"cosCode"})
     Optional<Course> findByCosCode(Long cosCode);
 

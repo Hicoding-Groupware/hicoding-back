@@ -1,6 +1,7 @@
 package com.hook.hicodingapi.jwt.service;
 
 import com.hook.hicodingapi.common.exception.BadRequestException;
+import com.hook.hicodingapi.jwt.CustomUser;
 import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.member.domain.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
@@ -166,8 +167,10 @@ public class JwtService {
                 .roles(member.getMemberRole().name())
                 .build();
 
+        CustomUser customUser = CustomUser.of(member.getMemberNo(), userDetails);
+
         Authentication authentication
-                = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                = new UsernamePasswordAuthenticationToken(customUser, null, customUser.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
