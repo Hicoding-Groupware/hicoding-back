@@ -1,7 +1,7 @@
 package com.hook.hicodingapi.member.presentation;
 
 import com.hook.hicodingapi.member.dto.request.MemberInformationRequest;
-import com.hook.hicodingapi.member.service.MemberService;
+//import com.hook.hicodingapi.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberService memberService;
+    //private final MemberService memberService;
 
     /* 2. 개인정보 업데이트 */
     @PutMapping("information/{memberNo}")

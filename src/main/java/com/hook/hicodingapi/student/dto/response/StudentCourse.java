@@ -14,16 +14,18 @@ import static lombok.AccessLevel.PRIVATE;
 @RequiredArgsConstructor(access = PRIVATE)
 public class StudentCourse {
     private final String cosName;
-    //private final String teacher;
+    private final String teacher;
     private final LocalDate cosSdt;
     private final LocalDate cosEdt;
+    private final LocalDate registedDate;
 
     public static StudentCourse from(Record record) {
         return new StudentCourse(
                 record.getCourse().getCosName(),
-                //record.getCourse().getTeacher().getMemberName(),
+                record.getCourse().getTeacher().getMemberName(),
                 record.getCourse().getCosSdt(),
-                record.getCourse().getCosEdt()
+                record.getCourse().getCosEdt(),
+                record.getRegistedDate()
         );
     }
 }

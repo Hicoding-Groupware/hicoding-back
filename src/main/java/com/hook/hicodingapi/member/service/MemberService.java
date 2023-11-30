@@ -1,3 +1,4 @@
+/*
 package com.hook.hicodingapi.member.service;
 
 import com.hook.hicodingapi.member.domain.Member;
@@ -36,3 +37,4 @@ public class MemberService {
         memberRepository.save(newMember);  //save를 통해 여기다가 엔티티를 저장한다.
     }
 }
+*/
