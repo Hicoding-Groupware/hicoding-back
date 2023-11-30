@@ -5,5 +5,6 @@ public enum AttendanceStatusType {
     ATTENDANCE,
     ABSENCE,
     TARDINESS,
-    LEAVE_EARLY
+    LEAVE_EARLY,
+    WAIT
 }
