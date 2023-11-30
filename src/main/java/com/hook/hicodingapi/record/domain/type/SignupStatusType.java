@@ -1,12 +1,12 @@
-package com.hook.hicodingapi.student.domain.type;
+package com.hook.hicodingapi.record.domain.type;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum SignupStatusType {
 
-    수강중("normal"),
-    수강철회("withdraw");
+    NORMAL("normal"),
+    WITHDRAW("withdraw");
 
     private final String value;
 

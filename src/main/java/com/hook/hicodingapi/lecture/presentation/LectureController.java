@@ -22,7 +22,7 @@ public class LectureController {
 
     private final LectureService lectureService;
 
-    @GetMapping("/lectures") //전체 강의 조회
+    @GetMapping("/lectures") //전체 강의 조회(강사)
     public ResponseEntity<PagingResponse> getTeacherLectures(@RequestParam(defaultValue = "1") Integer page){
 
         final Page<TeacherLecturesResponse> lectures = lectureService.getTeacherLectures(page);
@@ -32,7 +32,6 @@ public class LectureController {
         return ResponseEntity.ok(pagingResponse);
     }
 
-    //강의 생성
     @PostMapping("/lectures") //신규 강의 생성(행정)
     public ResponseEntity<Void> save(@RequestBody @Valid final LectureCreateRequest lectureRequest){
 
@@ -41,8 +40,7 @@ public class LectureController {
         return ResponseEntity.created(URI.create("/lectures-management/" + lecCode)).build();
     }
 
-    //강의 수정
-    @PutMapping("/lectures/{lecCode}")
+    @PutMapping("/lectures/{lecCode}")//강의 수정
     public ResponseEntity<Void> update (@PathVariable final Long lecCode,
                                         @RequestBody @Valid final LectureUpdateRequest lectureRequest){
 
@@ -52,8 +50,7 @@ public class LectureController {
 
     }
 
-    //강의 삭제
-    @DeleteMapping("/lectures/{lecCode}")
+    @DeleteMapping("/lectures/{lecCode}")//강의 삭제
     public ResponseEntity<Void> delete(@PathVariable final Long lecCode){
 
         lectureService.delete(lecCode);
