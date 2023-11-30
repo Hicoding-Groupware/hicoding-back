@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 
 @Getter
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class MemberInformationRequest {
     @NotBlank
     private final String memberPhone;
     @NotBlank
-    private final String memberBirth;
+    private final LocalDate memberBirth;
     @NotBlank
     private final String memberGender;
 

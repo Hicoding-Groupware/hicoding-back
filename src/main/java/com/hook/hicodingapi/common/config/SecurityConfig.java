@@ -1,15 +1,6 @@
 /*
 package com.hook.hicodingapi.common.config;
 
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.ohgiraffers.comprehensive.jwt.filter.JwtAuthenticationFilter;
-//import com.ohgiraffers.comprehensive.jwt.handler.JwtAccessDeniedHandler;
-//import com.ohgiraffers.comprehensive.jwt.handler.JwtAuthenticationEntryPoint;
-//import com.ohgiraffers.comprehensive.jwt.service.JwtService;
-//import com.ohgira ffers.comprehensive.login.filter.CustomUsernamePasswordAuthenticationFilter;
-//import com.ohgiraffers.comprehensive.login.handler.LoginFailureHandler;
-//import com.ohgiraffers.comprehensive.login.handler.LoginSuccessHandler;
-//import com.ohgiraffers.comprehensive.login.service.LoginService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hook.hicodingapi.jwt.filter.JwtAuthenticationFilter;
 import com.hook.hicodingapi.jwt.handler.JwtAccessDeniedHandler;
