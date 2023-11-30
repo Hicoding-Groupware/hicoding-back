@@ -21,7 +21,6 @@ public class LoginService implements UserDetailsService {
         Member member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 아이디가 존재하지 않습니다."));
 
-
         return User.builder()
                 .username(member.getMemberId())
                 .password(member.getMemberPwd())
