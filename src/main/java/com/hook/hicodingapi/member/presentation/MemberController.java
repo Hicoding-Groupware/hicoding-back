@@ -70,7 +70,7 @@ public class MemberController {
 
         return ResponseEntity.ok().build();
     }
-    
+
     // 직원 수정
     @PutMapping("/{memberCode}")
     public ResponseEntity<Void> update(@PathVariable final Long memberCode,

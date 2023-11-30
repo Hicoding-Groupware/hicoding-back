@@ -226,16 +226,16 @@ public class MemberService {
 
         // 재직 상태
         final MemberStatus mbrStatus = InformationIdentifierService.generateRandomEnumTypeValue(MemberStatus.class);
-        
+
         // 소속 부서
         // 위에서 기입됨
-        
+
         // 등록일
 
         // 입사일
 
         // 퇴사일
-        
+
         // 토큰
 
         Member newMember = new Member(

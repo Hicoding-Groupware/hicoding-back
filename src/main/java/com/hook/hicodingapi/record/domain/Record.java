@@ -34,9 +34,10 @@ public class Record {
     @Column
     private LocalDateTime withdrawDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stdCode")
-    private Student student;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "stdCode")
+//    private Student student;
+    private Long stdCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cosCode")
@@ -46,16 +47,16 @@ public class Record {
     @Column(nullable = false, updatable = false)
     private LocalDateTime registedDate;
 
-    public Record(Student student, Course course) {
+    public Record(Long stdCode, Course course) {
 
-        this.student = student;
+        this.stdCode = stdCode;
         this.course = course;
     }
 
 
-    public static Record of(final Student student, final Course course) {
+    public static Record of(final Long stdCode, final Course course) {
         return new Record(
-                student,
+                stdCode,
                 course
         );
     }
