@@ -118,6 +118,11 @@ public class Member {
         );
     }
 
+    public void update(MemberRole memberRole, MemberStatus memberStatus) {
+        this.memberRole = memberRole;
+        this.memberStatus = memberStatus;
+    }
+
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }

@@ -20,7 +20,7 @@ public class MemberRepositoryCriteria {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public List<Member> searchMembersByCriteria(final MemberInquiryRequest searchDTO) {
+    public List<Member> searchMembers(final MemberInquiryRequest searchDTO) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Member> query = criteriaBuilder.createQuery(Member.class);
         Root<Member> root = query.from(Member.class);

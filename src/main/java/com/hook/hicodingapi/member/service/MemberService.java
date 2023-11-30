@@ -257,8 +257,15 @@ public class MemberService {
     // 직원 상세 조회 -> By Criteria
     @Transactional(readOnly = true)
     public List<Member> getDetailMembers(final MemberInquiryRequest memberInquiryRequest) {
-        final List<Member> members = memberRepositoryCriteria.searchMembersByCriteria(memberInquiryRequest);
+        final List<Member> members = memberRepositoryCriteria.searchMembers(memberInquiryRequest);
         return members;
+    }
+
+    @Transactional
+    // 직원 수정
+    public void update(Long memberCode, MemberRole memberRole, MemberStatus memberStatus) {
+        Optional<Member> findMember = memberRepository.findById(memberCode);
+        findMember.get().update(memberRole, memberStatus);
     }
 
     // 직원 삭제
