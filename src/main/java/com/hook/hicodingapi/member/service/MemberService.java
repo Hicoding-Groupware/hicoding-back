@@ -1,4 +1,3 @@
-/*
 package com.hook.hicodingapi.member.service;
 
 import com.hook.hicodingapi.member.domain.Member;
@@ -296,4 +295,3 @@ public class MemberService {
         }
     }
 }
-*/
