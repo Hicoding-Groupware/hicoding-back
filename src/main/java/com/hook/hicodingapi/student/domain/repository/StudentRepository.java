@@ -5,6 +5,7 @@ import com.hook.hicodingapi.student.domain.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,7 +22,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
 
 
-   /* @Query(value = "SELECT STD_CODE as StdCode, STD_NAME as StdName, STD_BIRTH as StdBirth, " +
+    /*@Query(value = "SELECT STD_CODE as StdCode, STD_NAME as StdName, STD_BIRTH as StdBirth, " +
             "COS_NAME as CosName, MEMBER_NAME as MemberName, COS_SDT as CosSdt, COS_EDT as CosEdt, STD_PHONE as StdPhone, REGISTED_DATE as RegistedDate\n" +
             "FROM (\n" +
             "         SELECT\n" +

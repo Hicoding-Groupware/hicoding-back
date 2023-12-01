@@ -55,6 +55,10 @@ public class SecurityConfig {
                 // method / url / pattern
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers("/login").permitAll()
+
+                // 개발 끝나면 삭제 임시용
+                .antMatchers("/**").permitAll()
+
 //                .antMatchers("/api/v1/products-management/**", "/api/vi/products/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()

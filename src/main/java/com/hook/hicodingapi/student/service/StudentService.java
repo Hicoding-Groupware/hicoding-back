@@ -42,9 +42,14 @@ public class StudentService {
     private final CourseRepository courseRepository;
 
 
-    private Pageable getStudentPageable(final Integer page) {
+    private Pageable getStudentDscPageable(final Integer page) {
         return PageRequest.of(page - 1, 15, Sort.by("stdCode").descending());
     }
+
+    private Pageable getStudentAscPageable(final Integer page) {
+        return PageRequest.of(page - 1, 15, Sort.by("stdCode").ascending());
+    }
+
     private Pageable getCoursePageable(final Integer page) {
         return PageRequest.of(page - 1, 15);
     }
@@ -87,17 +92,22 @@ public class StudentService {
 
 
     @Transactional(readOnly = true)
-    public Page<StudentsRecordResponse> getStudentsRecord(Integer page) {
+    public Page<StudentsRecordResponse> getStudentsRecord(Integer page, String sort) {
+        if ("desc".equals(sort)) {
+            Page<Student> students = studentRepository.findAll(getStudentDscPageable(page));
+            return students.map(student -> StudentsRecordResponse.from(student));
+        }
+            Page<Student> students = studentRepository.findAll(getStudentAscPageable(page));
+            return students.map(student -> StudentsRecordResponse.from(student));
 
-        Page<Student> students = studentRepository.findAll(getStudentPageable(page));
-
-        return students.map(student -> StudentsRecordResponse.from(student));
     }
+
+
 
     @Transactional(readOnly = true)
     public Page<StudentsRecordResponse> getStudentName(Integer page, String studentName) {
 
-        Page<Student> students = studentRepository.findByStdNameContaining(getStudentPageable(page), studentName);
+        Page<Student> students = studentRepository.findByStdNameContaining(getStudentDscPageable(page), studentName);
 
         return students.map(student -> StudentsRecordResponse.from(student));
     }
@@ -108,7 +118,7 @@ public class StudentService {
         LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
 
-        Page<Student> students = studentRepository.findByCreatedAtBetween(getStudentPageable(page), startDateTime, endDateTime);
+        Page<Student> students = studentRepository.findByCreatedAtBetween(getStudentDscPageable(page), startDateTime, endDateTime);
 
         return students.map(student -> StudentsRecordResponse.from(student));
     }

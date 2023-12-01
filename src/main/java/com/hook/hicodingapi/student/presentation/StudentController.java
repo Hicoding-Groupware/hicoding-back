@@ -54,9 +54,10 @@ public class StudentController {
 
     /* 원생이 각각 최근 수강등록한 과정들도 나오게 목록 조회 */
     @GetMapping("/students")
-    public ResponseEntity<PagingResponse> getStudentsRecord(@RequestParam(defaultValue = "1") final Integer page) {
+    public ResponseEntity<PagingResponse> getStudentsRecord(@RequestParam(defaultValue = "1") final Integer page,
+                                                            @RequestParam String sort) {
 
-        final Page<StudentsRecordResponse> studentsRecord = studentService.getStudentsRecord(page);
+        final Page<StudentsRecordResponse> studentsRecord = studentService.getStudentsRecord(page, sort);
         final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(studentsRecord);
         final PagingResponse pagingResponse = PagingResponse.of(studentsRecord.getContent(), pagingButtonInfo);
         return ResponseEntity.ok(pagingResponse);
