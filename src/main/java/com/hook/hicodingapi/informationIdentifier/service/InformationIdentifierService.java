@@ -1,19 +1,18 @@
-package com.hook.hicodingapi.personalInformation.service;
+package com.hook.hicodingapi.informationIdentifier.service;
 
-import com.hook.hicodingapi.personalInformation.domain.type.GenderType;
+import com.hook.hicodingapi.informationIdentifier.domain.type.GenderType;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.hook.hicodingapi.personalInformation.domain.PersonalInformation.*;
+import static com.hook.hicodingapi.informationIdentifier.domain.InformationIdentifier.*;
 
 @Service
-public class PersonalInformationService {
+public class InformationIdentifierService {
 
     private final static Random RANDOM_N = new Random();
 

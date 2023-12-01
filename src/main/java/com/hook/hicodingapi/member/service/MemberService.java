@@ -1,21 +1,29 @@
 package com.hook.hicodingapi.member.service;
 
+import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.repository.MemberRepository;
+import com.hook.hicodingapi.member.domain.repository.MemberRepositoryCriteria;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.domain.type.MemberStatus;
 import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
 import com.hook.hicodingapi.member.dto.request.MemberInquiryRequest;
 import com.hook.hicodingapi.member.dto.response.MemberCreationResponse;
-import com.hook.hicodingapi.personalInformation.service.PersonalInformationService;
-import com.hook.hicodingapi.member.dto.request.MemberInformationRequest;
+import com.hook.hicodingapi.informationIdentifier.service.InformationIdentifierService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
@@ -25,11 +33,13 @@ import static com.hook.hicodingapi.member.domain.Member.MAX_DEPT_NUM;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final MemberRepositoryCriteria memberRepositoryCriteria;
     private final PasswordEncoder passwordEncoder;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     // 임시 비밀번호 생성
     private String generatePwd() {
@@ -126,7 +136,7 @@ public class MemberService {
 
         // 사용될 등록 번호의 0의 개수
         int caldRegZeoLenCnt = Integer.toString(caldRegdNumber).length() - 1;
-      
+
         // 0의 개수가 하나라도 있다면 최대 인원 0의 개수에서 빼서 추가할 0의 개수에 계산하여 대입한다.
         if (0 < caldRegZeoLenCnt) {
             addedZeroLenCnt = maxZeroLenCnt - caldRegZeoLenCnt;
@@ -143,23 +153,6 @@ public class MemberService {
 
         // 사용될 0의 개수 + 부서 등록 번호와 등록 번호를 보낸다.
         return new MemberDataSender(combinedNumber, caldRegdNumber);
-    }
-  
-    // 1. 회원가입
-    public void information(final MemberInformationRequest memberRequest) {
-        
-        final Member newMember = Member.of(
-                passwordEncoder.encode(memberRequest.getMemberPwd()),
-                memberRequest.getPostNo(),
-                memberRequest.getAddress(),
-                memberRequest.getDetailAddress(),
-                memberRequest.getMemberEmail(),
-                memberRequest.getMemberPhone(),
-                memberRequest.getMemberBirth(),
-                memberRequest.getMemberGender()
-        );
-
-        memberRepository.save(newMember);  //save를 통해 여기다가 엔티티를 저장한다.
     }
 
     // 직원 생성
@@ -195,7 +188,7 @@ public class MemberService {
 
         // ID
         // 회원 id는 사번이며, 사번은 규칙에 의거하여 만들어진다.
-        final MemberRole mbrDeptType = PersonalInformationService.generateRandomEnumTypeValue(MemberRole.class);
+        final MemberRole mbrDeptType = InformationIdentifierService.generateRandomEnumTypeValue(MemberRole.class);
         final MemberDataSender mbrIdAndRegNo = generateId(mbrDeptType);
 
         // 비번
@@ -203,47 +196,47 @@ public class MemberService {
         final String memberPwd = passwordEncoder.encode(inputtedPassword);
 
         // 이름
-        final String memberName = PersonalInformationService.generateKoreanName();
+        final String memberName = InformationIdentifierService.generateKoreanName();
 
         // 성별
-        final String memberGender = PersonalInformationService.generateRandomGender();
+        final String memberGender = InformationIdentifierService.generateRandomGender();
 
         // 생년월일
-        final LocalDate memberBirth = PersonalInformationService.generateRandomDateTime();
+        final LocalDate memberBirth = InformationIdentifierService.generateRandomDateTime();
 
         // 만 나이
-        final int memberAge = PersonalInformationService.calculateAge(memberBirth, LocalDate.now());
+        final int memberAge = InformationIdentifierService.calculateAge(memberBirth, LocalDate.now());
 
         // 연락처
-        final String memberPhone = PersonalInformationService.generateRandomPhoneNumber();
+        final String memberPhone = InformationIdentifierService.generateRandomPhoneNumber();
 
         // 이메일
-        final String memberEmail = PersonalInformationService.generateMail(mbrIdAndRegNo.getMemberId());
+        final String memberEmail = InformationIdentifierService.generateMail(mbrIdAndRegNo.getMemberId());
 
         // 프로필
 
         // 주소
         // post
-        final String mbrPostNo = PersonalInformationService.generateRandomPostNo();
+        final String mbrPostNo = InformationIdentifierService.generateRandomPostNo();
 
         // addr
-        final String mbrAddr = PersonalInformationService.generateRandomAddress();
+        final String mbrAddr = InformationIdentifierService.generateRandomAddress();
 
         // detailAddr
-        final String mbrDetailAddR = PersonalInformationService.generateRandomDetailAddress();
+        final String mbrDetailAddR = InformationIdentifierService.generateRandomDetailAddress();
 
         // 재직 상태
-        final MemberStatus mbrStatus = PersonalInformationService.generateRandomEnumTypeValue(MemberStatus.class);
-        
+        final MemberStatus mbrStatus = InformationIdentifierService.generateRandomEnumTypeValue(MemberStatus.class);
+
         // 소속 부서
         // 위에서 기입됨
-        
+
         // 등록일
 
         // 입사일
 
         // 퇴사일
-        
+
         // 토큰
 
         Member newMember = new Member(
@@ -258,18 +251,28 @@ public class MemberService {
     // 전체 직원 조회
     @Transactional(readOnly = true)
     public List<Member> getAllMembers() {
-
         final List<Member> members = memberRepository.findAll();
         return members;
     }
 
-    // 직원 상세 조회
+    // 직원 상세 조회 -> By Criteria
     @Transactional(readOnly = true)
     public List<Member> getDetailMembers(final MemberInquiryRequest memberInquiryRequest) {
+        final List<Member> members = memberRepositoryCriteria.searchMembers(memberInquiryRequest);
+        return members;
+    }
 
+    @Transactional
+    // 직원 수정
+    public void update(Long memberCode, MemberRole memberRole, MemberStatus memberStatus) {
+        Optional<Member> findMember = memberRepository.findById(memberCode);
+        findMember.get().update(memberRole, memberStatus);
+    }
 
-
-        return null;
+    // 직원 삭제
+    @Transactional
+    public void deleteMember(final Long memberCode) {
+        memberRepository.deleteById(memberCode);
     }
 
     // 직원 전체 삭제
