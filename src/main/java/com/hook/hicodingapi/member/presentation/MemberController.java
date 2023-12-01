@@ -8,7 +8,6 @@ import com.hook.hicodingapi.member.dto.request.MemberInquiryRequest;
 import com.hook.hicodingapi.member.dto.request.MemberRandomCreationRequest;
 import com.hook.hicodingapi.member.dto.response.MemberCreationResponse;
 import com.hook.hicodingapi.member.dto.request.MemberInformationRequest;
-//import com.hook.hicodingapi.member.service.MemberService;
 import com.hook.hicodingapi.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-
-import java.net.URI;
 import java.util.ArrayList;
 
 import java.util.HashMap;
