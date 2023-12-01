@@ -1,10 +1,12 @@
 package com.hook.hicodingapi.member.domain;
 
+import com.hook.hicodingapi.informationIdentifier.domain.type.GenderType;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.domain.type.MemberStatus;
-import com.hook.hicodingapi.member.dto.request.MemberGenerateRequest;
+import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -13,6 +15,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static com.hook.hicodingapi.member.domain.type.MemberStatus.ACTIVE;
@@ -24,6 +27,7 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 @Getter
+@ToString
 public class Member {
     public static final Integer MAX_DEPT_NUM = 100;
 
@@ -39,13 +43,12 @@ public class Member {
 
     @NotNull(message = "이름은 반드시 입력되어야 합니다.")
     private String memberName;
-
     private String memberGender;
-    private String memberBirth;
+    private LocalDate memberBirth;
     private String memberPhone;
     private String memberEmail;
     private String memberProfile;
-    private String post_no;
+    private String postNo;
     private String address;
     private String detailAddress;
 
@@ -85,17 +88,69 @@ public class Member {
         this.registrationNo = registrationNo;
     }
 
-    public static Member of(String memberId, String memberPwd, MemberGenerateRequest memberGenerateRequest, Integer registrationNo) {
+    public Member(String memberId, String memberPwd, String memberName,
+                  String memberGender, LocalDate memberBirth, String memberPhone,
+                  String memberEmail, String postNo, String address,
+                  String detailAddress, MemberStatus memberStatus, MemberRole memberRole,
+                  Integer registrationNo) {
+        this.memberId = memberId;
+        this.memberPwd = memberPwd;
+        this.memberName = memberName;
+        this.memberGender = memberGender;
+        this.memberBirth = memberBirth;
+        this.memberPhone = memberPhone;
+        this.memberEmail = memberEmail;
+        this.postNo = postNo;
+        this.address = address;
+        this.detailAddress = detailAddress;
+        this.memberStatus = memberStatus;
+        this.memberRole = memberRole;
+        this.registrationNo = registrationNo;
+    }
+
+    public static Member of(String memberId, String memberPwd, MemberCreationRequest memberCreationRequest, Integer registrationNo) {
         return new Member(
                 memberId,
                 memberPwd,
-                memberGenerateRequest.getMemberName(),
-                memberGenerateRequest.getMemberRole(),
+                memberCreationRequest.getMemberName(),
+                memberCreationRequest.getMemberRole(),
                 registrationNo
         );
+    }
+
+    public void update(MemberRole memberRole, MemberStatus memberStatus) {
+        this.memberRole = memberRole;
+        this.memberStatus = memberStatus;
     }
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
     }
+
+public Member(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, LocalDate memberBirth, String memberGender) {
+
+        this.memberPwd = memberPwd;
+        this.postNo = postNo;
+        this.address = address;
+        this.detailAddress = detailAddress;
+        this.memberEmail = memberEmail;
+        this.memberPhone = memberPhone;
+        this.memberBirth = memberBirth;
+        this.memberGender = memberGender;
+}
+
+public static Member of(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, LocalDate memberBirth, String memberGender) {
+
+        return new Member(
+                memberPwd,
+                postNo,
+                address,
+                detailAddress,
+                memberEmail,
+                memberPhone,
+                memberBirth,
+                memberGender
+        ); //(이렇게 전달된 값을 entity로 만들어주는 메소드)
+}
+
 }

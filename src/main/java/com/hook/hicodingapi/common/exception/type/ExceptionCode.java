@@ -20,8 +20,17 @@ public enum ExceptionCode {
 
     NOT_FOUND_RECORD_CODE(5002, "수강이력이 존재하지 않습니다."),
 
-    NOT_ENOUGH_CAPACITY(5003, "해당과정이 꽉찼습니다.");
+    NOT_ENOUGH_CAPACITY(5003, "해당과정이 꽉찼습니다."),
 
+    /*------------ 로그인 exceptionCode --------------*/
+
+    FAIL_LOGIN(4000, "로그인에 실패하였습니다"),
+
+    UNAUTHORIZED(4001, "인증되지 않은 요청입니다."),
+
+    NOT_FOUND_MEMBER_ID(4002, "아이디에 해당하는 유저가 없습니다."),
+
+    ACCESS_DENIED(4003, "허가 되지 않은 요청입니다.");
 
 
     private final int code;

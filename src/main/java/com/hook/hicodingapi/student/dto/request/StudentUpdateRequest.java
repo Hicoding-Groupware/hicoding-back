@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Date;
 
 @RequiredArgsConstructor
@@ -18,7 +19,7 @@ public class StudentUpdateRequest {
     private final String stdGender;
 
     @NotNull
-    private final Date stdBirth;
+    private final LocalDate stdBirth;
 
     @NotBlank
     private final String stdPhone;

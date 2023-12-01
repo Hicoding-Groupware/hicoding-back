@@ -2,56 +2,44 @@ package com.hook.hicodingapi.member.service;
 
 import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.Member;
+import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.repository.MemberRepository;
+import com.hook.hicodingapi.member.domain.repository.MemberRepositoryCriteria;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
-import com.hook.hicodingapi.member.dto.request.MemberGenerateRequest;
-import com.hook.hicodingapi.member.dto.response.MemberGenerateResponse;
+import com.hook.hicodingapi.member.domain.type.MemberStatus;
+import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
+import com.hook.hicodingapi.member.dto.request.MemberInquiryRequest;
+import com.hook.hicodingapi.member.dto.response.MemberCreationResponse;
+import com.hook.hicodingapi.informationIdentifier.service.InformationIdentifierService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 
 import static com.hook.hicodingapi.member.domain.Member.MAX_DEPT_NUM;
-import static com.hook.hicodingapi.member.domain.type.MemberStatus.DELETED;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final MemberRepositoryCriteria memberRepositoryCriteria;
     private final PasswordEncoder passwordEncoder;
-
-    // 직원 생성
-    @Transactional
-    public void create(final MemberGenerateRequest memberGenerateRequest, List<MemberGenerateResponse> memberGenerateResponseList) {
-        for (int i = 0; i < MAX_DEPT_NUM + 1; i++) {
-            // 회원 id는 사번이며, 사번은 규칙에 의거하여 만들어진다.
-            MemberDataSender mbrIdAndRegNo = generateId(memberGenerateRequest.getMemberRole());
-
-            // 임시 비밀번호
-            String tempPwd = generatePwd();
-
-            // 응답 아이디와 임시 비밀번호 저장
-            memberGenerateResponseList.add(new MemberGenerateResponse(mbrIdAndRegNo.getMemberId(), tempPwd));
-
-            // 비밀번호는 Encoder에 의하여 인코딩 과정이 들어간다.
-            String memberPwd = passwordEncoder.encode(tempPwd);
-
-            final Member newMember = Member.of(
-                    mbrIdAndRegNo.getMemberId(),
-                    memberPwd,
-                    memberGenerateRequest,
-                    mbrIdAndRegNo.getRegistrationNo()
-            );
-
-            memberRepository.save(newMember);
-        }
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     // 임시 비밀번호 생성
     private String generatePwd() {
@@ -60,26 +48,26 @@ public class MemberService {
         StringBuilder tempPwd = new StringBuilder();
 
         // 8 ~ 16자의 자릿수 랜덤 생성
-        final int PWD_LEN = (int)(Math.random() * 9 + 8);
+        final int PWD_LEN = (int) (Math.random() * 9 + 8);
 
         // 각 자릿수에 숫자 | 대 | 소문자 Char 값을 넣는다.
-        for(int i = 0; i < PWD_LEN; i++) {
+        for (int i = 0; i < PWD_LEN; i++) {
             char selectedVal = ' ';
-            switch ((int)(Math.random() * 3)) {
+            switch ((int) (Math.random() * 3)) {
                 // 숫자
                 case 0:
-                    selectedVal = (char)((int)(Math.random() * 9 + 1) + '0');
+                    selectedVal = (char) ((int) (Math.random() * 9 + 1) + '0');
                     break;
                 // 소문자    26
                 case 1:
 
-                    int lAlphabet = (int)(Math.random() * 25 + 65);
-                    selectedVal = (char)(lAlphabet);
+                    int lAlphabet = (int) (Math.random() * 25 + 65);
+                    selectedVal = (char) (lAlphabet);
                     break;
                 // 대문자
                 case 2:
-                    int bAlphabet = (int)(Math.random() * 25 + 97);
-                    selectedVal = (char)(bAlphabet);
+                    int bAlphabet = (int) (Math.random() * 25 + 97);
+                    selectedVal = (char) (bAlphabet);
                     break;
             }
 
@@ -90,7 +78,7 @@ public class MemberService {
     }
 
     // 사번 생성 알고리즘
-    public MemberDataSender generateId(final MemberRole departmentName) {
+    private MemberDataSender generateId(final MemberRole departmentName) {
 
         // --init--
 
@@ -131,8 +119,7 @@ public class MemberService {
         int addedZeroLenCnt = maxZeroLenCnt;
 
         // 소속 부서 마지막 등록 번호를 가져온다.
-        Optional<Member> lastMemberOptional = memberRepository.findTop1ByMemberRoleAndMemberStatusNot(departmentName,
-                        DELETED,
+        Optional<Member> lastMemberOptional = memberRepository.findTop1ByMemberRole(departmentName,
                         Sort.by(Sort.Order.desc("registrationNo")))
                 // 가져올 수 없다면 등록번호 0 번 초기화 값을 만들어 가져온다.
                 .map(Optional::of)
@@ -148,7 +135,7 @@ public class MemberService {
         }
 
         // 사용될 등록 번호의 0의 개수
-        int caldRegZeoLenCnt =  Integer.toString(caldRegdNumber).length() - 1;
+        int caldRegZeoLenCnt = Integer.toString(caldRegdNumber).length() - 1;
 
         // 0의 개수가 하나라도 있다면 최대 인원 0의 개수에서 빼서 추가할 0의 개수에 계산하여 대입한다.
         if (0 < caldRegZeoLenCnt) {
@@ -157,7 +144,7 @@ public class MemberService {
 
         // 추가할 0의 개수를 string으로 변환한다.
         StringBuilder zeroStr = new StringBuilder();
-        for(int i = 0; i < addedZeroLenCnt; i++) {
+        for (int i = 0; i < addedZeroLenCnt; i++) {
             zeroStr.append('0');
         }
 
@@ -166,5 +153,148 @@ public class MemberService {
 
         // 사용될 0의 개수 + 부서 등록 번호와 등록 번호를 보낸다.
         return new MemberDataSender(combinedNumber, caldRegdNumber);
+    }
+
+    // 직원 생성
+    @Transactional
+    public void customInsert(final MemberCreationRequest memberCreationRequest, List<MemberCreationResponse> memberCreationResponseList) {
+
+        // 회원 id는 사번이며, 사번은 규칙에 의거하여 만들어진다.
+        MemberDataSender mbrIdAndRegNo = generateId(memberCreationRequest.getMemberRole());
+
+        // 임시 비밀번호
+        String tempPwd = generatePwd();
+
+        // 응답 아이디와 임시 비밀번호 저장
+        memberCreationResponseList.add(new MemberCreationResponse(mbrIdAndRegNo.getMemberId(), tempPwd));
+
+        // 비밀번호는 Encoder에 의하여 인코딩 과정이 들어간다.
+        String memberPwd = passwordEncoder.encode(tempPwd);
+
+        final Member newMember = Member.of(
+                mbrIdAndRegNo.getMemberId(),
+                memberPwd,
+                memberCreationRequest,
+                mbrIdAndRegNo.getRegistrationNo()
+        );
+
+        memberRepository.save(newMember);
+    }
+
+    // 직원 랜덤 생성
+    @Transactional
+    public void randomInsert(final String inputtedPassword) {
+        // pk
+
+        // ID
+        // 회원 id는 사번이며, 사번은 규칙에 의거하여 만들어진다.
+        final MemberRole mbrDeptType = InformationIdentifierService.generateRandomEnumTypeValue(MemberRole.class);
+        final MemberDataSender mbrIdAndRegNo = generateId(mbrDeptType);
+
+        // 비번
+        // 암호화
+        final String memberPwd = passwordEncoder.encode(inputtedPassword);
+
+        // 이름
+        final String memberName = InformationIdentifierService.generateKoreanName();
+
+        // 성별
+        final String memberGender = InformationIdentifierService.generateRandomGender();
+
+        // 생년월일
+        final LocalDate memberBirth = InformationIdentifierService.generateRandomDateTime();
+
+        // 만 나이
+        final int memberAge = InformationIdentifierService.calculateAge(memberBirth, LocalDate.now());
+
+        // 연락처
+        final String memberPhone = InformationIdentifierService.generateRandomPhoneNumber();
+
+        // 이메일
+        final String memberEmail = InformationIdentifierService.generateMail(mbrIdAndRegNo.getMemberId());
+
+        // 프로필
+
+        // 주소
+        // post
+        final String mbrPostNo = InformationIdentifierService.generateRandomPostNo();
+
+        // addr
+        final String mbrAddr = InformationIdentifierService.generateRandomAddress();
+
+        // detailAddr
+        final String mbrDetailAddR = InformationIdentifierService.generateRandomDetailAddress();
+
+        // 재직 상태
+        final MemberStatus mbrStatus = InformationIdentifierService.generateRandomEnumTypeValue(MemberStatus.class);
+
+        // 소속 부서
+        // 위에서 기입됨
+
+        // 등록일
+
+        // 입사일
+
+        // 퇴사일
+
+        // 토큰
+
+        Member newMember = new Member(
+                mbrIdAndRegNo.getMemberId(), memberPwd, memberName,
+                memberGender, memberBirth, memberPhone,
+                memberEmail, mbrPostNo, mbrAddr, mbrDetailAddR,
+                mbrStatus, mbrDeptType, mbrIdAndRegNo.getRegistrationNo());
+
+        memberRepository.save(newMember);
+    }
+
+    // 전체 직원 조회
+    @Transactional(readOnly = true)
+    public List<Member> getAllMembers() {
+        final List<Member> members = memberRepository.findAll();
+        return members;
+    }
+
+    // 직원 상세 조회 -> By Criteria
+    @Transactional(readOnly = true)
+    public List<Member> getDetailMembers(final MemberInquiryRequest memberInquiryRequest) {
+        final List<Member> members = memberRepositoryCriteria.searchMembers(memberInquiryRequest);
+        return members;
+    }
+
+    @Transactional
+    // 직원 수정
+    public void update(Long memberCode, MemberRole memberRole, MemberStatus memberStatus) {
+        Optional<Member> findMember = memberRepository.findById(memberCode);
+        findMember.get().update(memberRole, memberStatus);
+    }
+
+    // 직원 삭제
+    @Transactional
+    public void deleteMember(final Long memberCode) {
+        memberRepository.deleteById(memberCode);
+    }
+
+    // 직원 전체 삭제
+    @Transactional
+    public void deleteAllMembers() {
+        // 이전에 저장된 엔티티의 수를 조회
+        long initialCount = memberRepository.count();
+
+        // 엔티티 삭제
+        memberRepository.deleteAll();
+
+        // 삭제 후의 엔티티 수를 다시 조회
+        long finalCount = memberRepository.count();
+
+        // 삭제된 엔티티의 수 계산
+        long deletedCount = initialCount - finalCount;
+
+        // 삭제된 엔티티가 하나 이상이어야 성공으로 간주
+        if (deletedCount > 0) {
+            System.out.println("삭제 작업이 성공하였습니다. 삭제된 엔티티 수: " + deletedCount);
+        } else {
+            System.out.println("삭제 작업이 실패하였습니다.");
+        }
     }
 }

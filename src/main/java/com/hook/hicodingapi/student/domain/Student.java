@@ -1,5 +1,7 @@
 package com.hook.hicodingapi.student.domain;
 
+import com.hook.hicodingapi.attendance.domain.Attendance;
+import com.hook.hicodingapi.record.domain.Record;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -9,8 +11,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PROTECTED;
@@ -33,7 +37,7 @@ public class Student {
     private String stdGender;
 
     @Column(nullable = false)
-    private Date stdBirth;
+    private LocalDate stdBirth;
 
     @Column(nullable = false)
     private String stdPhone;
@@ -61,7 +65,15 @@ public class Student {
     @Column(nullable = false)
     private LocalDateTime modifiedAt;
 
-    public Student(String stdName, String stdGender, Date stdBirth, String stdPhone, String stdEmail, String postNo, String address, String detailAddress, String stdMemo) {
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "stdCode")
+    private List<Record> recordList;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "stdCode")
+    private List<Attendance> attendStdCode;
+
+    public Student(String stdName, String stdGender, LocalDate stdBirth, String stdPhone, String stdEmail, String postNo, String address, String detailAddress, String stdMemo) {
         this.stdName = stdName;
         this.stdGender = stdGender;
         this.stdBirth = stdBirth;
@@ -73,7 +85,7 @@ public class Student {
         this.stdMemo = stdMemo;
     }
 
-    public static Student of(final String stdName, final String stdGender, final Date stdBirth,
+    public static Student of(final String stdName, final String stdGender, final LocalDate stdBirth,
                              final String stdPhone, final String stdEmail, final String postNo,
                              final String address, final String detailAddress, final String stdMemo) {
 
@@ -90,7 +102,7 @@ public class Student {
         );
     }
 
-    public void update(String stdName, String stdGender, Date stdBirth, String stdPhone,
+    public void update(String stdName, String stdGender, LocalDate stdBirth, String stdPhone,
                        String stdEmail, String postNo, String address, String detailAddress, String stdMemo) {
         this.stdName = stdName;
         this.stdGender = stdGender;
