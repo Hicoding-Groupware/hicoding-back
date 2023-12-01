@@ -4,6 +4,7 @@ import com.hook.hicodingapi.student.domain.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,6 +13,13 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     Page<Student> findByStdNameContaining(Pageable pageable, String studentName);
     Page<Student> findByCreatedAtBetween(Pageable pageable, LocalDateTime startDate, LocalDateTime endDate);
+
+
+    @Query("SELECT s " +
+            "FROM Student s " +
+            "JOIN FETCH s.recordList r " +
+            "WHERE r.signupStatus = 'NORMAL' ")
+    List<Student> findStudentsByAndSignupStatus();
 
 
    /* @Query(value = "SELECT STD_CODE as StdCode, STD_NAME as StdName, STD_BIRTH as StdBirth, " +

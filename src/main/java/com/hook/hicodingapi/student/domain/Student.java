@@ -70,8 +70,8 @@ public class Student {
     private List<Record> recordList;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "aStdCode")
-    private List<Attendance> aStdCode;
+    @JoinColumn(name = "stdCode")
+    private List<Attendance> attendStdCode;
 
     public Student(String stdName, String stdGender, LocalDate stdBirth, String stdPhone, String stdEmail, String postNo, String address, String detailAddress, String stdMemo) {
         this.stdName = stdName;
