@@ -4,10 +4,12 @@ import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.domain.type.MemberStatus;
 import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
+import com.hook.hicodingapi.member.dto.request.MemberInformationRequest;
 import com.hook.hicodingapi.member.dto.request.MemberInquiryRequest;
 import com.hook.hicodingapi.member.dto.request.MemberRandomCreationRequest;
+
 import com.hook.hicodingapi.member.dto.response.MemberCreationResponse;
-import com.hook.hicodingapi.member.dto.request.MemberInformationRequest;
+
 import com.hook.hicodingapi.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,8 +26,7 @@ import java.util.List;
 import static com.hook.hicodingapi.common.ApiURIConstants.BASE_PATH;
 import static com.hook.hicodingapi.common.ApiURIConstants.MEMBER_PATH;
 
-
-import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(BASE_PATH + MEMBER_PATH)
@@ -112,4 +113,9 @@ public class MemberController {
 
         return ResponseEntity.noContent().build();
     }
+
+
+
+
+
 }
