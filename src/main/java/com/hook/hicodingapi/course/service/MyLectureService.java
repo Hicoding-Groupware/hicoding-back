@@ -5,6 +5,7 @@ import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.course.domain.repository.MyLectureRepository;
 import com.hook.hicodingapi.course.dto.resposne.DetailCourseLectureResponse;
 import com.hook.hicodingapi.course.dto.resposne.TeacherCourseResponse;
+import com.hook.hicodingapi.jwt.CustomUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,12 +32,12 @@ public class MyLectureService {
 
     /* 1. 진행 중인 강의 조회 - 페이징, 개강일 ~ 종강일 사이의 날짜 포함 하여 조회 (강사) */
     @Transactional(readOnly = true)
-    public Page<TeacherCourseResponse> getTeacherCourseCosSdtAndCosEdt(final Integer page, final Long memberNo, LocalDate cosStd, LocalDate cosEtd) {
+    public Page<TeacherCourseResponse> getTeacherCourseCosSdtAndCosEdt(Integer page, CustomUser customUser, LocalDate cosStd, LocalDate cosEtd) {
 
 
         Page<Course> courses = myLectureRepository
                 .findByTeacherMemberNoAndCosSdtBeforeAndCosEdtAfter(
-                getPageable(page), memberNo, cosStd.minusDays(1), cosEtd.plusDays(1));
+                getPageable(page), customUser.getMemberNo(), cosStd.minusDays(1), cosEtd.plusDays(1));
 
         return courses.map(course -> TeacherCourseResponse.from(course));
     }
@@ -44,9 +45,9 @@ public class MyLectureService {
 
     /* 2. 지난 강의 조회 - 페이징, 종강 일이 이미 지난 날짜일 경우 조회 (강사) */
     @Transactional(readOnly = true)
-    public Page<TeacherCourseResponse> getTeacherCourseCosEdt(final Integer page, final Long memberNo, LocalDate cosEdt) {
+    public Page<TeacherCourseResponse> getTeacherCourseCosEdt(final Integer page, CustomUser customUser, LocalDate cosEdt) {
 
-        Page<Course> courses = myLectureRepository.findByTeacherMemberNoAndCosEdtBefore(getPageable(page), memberNo, cosEdt);
+        Page<Course> courses = myLectureRepository.findByTeacherMemberNoAndCosEdtBefore(getPageable(page), customUser.getMemberNo(), cosEdt);
 
         return courses.map(course -> TeacherCourseResponse.from(course));
     }
@@ -54,9 +55,9 @@ public class MyLectureService {
 
     /* 3. 예정 강의 조회 - 페이징, 개강 일이 아직 지나지 않은 날짜일 경우 조회 (강사) */
     @Transactional(readOnly = true)
-    public Page<TeacherCourseResponse> getTeacherCourseCosSdt(final Integer page, final Long memberNo, LocalDate cosSdt) {
+    public Page<TeacherCourseResponse> getTeacherCourseCosSdt(final Integer page, CustomUser customUser, LocalDate cosSdt) {
 
-        Page<Course> courses = myLectureRepository.findByTeacherMemberNoAndCosSdtAfter(getPageable(page), memberNo, cosSdt);
+        Page<Course> courses = myLectureRepository.findByTeacherMemberNoAndCosSdtAfter(getPageable(page), customUser.getMemberNo(), cosSdt);
 
         return courses.map(course -> TeacherCourseResponse.from(course));
     }

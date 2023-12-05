@@ -1,34 +1,29 @@
 package com.hook.hicodingapi.student.service;
 
+import com.hook.hicodingapi.attendance.domain.repository.AttendanceRepository;
+import com.hook.hicodingapi.attendance.dto.response.DailyAttendanceResponse;
 import com.hook.hicodingapi.common.exception.NotFoundException;
 import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.course.domain.repository.CourseRepository;
-import com.hook.hicodingapi.record.domain.Record;
 import com.hook.hicodingapi.student.domain.Student;
 import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
-import com.hook.hicodingapi.student.dto.response.StudentCourse;
 import com.hook.hicodingapi.student.dto.response.StudentCourseResponse;
 import com.hook.hicodingapi.student.dto.response.StudentsRecordResponse;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Map;
-
-import static com.fasterxml.jackson.databind.type.LogicalType.Map;
+import java.util.stream.Collectors;
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_STD_CODE;
 import static com.hook.hicodingapi.course.domain.type.CourseStatusType.AVAILABLE;
 
@@ -40,6 +35,7 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final CourseRepository courseRepository;
+    private final AttendanceRepository attendanceRepository;
 
 
     private Pageable getStudentDscPageable(final Integer page) {
@@ -140,5 +136,13 @@ public class StudentService {
     }
 
 
+    @Transactional
+    public List<DailyAttendanceResponse> getAttendanceForDay(Long cosCode) {
 
+        List<Student> students = studentRepository.findStudentsByAndSignupStatus();
+
+        return students.stream()
+                .map(DailyAttendanceResponse::from)
+                .collect(Collectors.toList());
+    }
 }

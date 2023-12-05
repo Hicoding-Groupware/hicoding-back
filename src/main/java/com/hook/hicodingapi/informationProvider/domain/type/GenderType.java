@@ -1,4 +1,4 @@
-package com.hook.hicodingapi.personalInformation.domain.type;
+package com.hook.hicodingapi.informationProvider.domain.type;
 
 import lombok.Getter;
 
