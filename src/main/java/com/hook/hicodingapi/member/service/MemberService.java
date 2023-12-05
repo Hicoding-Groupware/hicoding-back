@@ -1,6 +1,8 @@
 package com.hook.hicodingapi.member.service;
-
 import com.hook.hicodingapi.informationProvider.domain.type.GenderType;
+import com.hook.hicodingapi.member.dto.request.MemberUpdateRequest;
+import com.hook.hicodingapi.member.dto.response.PreLoginResponse;
+import com.hook.hicodingapi.common.exception.NotFoundException;
 import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.member.domain.repository.MemberRepository;
@@ -27,12 +29,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Map;
 
+import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_MEMBER_ID;
 import static com.hook.hicodingapi.member.domain.Member.MAX_DEPT_NUM;
 import static com.hook.hicodingapi.informationProvider.service.InformationProviderService.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -313,4 +318,50 @@ public class MemberService {
             System.out.println("삭제 작업이 실패하였습니다.");
         }
     }
+
+    /*----------------------------- 민서 존 ------------------------------------------------------------*/
+
+    public PreLoginResponse preLogin(Map<String, String> loginInfo) {
+        Member member = memberRepository.findByMemberId(loginInfo.get("memberId"))
+                .orElseThrow();
+
+        PreLoginResponse preLoginResponse = null;
+
+        if(member.getLoginStatus() == null) {
+            preLoginResponse = PreLoginResponse.of(true, member.getMemberId(), member.getMemberName());
+        } else {
+            preLoginResponse = PreLoginResponse.of(false, null, null);
+        }
+        return preLoginResponse;
+    }
+
+
+
+
+    public void memberUpdate(MemberUpdateRequest memberUpdateRequest) {
+
+        Optional<Member> optionalMember = memberRepository.findByMemberId(memberUpdateRequest.getMemberId());
+
+
+        if (optionalMember.isPresent()) {
+            Member member1 = optionalMember.get();
+
+            member1.update(
+                    memberUpdateRequest.getMemberPwd(),
+                    memberUpdateRequest.getPostNo(),
+                    memberUpdateRequest.getAddress(),
+                    memberUpdateRequest.getDetailAddress(),
+                    memberUpdateRequest.getMemberEmail(),
+                    memberUpdateRequest.getMemberPhone(),
+                    memberUpdateRequest.getMemberBirth(),
+                    memberUpdateRequest.getMemberGender()
+            );
+        } else {
+
+            throw new NotFoundException(NOT_FOUND_MEMBER_ID);
+
+
+        }
+    }
+
 }

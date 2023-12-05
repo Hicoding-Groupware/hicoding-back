@@ -5,8 +5,10 @@ import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.domain.type.MemberStatus;
 import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
+import com.hook.hicodingapi.member.dto.request.MemberInformationRequest;
 import com.hook.hicodingapi.member.dto.request.MemberInquiryRequest;
 import com.hook.hicodingapi.member.dto.request.MemberRandomCreationRequest;
+
 import com.hook.hicodingapi.member.dto.response.MemberCreationResponse;
 import com.hook.hicodingapi.member.dto.request.MemberInformationRequest;
 import com.hook.hicodingapi.member.dto.response.MemberInquiryResponse;
@@ -27,8 +29,7 @@ import static com.hook.hicodingapi.common.ApiURIConstants.BASE_PATH;
 import static com.hook.hicodingapi.common.ApiURIConstants.MEMBER_PATH;
 import static com.hook.hicodingapi.informationProvider.service.InformationProviderService.generateRandomEnumTypeValue;
 
-
-import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(BASE_PATH + MEMBER_PATH)
@@ -119,4 +120,9 @@ public class MemberController {
 
         return ResponseEntity.noContent().build();
     }
+
+
+
+
+
 }

@@ -1,6 +1,7 @@
 package com.hook.hicodingapi.course.dto.resposne;
 
 import com.hook.hicodingapi.course.domain.Course;
+import com.hook.hicodingapi.course.domain.type.CourseStatusType;
 import com.hook.hicodingapi.course.domain.type.DayStatusType;
 import com.hook.hicodingapi.course.domain.type.TimeStatusType;
 import lombok.Getter;
