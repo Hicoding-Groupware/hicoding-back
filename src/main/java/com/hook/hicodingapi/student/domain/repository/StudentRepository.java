@@ -3,6 +3,7 @@ package com.hook.hicodingapi.student.domain.repository;
 import com.hook.hicodingapi.student.domain.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -11,8 +12,23 @@ import java.util.List;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
-    Page<Student> findByStdNameContaining(Pageable pageable, String studentName);
-    Page<Student> findByCreatedAtBetween(Pageable pageable, LocalDateTime startDate, LocalDateTime endDate);
+    @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
+    Page<Student> findByStdNameContaining(Pageable studentPageable, String stdName);
+    @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
+    Page<Student> findByCreatedAtGreaterThanEqual(Pageable studentPageable, LocalDateTime startDateTime);
+    @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
+    Page<Student> findByCreatedAtLessThanEqual(Pageable studentPageable, LocalDateTime endDateTime);
+    @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
+    Page<Student> findByCreatedAtBetween(Pageable studentPageable, LocalDateTime startDateTime, LocalDateTime endDateTime);
+    @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
+    Page<Student> findByStdNameContainingAndCreatedAtGreaterThanEqual(Pageable studentPageable, String stdName, LocalDateTime startDateTime);
+    @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
+    Page<Student> findByStdNameContainingAndCreatedAtLessThanEqual(Pageable studentPageable, String stdName, LocalDateTime endDateTime);
+    @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
+    Page<Student> findByStdNameContainingAndCreatedAtBetween(Pageable studentPageable, String stdName, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    
+
 
 
     @Query("SELECT s " +
