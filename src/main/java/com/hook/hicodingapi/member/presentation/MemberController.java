@@ -1,6 +1,7 @@
 package com.hook.hicodingapi.member.presentation;
 
 import com.hook.hicodingapi.member.domain.Member;
+import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.domain.type.MemberStatus;
 import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
@@ -8,7 +9,7 @@ import com.hook.hicodingapi.member.dto.request.MemberInquiryRequest;
 import com.hook.hicodingapi.member.dto.request.MemberRandomCreationRequest;
 import com.hook.hicodingapi.member.dto.response.MemberCreationResponse;
 import com.hook.hicodingapi.member.dto.request.MemberInformationRequest;
-//import com.hook.hicodingapi.member.service.MemberService;
+import com.hook.hicodingapi.member.dto.response.MemberInquiryResponse;
 import com.hook.hicodingapi.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-
-import java.net.URI;
 import java.util.ArrayList;
 
 import java.util.HashMap;
@@ -26,6 +25,7 @@ import java.util.List;
 
 import static com.hook.hicodingapi.common.ApiURIConstants.BASE_PATH;
 import static com.hook.hicodingapi.common.ApiURIConstants.MEMBER_PATH;
+import static com.hook.hicodingapi.informationProvider.service.InformationProviderService.generateRandomEnumTypeValue;
 
 
 import java.util.List;
@@ -47,10 +47,10 @@ public class MemberController {
 
     // 직원 상세 조회
     @GetMapping()
-    public ResponseEntity<List<Member>> getDetailMembers(final MemberInquiryRequest memberInquiryRequest) {
+    public ResponseEntity<List<MemberInquiryResponse>> getDetailMembers(final MemberInquiryRequest memberInquiryRequest) {
 
-        List<Member> members = memberService.getDetailMembers(memberInquiryRequest);
-        return ResponseEntity.ok(members);
+        List<MemberInquiryResponse> memberInquiryResponses = memberService.getDetailMembers(memberInquiryRequest);
+        return ResponseEntity.ok(memberInquiryResponses);
     }
 
     /* 2. 개인정보 업데이트 */
@@ -68,21 +68,25 @@ public class MemberController {
 
         List<MemberCreationResponse> memberCreationResponseList = new ArrayList<>();
 
-        for (int i = 0; i < memberCreationRequest.getCnt(); i++)
+        for (int i = 0; i < memberCreationRequest.getCnt(); i++) {
             memberService.customInsert(memberCreationRequest, memberCreationResponseList);
+        }
 
         return ResponseEntity.ok(memberCreationResponseList);
     }
 
     // 직원 랜덤 생성
     @PostMapping("/random")
-    public ResponseEntity<Void> randomInsert(@RequestBody @Valid MemberRandomCreationRequest memberRandomCreationRequest) {
+    public ResponseEntity<List<Member>> randomInsert(@RequestBody @Valid MemberRandomCreationRequest memberRandomCreationRequest) {
+
+        List<Member> memberList = new ArrayList<>();
 
         final String mbrPwd = memberRandomCreationRequest.getMemberPwd();
-        for (int i = 0; i < memberRandomCreationRequest.getMbrCnt(); i++)
-            memberService.randomInsert(mbrPwd);
+        for (int i = 0; i < memberRandomCreationRequest.getMbrCnt(); i++) {
+            memberList.add(memberService.randomInsert(mbrPwd));
+        }
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(memberList);
     }
 
     // 직원 수정
