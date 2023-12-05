@@ -58,7 +58,7 @@ public class SecurityConfig {
                 // method / url / pattern
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers(BASE_PATH + MEMBER_PATH + "/**").permitAll()
-                .antMatchers("/login", "/pre/login", "/member").permitAll()
+                .antMatchers(BASE_PATH + "/login", BASE_PATH + "/member/pre/login", BASE_PATH +"/member/memberInfo").permitAll()
 //                .antMatchers("/api/v1/products-management/**", "/api/vi/products/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()

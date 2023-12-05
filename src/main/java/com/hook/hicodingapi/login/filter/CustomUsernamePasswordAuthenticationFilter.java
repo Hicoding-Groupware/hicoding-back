@@ -20,7 +20,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends AbstractAuthenti
 
     private static final String HTTP_METHOD = "POST";
 
-    private static final String LOGIN_REQUEST_URL = "/login";
+    private static final String LOGIN_REQUEST_URL = "/hc-app/v1/login";
 
     private static final String CONTENT_TYPE = "application/json";
 
