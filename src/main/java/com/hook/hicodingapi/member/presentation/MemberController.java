@@ -4,14 +4,12 @@ import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.domain.type.MemberStatus;
-import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
-import com.hook.hicodingapi.member.dto.request.MemberInformationRequest;
-import com.hook.hicodingapi.member.dto.request.MemberInquiryRequest;
-import com.hook.hicodingapi.member.dto.request.MemberRandomCreationRequest;
+import com.hook.hicodingapi.member.dto.request.*;
 
 import com.hook.hicodingapi.member.dto.response.MemberCreationResponse;
 import com.hook.hicodingapi.member.dto.request.MemberInformationRequest;
 import com.hook.hicodingapi.member.dto.response.MemberInquiryResponse;
+import com.hook.hicodingapi.member.dto.response.PreLoginResponse;
 import com.hook.hicodingapi.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -119,6 +117,23 @@ public class MemberController {
         memberService.deleteAllMembers();
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/pre/login")
+    public ResponseEntity<PreLoginResponse> preLogin(@RequestBody Map<String, String> loginInfo) {
+
+        PreLoginResponse preLoginResponse = memberService.preLogin(loginInfo);
+
+        return ResponseEntity.ok(preLoginResponse);
+    }
+
+    @PutMapping("/memberInfo")
+    public ResponseEntity<Void> update(@RequestBody final MemberUpdateRequest memberUpdateRequest){
+
+        memberService.memberUpdate(memberUpdateRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+
     }
 
 

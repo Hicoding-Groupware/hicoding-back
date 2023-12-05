@@ -354,7 +354,8 @@ public class MemberService {
                     memberUpdateRequest.getMemberEmail(),
                     memberUpdateRequest.getMemberPhone(),
                     memberUpdateRequest.getMemberBirth(),
-                    memberUpdateRequest.getMemberGender()
+                    memberUpdateRequest.getMemberGender(),
+                    memberUpdateRequest.getLoginStatus()
             );
         } else {
 
