@@ -1,5 +1,6 @@
 package com.hook.hicodingapi.member.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hook.hicodingapi.informationIdentifier.domain.type.GenderType;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.domain.type.MemberStatus;
@@ -74,6 +75,9 @@ public class Member {
     private LocalDateTime joinedAt;
 
     private LocalDateTime endedAt;
+
+    private String loginStatus;
+
     private String refreshToken;
 
     public Member(Integer registrationNo) {
@@ -151,6 +155,21 @@ public static Member of(String memberPwd, String postNo, String address, String 
                 memberBirth,
                 memberGender
         ); //(이렇게 전달된 값을 entity로 만들어주는 메소드)
+}
+
+/*------------------------ 민서 존 -------------------------*/
+public void update(String memberPwd, String postNo, String address, String detailAddress, String memberEmail,
+                   String memberPhone, LocalDate memberBirth, String memberGender) {
+
+    this.memberPwd = memberPwd;
+    this.postNo = postNo;
+    this.address = address;
+    this.detailAddress = detailAddress;
+    this.memberEmail = memberEmail;
+    this.memberPhone = memberPhone;
+    this.memberBirth = memberBirth;
+    this.memberGender = memberGender;
+
 }
 
 }
