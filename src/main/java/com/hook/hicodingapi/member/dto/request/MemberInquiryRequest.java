@@ -22,6 +22,7 @@ public class MemberInquiryRequest {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate joinedAt;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate endedAt;
 
     private String appliedOrderDataName;

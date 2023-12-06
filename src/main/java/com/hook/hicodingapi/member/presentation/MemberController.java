@@ -66,7 +66,6 @@ public class MemberController {
     public ResponseEntity<List<MemberCreationResponse>> insert(@RequestBody @Valid MemberCreationRequest memberCreationRequest) {
 
         List<MemberCreationResponse> memberCreationResponseList = new ArrayList<>();
-
         for (int i = 0; i < memberCreationRequest.getCnt(); i++) {
             memberService.customInsert(memberCreationRequest, memberCreationResponseList);
         }

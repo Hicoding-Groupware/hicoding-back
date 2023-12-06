@@ -18,6 +18,7 @@ import static javax.persistence.EnumType.STRING;
 @AllArgsConstructor
 @Getter
 public class MemberInquiryResponse {
+    private int no;
     private String id;
     private String name;
     private String gender;
@@ -36,15 +37,18 @@ public class MemberInquiryResponse {
     private LocalDate joinedAt;
     private LocalDate endedAt;
 
-    public static MemberInquiryResponse from(Member member) {
+    public static MemberInquiryResponse from(int idx, Member member) {
 
         LocalDate birth = member.getMemberBirth();
         final LocalDateTime endedAt = member.getEndedAt();
 
         return new MemberInquiryResponse(
+                idx,
                 member.getMemberId(),
                 member.getMemberName(),
-                member.getMemberGender().getGender(),
+                member.getMemberGender() != null ?
+                    member.getMemberGender().getGender() :
+                        null,
                 birth,
                 // 만 나이
                 birth != null ?
@@ -53,8 +57,12 @@ public class MemberInquiryResponse {
                 member.getMemberPhone(),
                 member.getPostNo() + ' ' + member.getAddress() + member.getDetailAddress(),
                 member.getMemberEmail(),
-                member.getMemberRole(),
-                member.getMemberStatus(),
+                member.getMemberRole() != null ?
+                        member.getMemberRole() :
+                        null,
+                member.getMemberStatus() != null ?
+                        member.getMemberStatus() :
+                        null,
                 member.getJoinedAt().toLocalDate(),
                 endedAt != null ?
                         endedAt.toLocalDate() :
