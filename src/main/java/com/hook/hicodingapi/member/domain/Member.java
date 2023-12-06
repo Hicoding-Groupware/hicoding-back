@@ -93,10 +93,10 @@ public class Member {
     }
 
     private Member(String memberId, String memberPwd, String memberName,
-                   GenderType memberGender, LocalDate memberBirth, String memberPhone,
-                   String memberEmail, String postNo, String address,
-                   String detailAddress, MemberStatus memberStatus, MemberRole memberRole,
-                   Integer registrationNo, LocalDateTime joinedAt, LocalDateTime endedAt) {
+                  GenderType memberGender, LocalDate memberBirth, String memberPhone,
+                  String memberEmail, String postNo, String address,
+                  String detailAddress, MemberStatus memberStatus, MemberRole memberRole,
+                  Integer registrationNo, LocalDateTime joinedAt, LocalDateTime endedAt) {
         this.memberId = memberId;
         this.memberPwd = memberPwd;
         this.memberName = memberName;
@@ -148,7 +148,7 @@ public class Member {
         this.refreshToken = refreshToken;
     }
 
-    public Member(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, LocalDate memberBirth, GenderType memberGender) {
+public Member(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, LocalDate memberBirth, GenderType memberGender) {
 
         this.memberPwd = memberPwd;
         this.postNo = postNo;
@@ -188,6 +188,6 @@ public class Member {
         this.memberGender = memberGender;
         this.loginStatus = loginStatus;
 
-    }
+}
 
 }

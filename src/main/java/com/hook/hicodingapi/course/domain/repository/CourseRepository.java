@@ -17,4 +17,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     Page<Course> findByStatus(Pageable pageable, CourseStatusType courseStatusType);
 
     Page<Course> findByCosNameContainsAndStatus(Pageable coursePageable, String cosName, CourseStatusType courseStatusType);
+
+    Optional<Course> findByCosCodeAndStatus(Long cosCode, CourseStatusType courseStatusType);
 }
