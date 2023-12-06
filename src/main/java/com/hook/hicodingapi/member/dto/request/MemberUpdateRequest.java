@@ -32,4 +32,5 @@ public class MemberUpdateRequest {
     private GenderType memberGender;
 
     private String loginStatus;
+
 }

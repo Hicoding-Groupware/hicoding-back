@@ -344,10 +344,10 @@ public class MemberService {
 
 
         if (optionalMember.isPresent()) {
-            Member member1 = optionalMember.get();
-
-            member1.update(
-                    memberUpdateRequest.getMemberPwd(),
+            Member member = optionalMember.get();
+             /* 업데이트 할때 비밀번호 암호화해줌 */
+            member.update(
+                    passwordEncoder.encode(memberUpdateRequest.getMemberPwd()),
                     memberUpdateRequest.getPostNo(),
                     memberUpdateRequest.getAddress(),
                     memberUpdateRequest.getDetailAddress(),
@@ -355,7 +355,7 @@ public class MemberService {
                     memberUpdateRequest.getMemberPhone(),
                     memberUpdateRequest.getMemberBirth(),
                     memberUpdateRequest.getMemberGender(),
-                    memberUpdateRequest.getLoginStatus()
+                    "Y"
             );
         } else {
 
