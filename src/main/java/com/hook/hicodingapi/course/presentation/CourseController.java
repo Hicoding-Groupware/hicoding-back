@@ -5,6 +5,7 @@ import com.hook.hicodingapi.common.paging.PagingButtonInfo;
 import com.hook.hicodingapi.common.paging.PagingResponse;
 import com.hook.hicodingapi.course.dto.request.CourseCreateRequest;
 import com.hook.hicodingapi.course.dto.request.CourseUpdateRequest;
+import com.hook.hicodingapi.course.dto.resposne.CourseDetailResponse;
 import com.hook.hicodingapi.course.dto.resposne.TeacherCoursesResponse;
 import com.hook.hicodingapi.course.service.CourseService;
 import com.hook.hicodingapi.lecture.dto.request.LectureCreateRequest;
@@ -34,6 +35,15 @@ public class CourseController {
 
         return ResponseEntity.ok(pagingResponse);
     }
+
+    @GetMapping("/courses/{cosCode}")//과정 상세 조회
+    public ResponseEntity<CourseDetailResponse> getCourseDetail(@PathVariable final Long cosCode) {
+
+        final CourseDetailResponse courseDetailResponse = courseService.getCourseDetail(cosCode);
+
+        return ResponseEntity.ok(courseDetailResponse);
+    }
+
 
     @PostMapping("/courses") //과정 생성
     public ResponseEntity<Void> save(@RequestBody @Valid final CourseCreateRequest courseRequest){
