@@ -1,4 +1,4 @@
 package com.hook.hicodingapi.posting;
 
-public class Sample {
+public class Posting {
 }

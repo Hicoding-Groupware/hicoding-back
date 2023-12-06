@@ -12,6 +12,7 @@ import javax.persistence.criteria.*;
 import javax.swing.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,11 +51,14 @@ public class MemberRepositoryCriteria {
 
         // 상세 조회 -> 날짜 간격, 범위
         if (searchDTO.getJoinedAt() != null) {
+
+            final LocalDateTime joinedAt = searchDTO.getJoinedAt().atStartOfDay();
             // start -> end 두 날짜가 있으므로 범위 내 조회한다.
             if (searchDTO.getEndedAt() != null) {
-                predicates.add(criteriaBuilder.between(root.get("joinedAt"), searchDTO.getJoinedAt(), searchDTO.getEndedAt()));
+                final LocalDateTime endedAt = searchDTO.getEndedAt().atStartOfDay();
+                predicates.add(criteriaBuilder.between(root.get("joinedAt"), joinedAt, endedAt));
             } else { // 그게 아니라면 start 날짜 이후의 데이터를 조회한다.
-                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("joinedAt"), searchDTO.getJoinedAt()));
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("joinedAt"), joinedAt));
             }
         }
 
@@ -108,6 +112,8 @@ public class MemberRepositoryCriteria {
         }
 
         query.where(predicates.toArray(new Predicate[0]));
+
+        List<Member> member = entityManager.createQuery(query).getResultList();
 
         return entityManager.createQuery(query).getResultList();
     }
