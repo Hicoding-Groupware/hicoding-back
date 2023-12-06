@@ -3,13 +3,10 @@ package com.hook.hicodingapi.student.presentation;
 import com.hook.hicodingapi.common.paging.Pagenation;
 import com.hook.hicodingapi.common.paging.PagingButtonInfo;
 import com.hook.hicodingapi.common.paging.PagingResponse;
-import com.hook.hicodingapi.course.domain.Course;
-import com.hook.hicodingapi.student.domain.Student;
-import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
-import com.hook.hicodingapi.student.dto.response.StudentCourse;
 import com.hook.hicodingapi.student.dto.response.StudentCourseResponse;
+import com.hook.hicodingapi.student.dto.response.StudentDetailResponse;
 import com.hook.hicodingapi.student.dto.response.StudentsRecordResponse;
 import com.hook.hicodingapi.student.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
@@ -64,6 +58,15 @@ public class StudentController {
         final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(students);
         final PagingResponse pagingResponse = PagingResponse.of(students.getContent(), pagingButtonInfo);
         return ResponseEntity.ok(pagingResponse);
+    }
+
+    /* 원생 상세 조회 */
+    @GetMapping("/student-detail/{stdCode}")
+    public ResponseEntity<StudentDetailResponse> getStudent(@PathVariable final Long stdCode) {
+
+        final StudentDetailResponse studentDetailResponse = studentService.getStudent(stdCode);
+
+        return ResponseEntity.ok(studentDetailResponse);
     }
 
 

@@ -38,6 +38,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     List<Student> findStudentsByAndSignupStatus();
 
 
+
+
     /*@Query(value = "SELECT STD_CODE as StdCode, STD_NAME as StdName, STD_BIRTH as StdBirth, " +
             "COS_NAME as CosName, MEMBER_NAME as MemberName, COS_SDT as CosSdt, COS_EDT as CosEdt, STD_PHONE as StdPhone, REGISTED_DATE as RegistedDate\n" +
             "FROM (\n" +

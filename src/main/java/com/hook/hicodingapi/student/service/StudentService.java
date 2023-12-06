@@ -12,6 +12,7 @@ import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
 import com.hook.hicodingapi.student.dto.response.StudentCourse;
 import com.hook.hicodingapi.student.dto.response.StudentCourseResponse;
+import com.hook.hicodingapi.student.dto.response.StudentDetailResponse;
 import com.hook.hicodingapi.student.dto.response.StudentsRecordResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.fasterxml.jackson.databind.type.LogicalType.Map;
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_STD_CODE;
@@ -97,55 +99,6 @@ public class StudentService {
     }
 
 
-    @Transactional(readOnly = true)
-    public Page<StudentsRecordResponse> getStudentsRecord(Integer page, String sort) {
-        if ("desc".equals(sort)) {
-            Page<Student> students = studentRepository.findAll(getStudentDscPageable(page));
-            return students.map(student -> StudentsRecordResponse.from(student));
-        }
-            Page<Student> students = studentRepository.findAll(getStudentAscPageable(page));
-            return students.map(student -> StudentsRecordResponse.from(student));
-
-    }
-
-
-
-    @Transactional(readOnly = true)
-    public Page<StudentsRecordResponse> getStudentName(Integer page, String studentName) {
-
-        Page<Student> students = studentRepository.findByStdNameContaining(getStudentDscPageable(page), studentName);
-
-        return students.map(student -> StudentsRecordResponse.from(student));
-    }
-
-    @Transactional(readOnly = true)
-    public Page<StudentsRecordResponse> getCreatedAt(Integer page, LocalDate startDate, LocalDate endDate) {
-
-        /*LocalDateTime startDateTime = startDate.atStartOfDay();
-        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);*/
-        LocalDateTime startDateTime = null;
-        LocalDateTime endDateTime = null;
-
-        if (startDate != null) {
-            startDateTime = startDate.atStartOfDay();
-        }
-        if (endDate != null) {
-            endDateTime = endDate.atTime(LocalTime.MAX);
-        }
-
-        if(endDate == null){
-            Page<Student> students = studentRepository.findByCreatedAtGreaterThanEqual(getStudentDscPageable(page), startDateTime);
-            return students.map(student -> StudentsRecordResponse.from(student));
-        } else if(startDate == null) {
-            Page<Student> students = studentRepository.findByCreatedAtLessThanEqual(getStudentDscPageable(page), endDateTime);
-            return students.map(student -> StudentsRecordResponse.from(student));
-        } else {
-            Page<Student> students = studentRepository.findByCreatedAtBetween(getStudentDscPageable(page), startDateTime, endDateTime);
-            return students.map(student -> StudentsRecordResponse.from(student));
-        }
-
-
-    }
 
     @Transactional(readOnly = true)
     public Page<StudentCourseResponse> getCourse(Integer page) {
@@ -259,5 +212,14 @@ public class StudentService {
 
 
 
+    }
+
+    @Transactional(readOnly = true)
+    public StudentDetailResponse getStudent(final Long stdCode) {
+
+        Student student = studentRepository.findById(stdCode)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_STD_CODE));
+
+        return StudentDetailResponse.from(student);
     }
 }
