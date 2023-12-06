@@ -28,20 +28,24 @@ public class MemberRepositoryCriteria {
         List<Predicate> predicates = new ArrayList<>();
 
         // 상세 조회
-        if (searchDTO.getMemberId() != null && !searchDTO.getMemberId().isEmpty()) {
-            predicates.add(criteriaBuilder.like(root.get("memberId"), "%" + searchDTO.getMemberId() + "%"));
+        if (searchDTO.getId() != null && !searchDTO.getId().isEmpty()) {
+            predicates.add(criteriaBuilder.like(root.get("memberId"), "%" + searchDTO.getId() + "%"));
         }
 
-        if (searchDTO.getMemberName() != null && !searchDTO.getMemberName().isEmpty()) {
-            predicates.add(criteriaBuilder.like(root.get("memberName"), "%" + searchDTO.getMemberName() + "%"));
+        if (searchDTO.getName() != null && !searchDTO.getName().isEmpty()) {
+            predicates.add(criteriaBuilder.like(root.get("memberName"), "%" + searchDTO.getName() + "%"));
         }
 
-        if (searchDTO.getMemberRole() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("memberRole"), searchDTO.getMemberRole()));
+        if (searchDTO.getGender() != null) {
+            predicates.add(criteriaBuilder.equal(root.get("memberGender"), searchDTO.getGender()));
         }
 
-        if (searchDTO.getMemberStatus() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("memberStatus"), searchDTO.getMemberStatus()));
+        if (searchDTO.getRole() != null) {
+            predicates.add(criteriaBuilder.equal(root.get("memberRole"), searchDTO.getRole()));
+        }
+
+        if (searchDTO.getStatus() != null) {
+            predicates.add(criteriaBuilder.equal(root.get("memberStatus"), searchDTO.getStatus()));
         }
 
         // 상세 조회 -> 날짜 간격, 범위
@@ -63,11 +67,11 @@ public class MemberRepositoryCriteria {
 
                 boolean isPass = true;
                 // 상세 조회에서 MemberRole, MemberStatus가 정렬 기준에도 들어가는 경우라면 정렬 기준에 넣을 수 없다.
-                if (searchDTO.getMemberRole() != null &&
+                if (searchDTO.getRole() != null &&
                         searchDTO.getAppliedOrderDataName().equals("memberRole")) {
                     isPass = false;
                 }
-                else if (searchDTO.getMemberStatus() != null &&
+                else if (searchDTO.getStatus() != null &&
                         searchDTO.getAppliedOrderDataName().equals("memberStatus")) {
                     isPass = false;
                 }

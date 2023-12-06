@@ -3,13 +3,10 @@ package com.hook.hicodingapi.student.presentation;
 import com.hook.hicodingapi.common.paging.Pagenation;
 import com.hook.hicodingapi.common.paging.PagingButtonInfo;
 import com.hook.hicodingapi.common.paging.PagingResponse;
-import com.hook.hicodingapi.course.domain.Course;
-import com.hook.hicodingapi.student.domain.Student;
-import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
-import com.hook.hicodingapi.student.dto.response.StudentCourse;
 import com.hook.hicodingapi.student.dto.response.StudentCourseResponse;
+import com.hook.hicodingapi.student.dto.response.StudentDetailResponse;
 import com.hook.hicodingapi.student.dto.response.StudentsRecordResponse;
 import com.hook.hicodingapi.student.service.StudentService;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,39 +46,29 @@ public class StudentController {
     }
 
 
-    /* 원생이 각각 최근 수강등록한 과정들도 나오게 목록 조회 */
+    /* 원생 조회 및 검색조건 모두 포함 */
     @GetMapping("/students")
-    public ResponseEntity<PagingResponse> getStudentsRecord(@RequestParam(defaultValue = "1") final Integer page) {
+    public ResponseEntity<PagingResponse> getMutiSearch(@RequestParam(defaultValue = "1") final Integer page,
+                                                  @RequestParam(required = false) final String sort,
+                                                  @RequestParam(required = false) final String stdName,
+                                                  @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")  final LocalDate startDate,
+                                                  @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDate endDate){
 
-        final Page<StudentsRecordResponse> studentsRecord = studentService.getStudentsRecord(page);
-        final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(studentsRecord);
-        final PagingResponse pagingResponse = PagingResponse.of(studentsRecord.getContent(), pagingButtonInfo);
-        return ResponseEntity.ok(pagingResponse);
-    }
-
-    /* 수강생 이름 조회 */
-    @GetMapping("/students/searchStdName")
-    public ResponseEntity<PagingResponse> getStudentName(@RequestParam(defaultValue = "1") final Integer page,
-                                                         @RequestParam final String studentName){
-
-        final Page<StudentsRecordResponse> students = studentService.getStudentName(page, studentName);
+        final Page<StudentsRecordResponse> students = studentService.getMutiSearch(page, sort, stdName, startDate, endDate);
         final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(students);
         final PagingResponse pagingResponse = PagingResponse.of(students.getContent(), pagingButtonInfo);
         return ResponseEntity.ok(pagingResponse);
     }
 
-    /* 원생 등록일 조회 */
-    @GetMapping("/students/searchCreatedAt")
-    public ResponseEntity<PagingResponse> getCreatedAt(@RequestParam(defaultValue = "1") final Integer page,
-                                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd")  final LocalDate startDate,
-                                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDate endDate) {
+    /* 원생 상세 조회 */
+    @GetMapping("/student-detail/{stdCode}")
+    public ResponseEntity<StudentDetailResponse> getStudent(@PathVariable final Long stdCode) {
 
-        final Page<StudentsRecordResponse> students = studentService.getCreatedAt(page, startDate, endDate);
-        final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(students);
-        final PagingResponse pagingResponse = PagingResponse.of(students.getContent(), pagingButtonInfo);
+        final StudentDetailResponse studentDetailResponse = studentService.getStudent(stdCode);
 
-        return ResponseEntity.ok(pagingResponse);
+        return ResponseEntity.ok(studentDetailResponse);
     }
+
 
     /* 코스명,담당강사, 코스기간 목록조회 */
     @GetMapping("/students/searchCourse")

@@ -1,8 +1,10 @@
 package com.hook.hicodingapi.member.service;
-
+import com.hook.hicodingapi.informationProvider.domain.type.GenderType;
+import com.hook.hicodingapi.member.dto.request.MemberUpdateRequest;
+import com.hook.hicodingapi.member.dto.response.PreLoginResponse;
+import com.hook.hicodingapi.common.exception.NotFoundException;
 import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.Member;
-import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.repository.MemberRepository;
 import com.hook.hicodingapi.member.domain.repository.MemberRepositoryCriteria;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
@@ -10,9 +12,9 @@ import com.hook.hicodingapi.member.domain.type.MemberStatus;
 import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
 import com.hook.hicodingapi.member.dto.request.MemberInquiryRequest;
 import com.hook.hicodingapi.member.dto.response.MemberCreationResponse;
-import com.hook.hicodingapi.informationIdentifier.service.InformationIdentifierService;
+import com.hook.hicodingapi.member.dto.response.MemberInquiryResponse;
+import com.hook.hicodingapi.student.dto.response.StudentCourse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,19 +22,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.Map;
 
+import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_MEMBER_ID;
 import static com.hook.hicodingapi.member.domain.Member.MAX_DEPT_NUM;
+import static com.hook.hicodingapi.informationProvider.service.InformationProviderService.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -78,7 +83,8 @@ public class MemberService {
     }
 
     // 사번 생성 알고리즘
-    private MemberDataSender generateId(final MemberRole departmentName) {
+    @Transactional(readOnly = true)
+    public MemberDataSender generateId(final MemberRole departmentName) {
 
         // --init--
 
@@ -110,7 +116,6 @@ public class MemberService {
 
     // 직원 등록번호 생성 알고리즘
     // 입사년도 두자리 + 부서코드 + 등록번호 -> ex 2301001
-    @Transactional(readOnly = true)
     public MemberDataSender generateRegistrationNo(final MemberRole departmentName) {
         // 최대 인원 0의 개수
         final int maxZeroLenCnt = Integer.toString(MAX_DEPT_NUM).length() - 1;
@@ -171,11 +176,15 @@ public class MemberService {
         // 비밀번호는 Encoder에 의하여 인코딩 과정이 들어간다.
         String memberPwd = passwordEncoder.encode(tempPwd);
 
+        // 가입일
+        final LocalDateTime mbrJoinedAt = LocalDateTime.now();
+
         final Member newMember = Member.of(
                 mbrIdAndRegNo.getMemberId(),
                 memberPwd,
                 memberCreationRequest,
-                mbrIdAndRegNo.getRegistrationNo()
+                mbrIdAndRegNo.getRegistrationNo(),
+                mbrJoinedAt
         );
 
         memberRepository.save(newMember);
@@ -183,12 +192,13 @@ public class MemberService {
 
     // 직원 랜덤 생성
     @Transactional
-    public void randomInsert(final String inputtedPassword) {
+    public Member randomInsert(final String inputtedPassword) {
+
         // pk
 
-        // ID
+        //ID
         // 회원 id는 사번이며, 사번은 규칙에 의거하여 만들어진다.
-        final MemberRole mbrDeptType = InformationIdentifierService.generateRandomEnumTypeValue(MemberRole.class);
+        final MemberRole mbrDeptType = generateRandomEnumTypeValue(MemberRole.class);
         final MemberDataSender mbrIdAndRegNo = generateId(mbrDeptType);
 
         // 비번
@@ -196,37 +206,37 @@ public class MemberService {
         final String memberPwd = passwordEncoder.encode(inputtedPassword);
 
         // 이름
-        final String memberName = InformationIdentifierService.generateKoreanName();
+        final String memberName = generateKoreanName();
 
         // 성별
-        final String memberGender = InformationIdentifierService.generateRandomGender();
+        final GenderType memberGender = generateRandomGender();
 
         // 생년월일
-        final LocalDate memberBirth = InformationIdentifierService.generateRandomDateTime();
+        final LocalDate memberBirth = generateRandomDateTime(1900).toLocalDate();
 
         // 만 나이
-        final int memberAge = InformationIdentifierService.calculateAge(memberBirth, LocalDate.now());
+        final int memberAge = calculateAge(memberBirth, LocalDate.now());
 
         // 연락처
-        final String memberPhone = InformationIdentifierService.generateRandomPhoneNumber();
+        final String memberPhone = generateRandomPhoneNumber();
 
         // 이메일
-        final String memberEmail = InformationIdentifierService.generateMail(mbrIdAndRegNo.getMemberId());
+        final String memberEmail = generateMail(mbrIdAndRegNo.getMemberId());
 
         // 프로필
 
         // 주소
         // post
-        final String mbrPostNo = InformationIdentifierService.generateRandomPostNo();
+        final String mbrPostNo = generateRandomPostNo();
 
         // addr
-        final String mbrAddr = InformationIdentifierService.generateRandomAddress();
+        final String mbrAddr = generateRandomAddress();
 
         // detailAddr
-        final String mbrDetailAddR = InformationIdentifierService.generateRandomDetailAddress();
+        final String mbrDetailAddR = generateRandomDetailAddress();
 
         // 재직 상태
-        final MemberStatus mbrStatus = InformationIdentifierService.generateRandomEnumTypeValue(MemberStatus.class);
+        final MemberStatus mbrStatus = generateRandomEnumTypeValue(MemberStatus.class);
 
         // 소속 부서
         // 위에서 기입됨
@@ -234,18 +244,23 @@ public class MemberService {
         // 등록일
 
         // 입사일
+        final LocalDateTime mbrJoinedAt = generateRandomDateTime(1999);
 
         // 퇴사일
+        final LocalDateTime mbrEndedAt = generateRandomDateTime(mbrJoinedAt.toLocalDate().getYear() + 1);
 
         // 토큰
 
-        Member newMember = new Member(
-                mbrIdAndRegNo.getMemberId(), memberPwd, memberName,
+        Member newMember = Member.of(mbrIdAndRegNo.getMemberId(), memberPwd, memberName,
                 memberGender, memberBirth, memberPhone,
-                memberEmail, mbrPostNo, mbrAddr, mbrDetailAddR,
-                mbrStatus, mbrDeptType, mbrIdAndRegNo.getRegistrationNo());
+                memberEmail, mbrPostNo, mbrAddr,
+                mbrDetailAddR, mbrStatus, mbrDeptType,
+                mbrIdAndRegNo.getRegistrationNo(), mbrJoinedAt, mbrEndedAt
+        );
 
         memberRepository.save(newMember);
+
+        return newMember;
     }
 
     // 전체 직원 조회
@@ -257,9 +272,15 @@ public class MemberService {
 
     // 직원 상세 조회 -> By Criteria
     @Transactional(readOnly = true)
-    public List<Member> getDetailMembers(final MemberInquiryRequest memberInquiryRequest) {
+    public List<MemberInquiryResponse> getDetailMembers(final MemberInquiryRequest memberInquiryRequest) {
+
         final List<Member> members = memberRepositoryCriteria.searchMembers(memberInquiryRequest);
-        return members;
+
+        List<MemberInquiryResponse> mbrInquiryResponseList = members
+                .stream().map(member -> MemberInquiryResponse.from(member))
+                .collect(Collectors.toList());
+
+        return mbrInquiryResponseList;
     }
 
     @Transactional
@@ -297,4 +318,51 @@ public class MemberService {
             System.out.println("삭제 작업이 실패하였습니다.");
         }
     }
+
+    /*----------------------------- 민서 존 ------------------------------------------------------------*/
+
+    public PreLoginResponse preLogin(Map<String, String> loginInfo) {
+        Member member = memberRepository.findByMemberId(loginInfo.get("memberId"))
+                .orElseThrow();
+
+        PreLoginResponse preLoginResponse = null;
+
+        if(member.getLoginStatus() == null) {
+            preLoginResponse = PreLoginResponse.of(true, member.getMemberId(), member.getMemberName());
+        } else {
+            preLoginResponse = PreLoginResponse.of(false, null, null);
+        }
+        return preLoginResponse;
+    }
+
+
+
+
+    public void memberUpdate(MemberUpdateRequest memberUpdateRequest) {
+
+        Optional<Member> optionalMember = memberRepository.findByMemberId(memberUpdateRequest.getMemberId());
+
+
+        if (optionalMember.isPresent()) {
+            Member member1 = optionalMember.get();
+
+            member1.update(
+                    memberUpdateRequest.getMemberPwd(),
+                    memberUpdateRequest.getPostNo(),
+                    memberUpdateRequest.getAddress(),
+                    memberUpdateRequest.getDetailAddress(),
+                    memberUpdateRequest.getMemberEmail(),
+                    memberUpdateRequest.getMemberPhone(),
+                    memberUpdateRequest.getMemberBirth(),
+                    memberUpdateRequest.getMemberGender(),
+                    memberUpdateRequest.getLoginStatus()
+            );
+        } else {
+
+            throw new NotFoundException(NOT_FOUND_MEMBER_ID);
+
+
+        }
+    }
+
 }
