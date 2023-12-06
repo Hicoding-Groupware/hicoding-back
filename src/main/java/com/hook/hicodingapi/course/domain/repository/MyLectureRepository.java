@@ -29,11 +29,4 @@ public interface MyLectureRepository extends JpaRepository<Course, Long> {
     @EntityGraph(attributePaths = {"teacher"})
     Page<Course> findByTeacherMemberNoAndCosSdtAfter(Pageable pageable, Long memberNo, LocalDate cosSdt);
 
-    /* 4. 강의 상세 조회 - 조건 없이 해당 강의 상세 목록 모두 조회 가능 (강사) */
-    /* 5. 일일 출석부 조회 */
-    @EntityGraph(attributePaths = {"cosCode"})
-    Optional<Course> findByCosCode(Long cosCode);
-
-
-
 }
