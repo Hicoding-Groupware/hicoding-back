@@ -84,9 +84,12 @@ public class StudentController {
     /* 코스명 조회 */
     @GetMapping("/students/searchCosName")
     public ResponseEntity<PagingResponse> getCourseName(@RequestParam(defaultValue = "1") final Integer page,
-                                                        @RequestParam final String cosName) {
+                                                        @RequestParam(required = false) final String cosName
+                                                        ) {
 
-        final Page<StudentCourseResponse> courses = studentService.getCourseName(page, cosName);
+        LocalDate currentDay = LocalDate.now();
+
+        final Page<StudentCourseResponse> courses = studentService.getCourseName(page, cosName, currentDay);
         final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(courses);
         final PagingResponse pagingResponse = PagingResponse.of(courses.getContent(), pagingButtonInfo);
 

@@ -59,7 +59,7 @@ public class StudentService {
     }
 
     private Pageable getCoursePageable(final Integer page) {
-        return PageRequest.of(page - 1, 15);
+        return PageRequest.of(page - 1, 5);
     }
     public Long regist(StudentRegistRequest registRequest) {
 
@@ -109,9 +109,10 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<StudentCourseResponse> getCourseName(Integer page, String cosName) {
+    public Page<StudentCourseResponse> getCourseName(Integer page, String cosName, LocalDate currentDay) {
 
-        Page<Course> courses = courseRepository.findByCosNameContainsAndStatus(getCoursePageable(page), cosName, AVAILABLE);
+
+        Page<Course> courses = courseRepository.findByCosNameContainsAndStatusAndCosEdtAfter(getCoursePageable(page), cosName, AVAILABLE, currentDay);
 
         return courses.map(course -> StudentCourseResponse.from(course));
     }
