@@ -1,7 +1,6 @@
 package com.hook.hicodingapi.course.dto.resposne;
 
 import com.hook.hicodingapi.course.domain.Course;
-import com.hook.hicodingapi.course.domain.type.CourseStatusType;
 import com.hook.hicodingapi.course.domain.type.DayStatusType;
 import com.hook.hicodingapi.course.domain.type.TimeStatusType;
 import lombok.Getter;
@@ -13,11 +12,13 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @RequiredArgsConstructor(access = PROTECTED)
-public class TeacherCoursesResponse {
+public class CourseDetailResponse {
 
     private final Long cosCode;
     private final String cosName;
     private final String lecCode;
+    private final String textbook;
+    private final String techStack;
     private final LocalDate cosSdt;
     private final LocalDate cosEdt;
     private final String roomCode;
@@ -27,11 +28,13 @@ public class TeacherCoursesResponse {
     private final String staff;
     private final DayStatusType dayStatus;
     private final TimeStatusType timeStatus;
-    public static TeacherCoursesResponse from(final Course course) {
-        return new TeacherCoursesResponse(
+    public static CourseDetailResponse from(final Course course) {
+        return new CourseDetailResponse(
                 course.getCosCode(),
                 course.getCosName(),
                 course.getLecCode().getLecName(),
+                course.getLecCode().getTextbook(),
+                course.getLecCode().getTechStack(),
                 course.getCosSdt(),
                 course.getCosEdt(),
                 course.getClassroom().getRoomName(),
@@ -41,7 +44,9 @@ public class TeacherCoursesResponse {
                 course.getStaff().getMemberName(),
                 course.getDayStatus(),
                 course.getTimeStatus()
-
         );
     }
+
+
+
 }

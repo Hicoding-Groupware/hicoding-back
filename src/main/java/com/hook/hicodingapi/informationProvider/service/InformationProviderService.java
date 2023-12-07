@@ -1,6 +1,6 @@
-package com.hook.hicodingapi.informationIdentifier.service;
+package com.hook.hicodingapi.informationProvider.service;
 
-import com.hook.hicodingapi.informationIdentifier.domain.type.GenderType;
+import com.hook.hicodingapi.informationProvider.domain.type.GenderType;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.hook.hicodingapi.informationIdentifier.domain.InformationIdentifier.*;
+import static com.hook.hicodingapi.informationProvider.domain.InformationProvider.*;
 
 @Service
-public class InformationIdentifierService {
+public class InformationProviderService {
 
     private final static Random RANDOM_N = new Random();
 
@@ -33,19 +33,23 @@ public class InformationIdentifierService {
     }
 
     // 년도 랜덤 생성 알고리즘
-    public static LocalDate generateRandomDateTime() {
+    public static LocalDateTime generateRandomDateTime(int startYear) {
+
         // 현재년도
-        int currentYear = LocalDateTime.now().getYear();
+        final int currentYear = LocalDateTime.now().getYear();
+        // 시작년도가 현재년도보다 크다면 현재년도를 대입
+        if (currentYear < startYear)
+            startYear = currentYear;
 
         // 1900년 이후 출생일
-        LocalDateTime startDateTime = LocalDateTime.of(1900, 1, 1, 0, 0);
+        LocalDateTime startDateTime = LocalDateTime.of(startYear, 1, 1, 0, 0);
         LocalDateTime endDateTime = LocalDateTime.of(currentYear, 12, 31, 23, 59);
 
         // 랜덤한 초 생성
         long seconds = Duration.between(startDateTime, endDateTime).getSeconds();
         long randomSeconds = ThreadLocalRandom.current().nextLong(seconds + 1);
 
-        return startDateTime.plusSeconds(randomSeconds).toLocalDate();
+        return startDateTime.plusSeconds(randomSeconds);
     }
 
     // 나이 계산 알고리즘
@@ -60,10 +64,9 @@ public class InformationIdentifierService {
     }
 
     // 성별 랜덤 생성 알고리즘
-    public static String generateRandomGender() {
-        int randomNumber = RANDOM_N.nextInt(2);  // 0 또는 1을 랜덤으로 생성
-
-        return (randomNumber == 0) ? GenderType.MALE.getGender() : GenderType.FEMALE.getGender();
+    public static GenderType generateRandomGender() {
+        final int randomNumber = RANDOM_N.nextInt(2);  // 0 또는 1을 랜덤으로 생성
+        return (randomNumber == 0) ? GenderType.MALE : GenderType.FEMALE;
     }
 
     // 휴대폰 랜덤 생성 알고리즘

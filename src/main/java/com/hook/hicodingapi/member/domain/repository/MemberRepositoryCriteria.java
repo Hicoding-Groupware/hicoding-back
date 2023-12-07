@@ -12,6 +12,7 @@ import javax.persistence.criteria.*;
 import javax.swing.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,29 +29,36 @@ public class MemberRepositoryCriteria {
         List<Predicate> predicates = new ArrayList<>();
 
         // 상세 조회
-        if (searchDTO.getMemberId() != null && !searchDTO.getMemberId().isEmpty()) {
-            predicates.add(criteriaBuilder.like(root.get("memberId"), "%" + searchDTO.getMemberId() + "%"));
+        if (searchDTO.getId() != null && !searchDTO.getId().isEmpty()) {
+            predicates.add(criteriaBuilder.like(root.get("memberId"), "%" + searchDTO.getId() + "%"));
         }
 
-        if (searchDTO.getMemberName() != null && !searchDTO.getMemberName().isEmpty()) {
-            predicates.add(criteriaBuilder.like(root.get("memberName"), "%" + searchDTO.getMemberName() + "%"));
+        if (searchDTO.getName() != null && !searchDTO.getName().isEmpty()) {
+            predicates.add(criteriaBuilder.like(root.get("memberName"), "%" + searchDTO.getName() + "%"));
         }
 
-        if (searchDTO.getMemberRole() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("memberRole"), searchDTO.getMemberRole()));
+        if (searchDTO.getGender() != null) {
+            predicates.add(criteriaBuilder.equal(root.get("memberGender"), searchDTO.getGender()));
         }
 
-        if (searchDTO.getMemberStatus() != null) {
-            predicates.add(criteriaBuilder.equal(root.get("memberStatus"), searchDTO.getMemberStatus()));
+        if (searchDTO.getRole() != null) {
+            predicates.add(criteriaBuilder.equal(root.get("memberRole"), searchDTO.getRole()));
+        }
+
+        if (searchDTO.getStatus() != null) {
+            predicates.add(criteriaBuilder.equal(root.get("memberStatus"), searchDTO.getStatus()));
         }
 
         // 상세 조회 -> 날짜 간격, 범위
         if (searchDTO.getJoinedAt() != null) {
+
+            final LocalDateTime joinedAt = searchDTO.getJoinedAt().atStartOfDay();
             // start -> end 두 날짜가 있으므로 범위 내 조회한다.
             if (searchDTO.getEndedAt() != null) {
-                predicates.add(criteriaBuilder.between(root.get("joinedAt"), searchDTO.getJoinedAt(), searchDTO.getEndedAt()));
+                final LocalDateTime endedAt = searchDTO.getEndedAt().atStartOfDay();
+                predicates.add(criteriaBuilder.between(root.get("joinedAt"), joinedAt, endedAt));
             } else { // 그게 아니라면 start 날짜 이후의 데이터를 조회한다.
-                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("joinedAt"), searchDTO.getJoinedAt()));
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("joinedAt"), joinedAt));
             }
         }
 
@@ -63,11 +71,11 @@ public class MemberRepositoryCriteria {
 
                 boolean isPass = true;
                 // 상세 조회에서 MemberRole, MemberStatus가 정렬 기준에도 들어가는 경우라면 정렬 기준에 넣을 수 없다.
-                if (searchDTO.getMemberRole() != null &&
+                if (searchDTO.getRole() != null &&
                         searchDTO.getAppliedOrderDataName().equals("memberRole")) {
                     isPass = false;
                 }
-                else if (searchDTO.getMemberStatus() != null &&
+                else if (searchDTO.getStatus() != null &&
                         searchDTO.getAppliedOrderDataName().equals("memberStatus")) {
                     isPass = false;
                 }
@@ -104,6 +112,8 @@ public class MemberRepositoryCriteria {
         }
 
         query.where(predicates.toArray(new Predicate[0]));
+
+        List<Member> member = entityManager.createQuery(query).getResultList();
 
         return entityManager.createQuery(query).getResultList();
     }

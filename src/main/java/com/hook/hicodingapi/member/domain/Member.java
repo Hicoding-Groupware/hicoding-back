@@ -1,14 +1,17 @@
 package com.hook.hicodingapi.member.domain;
 
-import com.hook.hicodingapi.informationIdentifier.domain.type.GenderType;
+import com.hook.hicodingapi.informationProvider.domain.type.GenderType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.domain.type.MemberStatus;
 import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.*;
@@ -29,7 +32,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @ToString
 public class Member {
-    public static final Integer MAX_DEPT_NUM = 100;
+    public static final Integer MAX_DEPT_NUM = 10000;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +46,10 @@ public class Member {
 
     @NotNull(message = "이름은 반드시 입력되어야 합니다.")
     private String memberName;
-    private String memberGender;
+
+    @Enumerated(value = STRING)
+    private GenderType memberGender;
+
     private LocalDate memberBirth;
     private String memberPhone;
     private String memberEmail;
@@ -66,33 +72,37 @@ public class Member {
     @NotNull
     @CreatedDate
     @Column(updatable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDateTime createdAt;
 
     @NotNull
-    @CreatedDate
-    @Column(updatable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDateTime joinedAt;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDateTime endedAt;
+
+    private String loginStatus;
     private String refreshToken;
 
     public Member(Integer registrationNo) {
         this.registrationNo = registrationNo;
     }
 
-    private Member(String memberId, String memberPwd, String memberName, MemberRole memberRole, Integer registrationNo) {
+    private Member(String memberId, String memberPwd, String memberName, MemberRole memberRole, Integer registrationNo, LocalDateTime joinedAt) {
         this.memberId = memberId;
         this.memberPwd = memberPwd;
         this.memberName = memberName;
         this.memberRole = memberRole;
         this.registrationNo = registrationNo;
+        this.joinedAt = joinedAt;
     }
 
-    public Member(String memberId, String memberPwd, String memberName,
-                  String memberGender, LocalDate memberBirth, String memberPhone,
+    private Member(String memberId, String memberPwd, String memberName,
+                  GenderType memberGender, LocalDate memberBirth, String memberPhone,
                   String memberEmail, String postNo, String address,
                   String detailAddress, MemberStatus memberStatus, MemberRole memberRole,
-                  Integer registrationNo) {
+                  Integer registrationNo, LocalDateTime joinedAt, LocalDateTime endedAt) {
         this.memberId = memberId;
         this.memberPwd = memberPwd;
         this.memberName = memberName;
@@ -106,15 +116,32 @@ public class Member {
         this.memberStatus = memberStatus;
         this.memberRole = memberRole;
         this.registrationNo = registrationNo;
+        this.joinedAt = joinedAt;
+        this.endedAt = endedAt;
     }
 
-    public static Member of(String memberId, String memberPwd, MemberCreationRequest memberCreationRequest, Integer registrationNo) {
+    public static Member of(String memberId, String memberPwd, MemberCreationRequest memberCreationRequest, Integer registrationNo, LocalDateTime joinedAt) {
         return new Member(
                 memberId,
                 memberPwd,
                 memberCreationRequest.getMemberName(),
                 memberCreationRequest.getMemberRole(),
-                registrationNo
+                registrationNo,
+                joinedAt
+        );
+    }
+
+    public static Member of(String memberId, String memberPwd, String memberName,
+                            GenderType memberGender, LocalDate memberBirth, String memberPhone,
+                            String memberEmail, String postNo, String address,
+                            String detailAddress, MemberStatus memberStatus, MemberRole memberRole,
+                            Integer registrationNo, LocalDateTime joinedAt, LocalDateTime endedAt) {
+        return new Member(
+                memberId, memberPwd, memberName,
+                memberGender, memberBirth, memberPhone,
+                memberEmail, postNo, address,
+                detailAddress, memberStatus, memberRole,
+                registrationNo, joinedAt, endedAt
         );
     }
 
@@ -127,7 +154,7 @@ public class Member {
         this.refreshToken = refreshToken;
     }
 
-public Member(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, LocalDate memberBirth, String memberGender) {
+public Member(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, LocalDate memberBirth, GenderType memberGender) {
 
         this.memberPwd = memberPwd;
         this.postNo = postNo;
@@ -137,9 +164,9 @@ public Member(String memberPwd, String postNo, String address, String detailAddr
         this.memberPhone = memberPhone;
         this.memberBirth = memberBirth;
         this.memberGender = memberGender;
-}
+    }
 
-public static Member of(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, LocalDate memberBirth, String memberGender) {
+    public static Member of(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, LocalDate memberBirth, GenderType memberGender) {
 
         return new Member(
                 memberPwd,
@@ -151,6 +178,22 @@ public static Member of(String memberPwd, String postNo, String address, String 
                 memberBirth,
                 memberGender
         ); //(이렇게 전달된 값을 entity로 만들어주는 메소드)
+    }
+
+    /*------------------------ 민서 존 -------------------------*/
+    public void update(String memberPwd, String postNo, String address, String detailAddress, String memberEmail,
+                       String memberPhone, LocalDate memberBirth, GenderType memberGender, String loginStatus) {
+
+        this.memberPwd = memberPwd;
+        this.postNo = postNo;
+        this.address = address;
+        this.detailAddress = detailAddress;
+        this.memberEmail = memberEmail;
+        this.memberPhone = memberPhone;
+        this.memberBirth = memberBirth;
+        this.memberGender = memberGender;
+        this.loginStatus = loginStatus;
+
 }
 
 }
