@@ -27,15 +27,16 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
     Page<Student> findByStdNameContainingAndCreatedAtBetween(Pageable studentPageable, String stdName, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
-    
+
 
 
 
     @Query("SELECT s " +
             "FROM Student s " +
             "JOIN FETCH s.recordList r " +
+            "LEFT JOIN s.attendStdCode a " +
             "WHERE r.signupStatus = 'NORMAL' ")
-    List<Student> findStudentsByAndSignupStatus();
+    List<Student> findStudentsByAndSignupStatus(Long cosCode);
 
 
 

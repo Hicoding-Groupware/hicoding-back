@@ -120,7 +120,7 @@ public class StudentService {
     @Transactional
     public List<DailyAttendanceResponse> getAttendanceForDay(Long cosCode) {
 
-        List<Student> students = studentRepository.findStudentsByAndSignupStatus();
+        List<Student> students = studentRepository.findStudentsByAndSignupStatus(cosCode);
 
         return students.stream()
                 .map(DailyAttendanceResponse::from)

@@ -13,6 +13,7 @@ import static lombok.AccessLevel.PRIVATE;
 @RequiredArgsConstructor(access = PRIVATE)
 public class DailyAttendanceResponse {
 
+    private final String cosName;
     private final Long stdCode;
     private final String stdName;
     private final LocalDate stdBirth;
@@ -25,6 +26,7 @@ public class DailyAttendanceResponse {
 
         return
                 new DailyAttendanceResponse(
+                        student.getRecordList().get(0).getCourse().getCosName(),
                         student.getStdCode(),
                         student.getStdName(),
                         student.getStdBirth(),
