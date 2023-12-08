@@ -4,11 +4,15 @@ package com.hook.hicodingapi.attendance.presentation;
 import com.hook.hicodingapi.attendance.dto.request.AttendanceRegistRequest;
 import com.hook.hicodingapi.attendance.dto.response.DailyAttendanceResponse;
 import com.hook.hicodingapi.attendance.service.AttendanceService;
+import com.hook.hicodingapi.course.domain.Course;
+import com.hook.hicodingapi.course.domain.repository.CourseRepository;
 import com.hook.hicodingapi.jwt.CustomUser;
 import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import com.hook.hicodingapi.student.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
+import org.springframework.cglib.core.Local;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -25,25 +30,29 @@ public class AttendanceController {
 
     private final AttendanceService attendanceService;
     private final StudentService studentService;
+    private final CourseRepository courseRepository;
 
 
-    /* 5. 일별 출석표 조회 */
+    /* 4. 일별 출석표 조회 */
     @GetMapping("/day/{cosCode}")
     public ResponseEntity<List<DailyAttendanceResponse>> getAttendances(
-            @PathVariable final Long cosCode
+            @PathVariable final Long cosCode,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate atdDate
     ) {
-        final List<DailyAttendanceResponse> dailyAttendanceResponses = studentService.getAttendanceForDay(cosCode);
+        LocalDate defaultAtdDate = atdDate != null ? atdDate : LocalDate.now();
+
+        List<DailyAttendanceResponse> dailyAttendanceResponses = studentService.getAttendanceForDay(cosCode, defaultAtdDate);
 
         return ResponseEntity.ok(dailyAttendanceResponses);
     }
 
-    /* 6. 출석 등록 */
+    /* 5. 출석 등록 */
     @PostMapping("/day")
     public ResponseEntity<Void> save(@RequestParam @Valid final AttendanceRegistRequest registAttendance,
                                      @AuthenticationPrincipal CustomUser customUser
     ) {
         /* 등록 데이터 저장 */
-        final Long atdCode = attendanceService.save(registAttendance);
+//        final Long atdCode = attendanceService.save(registAttendance);
 
 //        return ResponseEntity.created(URI.create("/hc-app/v1/attendance" + atdCode)).build();
         // http 201 Create 상태 코드를 나타낸다. 새로운 리소스가 성공적으로 생성되었음을 나타낸다.

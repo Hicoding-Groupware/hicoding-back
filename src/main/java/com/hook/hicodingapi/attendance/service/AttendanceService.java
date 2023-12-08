@@ -19,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class AttendanceService {
 
     private final AttendanceRepository attendanceRepository;
-    private final MyLectureRepository myLectureRepository;
-    private final StudentRepository studentRepository;
 
 
     public Long save(AttendanceRegistRequest registAttendance, CustomUser customUser) {
@@ -29,7 +27,7 @@ public class AttendanceService {
                 .orElseThrow(() -> new NotFoundException(ExceptionCode.NOT_FOUND_STD_CODE));
         // 학생을 찾는다. 학생이 없을 경우 예외 발생
 
-
+            return null;
 
     }
 

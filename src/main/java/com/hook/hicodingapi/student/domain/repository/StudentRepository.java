@@ -6,7 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,13 +33,14 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
 
 
-    @Query("SELECT s " +
+    @Query("SELECT s, a.atdStatus " +
             "FROM Student s " +
             "JOIN FETCH s.recordList r " +
             "LEFT JOIN s.attendStdCode a " +
-            "WHERE r.signupStatus = 'NORMAL' ")
-    List<Student> findStudentsByAndSignupStatus(Long cosCode);
-
+            "ON a.atdDate = :atdDate " +
+            "WHERE r.signupStatus = 'NORMAL' " +
+            "AND (:cosCode is not null) ")
+    List<Student> findStudentsByAndSignupStatus(@Param("cosCode") Long cosCode, @Param("atdDate") LocalDate atdDate);
 
 
 

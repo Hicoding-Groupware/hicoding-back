@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -20,9 +21,13 @@ public class DailyAttendanceResponse {
     private final String stdPhone;
     private final AttendanceStatusType attendanceStatus;
 
-    public static DailyAttendanceResponse from(Student student) {
-        AttendanceStatusType status =
-                student.getAttendStdCode().isEmpty() ? null : student.getAttendStdCode().get(0).getAtdStatus();
+    public static DailyAttendanceResponse from(Student student, LocalDate atdDate) {
+//        AttendanceStatusType status =
+//                student.getAttendStdCode().isEmpty() ? null : student.getAttendStdCode().get(0).getAtdStatus();
+
+        AttendanceStatusType status = student.getAttendStdCode().isEmpty() || !studentHasAttendanceOnDate(student, atdDate)
+                ? null
+                : student.getAttendStdCode().get(0).getAtdStatus();
 
         return
                 new DailyAttendanceResponse(
@@ -34,4 +39,10 @@ public class DailyAttendanceResponse {
                         status
                 );
     }
+
+    private static boolean studentHasAttendanceOnDate(Student student, LocalDate atdDate) {
+        return student.getAttendStdCode().stream()
+                .anyMatch(attendance -> atdDate.equals(attendance.getAtdDate()));
+    }
+
 }

@@ -10,10 +10,7 @@ import com.hook.hicodingapi.student.domain.Student;
 import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
-import com.hook.hicodingapi.student.dto.response.StudentCourse;
-import com.hook.hicodingapi.student.dto.response.StudentCourseResponse;
-import com.hook.hicodingapi.student.dto.response.StudentDetailResponse;
-import com.hook.hicodingapi.student.dto.response.StudentsRecordResponse;
+import com.hook.hicodingapi.student.dto.response.*;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.fasterxml.jackson.databind.type.LogicalType.Map;
@@ -118,12 +114,15 @@ public class StudentService {
 
 
     @Transactional
-    public List<DailyAttendanceResponse> getAttendanceForDay(Long cosCode) {
+    public List<DailyAttendanceResponse> getAttendanceForDay(Long cosCode, LocalDate defaultAtdDate) {
+        List<Student> students = studentRepository.findStudentsByAndSignupStatus(cosCode, defaultAtdDate);
 
-        List<Student> students = studentRepository.findStudentsByAndSignupStatus(cosCode);
+        if(students.isEmpty()) {
+            return Collections.emptyList();
+        }
 
         return students.stream()
-                .map(DailyAttendanceResponse::from)
+                .map(student -> DailyAttendanceResponse.from(student, defaultAtdDate))
                 .collect(Collectors.toList());
     }
 
