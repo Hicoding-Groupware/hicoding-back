@@ -112,18 +112,6 @@ public class StudentService {
     @Transactional(readOnly = true)
     public Page<StudentCourseResponse> getCourseName(Integer page, String cosName, LocalDate currentDay) {
 
-//        List<Course> course = courseRepository.findAll();
-//
-//        boolean EnoughCapacity = course.stream()
-//                .allMatch(courses -> courses.getCurCnt() < courses.getCapacity());
-//
-//        if (EnoughCapacity) {
-//            Page<Course> resultCourses = courseRepository.findByCosNameContainsAndStatusAndCosEdtAfter(
-//                    getCoursePageable(page), cosName, AVAILABLE, currentDay);
-//            return resultCourses.map(courseList -> StudentCourseResponse.from(courseList));
-//        } else {
-//            throw new ConflictException(NOT_ENOUGH_CAPACITY);
-//        }
         Page<Course> resultCourses = courseRepository.findByCosNameContainsAndStatusAndCosEdtAfter(
                 getCoursePageable(page), cosName, AVAILABLE, currentDay);
         return resultCourses.map(courseList -> StudentCourseResponse.from(courseList));
