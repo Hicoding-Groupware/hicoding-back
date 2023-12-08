@@ -8,8 +8,10 @@ import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.*;
@@ -70,12 +72,16 @@ public class Member {
     @NotNull
     @CreatedDate
     @Column(updatable = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDateTime createdAt;
 
     @NotNull
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDateTime joinedAt;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDateTime endedAt;
+
     private String loginStatus;
     private String refreshToken;
 

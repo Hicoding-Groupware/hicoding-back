@@ -37,9 +37,9 @@ public class InformationProviderService {
 
         // 현재년도
         final int currentYear = LocalDateTime.now().getYear();
-        // 시작년도가 현재년도보다 크다면 시작년도를 하나 뺀다.
+        // 시작년도가 현재년도보다 크다면 현재년도를 대입
         if (currentYear < startYear)
-            startYear -= 1;
+            startYear = currentYear;
 
         // 1900년 이후 출생일
         LocalDateTime startDateTime = LocalDateTime.of(startYear, 1, 1, 0, 0);

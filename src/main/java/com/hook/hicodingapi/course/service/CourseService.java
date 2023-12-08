@@ -9,10 +9,10 @@ import com.hook.hicodingapi.course.domain.repository.CourseRepository;
 import com.hook.hicodingapi.course.domain.type.CourseStatusType;
 import com.hook.hicodingapi.course.dto.request.CourseCreateRequest;
 import com.hook.hicodingapi.course.dto.request.CourseUpdateRequest;
+import com.hook.hicodingapi.course.dto.resposne.CourseDetailResponse;
 import com.hook.hicodingapi.course.dto.resposne.TeacherCoursesResponse;
 import com.hook.hicodingapi.lecture.domain.Lecture;
 import com.hook.hicodingapi.lecture.domain.repository.LectureRepository;
-import com.hook.hicodingapi.lecture.dto.response.TeacherLecturesResponse;
 import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.member.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_COS_CODE;
-import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_LEC_CODE;
-import static com.hook.hicodingapi.lecture.domain.type.LectureStatusType.AVAILABLE;
-import static com.hook.hicodingapi.lecture.domain.type.LectureStatusType.DELETED;
 
 @Service
 @Transactional
@@ -50,6 +47,16 @@ public class CourseService {
         Page<Course> courses = courseRepository.findByStatusNot(getPageable(page), CourseStatusType.DELETED);
 
         return courses.map(course -> TeacherCoursesResponse.from(course));
+    }
+
+    //과정 상세 조회
+    @Transactional(readOnly = true)
+    public CourseDetailResponse getCourseDetail(Long cosCode) {
+
+        Course course = courseRepository.findByCosCodeAndStatus(cosCode, CourseStatusType.AVAILABLE)
+                .orElseThrow(() -> new BadRequestException(NOT_FOUND_COS_CODE));
+
+        return CourseDetailResponse.from(course);
     }
 
     //과정 등록

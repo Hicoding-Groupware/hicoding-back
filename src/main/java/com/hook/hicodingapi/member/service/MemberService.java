@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_MEMBER_ID;
 import static com.hook.hicodingapi.member.domain.Member.MAX_DEPT_NUM;
@@ -188,6 +189,8 @@ public class MemberService {
         );
 
         memberRepository.save(newMember);
+
+        System.out.println(newMember.toString());
     }
 
     // 직원 랜덤 생성
@@ -276,8 +279,12 @@ public class MemberService {
 
         final List<Member> members = memberRepositoryCriteria.searchMembers(memberInquiryRequest);
 
-        List<MemberInquiryResponse> mbrInquiryResponseList = members
-                .stream().map(member -> MemberInquiryResponse.from(member))
+//        List<MemberInquiryResponse> mbrInquiryResponseList = members
+//                .stream().map((member) -> MemberInquiryResponse.from(member))
+//                .collect(Collectors.toList());
+
+        List<MemberInquiryResponse> mbrInquiryResponseList = IntStream.range(0, members.size())
+                .mapToObj(index -> MemberInquiryResponse.from(index, members.get(index)))
                 .collect(Collectors.toList());
 
         return mbrInquiryResponseList;
@@ -344,10 +351,10 @@ public class MemberService {
 
 
         if (optionalMember.isPresent()) {
-            Member member1 = optionalMember.get();
-
-            member1.update(
-                    memberUpdateRequest.getMemberPwd(),
+            Member member = optionalMember.get();
+             /* 업데이트 할때 비밀번호 암호화해줌 */
+            member.update(
+                    passwordEncoder.encode(memberUpdateRequest.getMemberPwd()),
                     memberUpdateRequest.getPostNo(),
                     memberUpdateRequest.getAddress(),
                     memberUpdateRequest.getDetailAddress(),
@@ -355,7 +362,7 @@ public class MemberService {
                     memberUpdateRequest.getMemberPhone(),
                     memberUpdateRequest.getMemberBirth(),
                     memberUpdateRequest.getMemberGender(),
-                    memberUpdateRequest.getLoginStatus()
+                    "Y"
             );
         } else {
 
