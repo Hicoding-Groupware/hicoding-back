@@ -14,6 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Getter
 @RequiredArgsConstructor(access = PRIVATE)
 public class StudentCourse {
+    private final Long cosCode;
     private final String cosName;
     private final String teacher;
     private final LocalDate cosSdt;
@@ -24,6 +25,7 @@ public class StudentCourse {
 
     public static StudentCourse from(Record record) {
         return new StudentCourse(
+                record.getCourse().getCosCode(),
                 record.getCourse().getCosName(),
                 record.getCourse().getTeacher().getMemberName(),
                 record.getCourse().getCosSdt(),

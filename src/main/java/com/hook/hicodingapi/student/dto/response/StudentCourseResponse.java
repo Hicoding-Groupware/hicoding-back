@@ -18,6 +18,8 @@ public class StudentCourseResponse {
     private final String teacher;
     private final LocalDate cosSdt;
     private final LocalDate cosEdt;
+    private final int curCnt;
+    private final int capacity;
 
     public static StudentCourseResponse from(Course course) {
         return new StudentCourseResponse(
@@ -25,7 +27,9 @@ public class StudentCourseResponse {
                 course.getCosName(),
                 course.getTeacher().getMemberName(),
                 course.getCosSdt(),
-                course.getCosEdt()
+                course.getCosEdt(),
+                course.getCurCnt(),
+                course.getCapacity()
 
         );
 

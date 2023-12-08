@@ -2,6 +2,7 @@ package com.hook.hicodingapi.student.service;
 
 import com.hook.hicodingapi.attendance.domain.repository.AttendanceRepository;
 import com.hook.hicodingapi.attendance.dto.response.DailyAttendanceResponse;
+import com.hook.hicodingapi.common.exception.ConflictException;
 import com.hook.hicodingapi.common.exception.NotFoundException;
 import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.course.domain.repository.CourseRepository;
@@ -33,7 +34,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.fasterxml.jackson.databind.type.LogicalType.Map;
-import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_STD_CODE;
+import static com.hook.hicodingapi.common.exception.type.ExceptionCode.*;
 import static com.hook.hicodingapi.course.domain.type.CourseStatusType.AVAILABLE;
 
 @Slf4j
@@ -111,10 +112,22 @@ public class StudentService {
     @Transactional(readOnly = true)
     public Page<StudentCourseResponse> getCourseName(Integer page, String cosName, LocalDate currentDay) {
 
+//        List<Course> course = courseRepository.findAll();
+//
+//        boolean EnoughCapacity = course.stream()
+//                .allMatch(courses -> courses.getCurCnt() < courses.getCapacity());
+//
+//        if (EnoughCapacity) {
+//            Page<Course> resultCourses = courseRepository.findByCosNameContainsAndStatusAndCosEdtAfter(
+//                    getCoursePageable(page), cosName, AVAILABLE, currentDay);
+//            return resultCourses.map(courseList -> StudentCourseResponse.from(courseList));
+//        } else {
+//            throw new ConflictException(NOT_ENOUGH_CAPACITY);
+//        }
+        Page<Course> resultCourses = courseRepository.findByCosNameContainsAndStatusAndCosEdtAfter(
+                getCoursePageable(page), cosName, AVAILABLE, currentDay);
+        return resultCourses.map(courseList -> StudentCourseResponse.from(courseList));
 
-        Page<Course> courses = courseRepository.findByCosNameContainsAndStatusAndCosEdtAfter(getCoursePageable(page), cosName, AVAILABLE, currentDay);
-
-        return courses.map(course -> StudentCourseResponse.from(course));
     }
 
 

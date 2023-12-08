@@ -3,6 +3,7 @@ package com.hook.hicodingapi.student.presentation;
 import com.hook.hicodingapi.common.paging.Pagenation;
 import com.hook.hicodingapi.common.paging.PagingButtonInfo;
 import com.hook.hicodingapi.common.paging.PagingResponse;
+import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
 import com.hook.hicodingapi.student.dto.response.StudentCourseResponse;
@@ -88,6 +89,7 @@ public class StudentController {
                                                         ) {
 
         LocalDate currentDay = LocalDate.now();
+
 
         final Page<StudentCourseResponse> courses = studentService.getCourseName(page, cosName, currentDay);
         final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(courses);
