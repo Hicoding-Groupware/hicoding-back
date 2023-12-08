@@ -3,6 +3,7 @@ package com.hook.hicodingapi.course.presentation;
 import com.hook.hicodingapi.common.paging.Pagenation;
 import com.hook.hicodingapi.common.paging.PagingButtonInfo;
 import com.hook.hicodingapi.common.paging.PagingResponse;
+import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.course.dto.request.CourseCreateRequest;
 import com.hook.hicodingapi.course.dto.request.CourseUpdateRequest;
 import com.hook.hicodingapi.course.dto.resposne.CourseDetailResponse;
@@ -50,7 +51,7 @@ public class CourseController {
 
         final Long cosCode = courseService.save(courseRequest);
 
-        return ResponseEntity.created(URI.create("/lectures-management/" + cosCode)).build();
+        return ResponseEntity.created(URI.create("/courses-management/" + cosCode)).build();
     }
 
     @PutMapping("/courses/{cosCode}")//과정 수정

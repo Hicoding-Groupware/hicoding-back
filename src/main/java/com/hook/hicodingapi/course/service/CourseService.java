@@ -1,6 +1,6 @@
 package com.hook.hicodingapi.course.service;
 
-import com.hook.hicodingapi.classroom.Classroom;
+import com.hook.hicodingapi.classroom.domain.Classroom;
 import com.hook.hicodingapi.classroom.domain.repository.ClassroomRepository;
 import com.hook.hicodingapi.common.exception.BadRequestException;
 import com.hook.hicodingapi.common.exception.type.ExceptionCode;
@@ -23,6 +23,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_COS_CODE;
 
 @Service
@@ -37,7 +40,7 @@ public class CourseService {
 
     private Pageable getPageable(final Integer page){
 
-        return PageRequest.of(page-1,  10, Sort.by("cosCode"));
+        return PageRequest.of(page-1,  10, Sort.by("cosCode").descending());
     }
 
     //과정 조회(강사)
@@ -80,6 +83,7 @@ public class CourseService {
                 courseRequest.getCosSdt(),
                 courseRequest.getCosEdt(),
                 courseRequest.getCapacity(),
+                courseRequest.getCosNotice(),
                 courseRequest.getDayStatus(),
                 courseRequest.getTimeStatus()
         );
