@@ -13,6 +13,7 @@ import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
 import com.hook.hicodingapi.member.dto.request.MemberInquiryRequest;
 import com.hook.hicodingapi.member.dto.response.MemberCreationResponse;
 import com.hook.hicodingapi.member.dto.response.MemberInquiryResponse;
+import com.hook.hicodingapi.member.dto.response.ProfileResponse;
 import com.hook.hicodingapi.student.dto.response.StudentCourse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_COS_CODE;
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_MEMBER_ID;
 import static com.hook.hicodingapi.member.domain.Member.MAX_DEPT_NUM;
 import static com.hook.hicodingapi.informationProvider.service.InformationProviderService.*;
@@ -330,7 +332,8 @@ public class MemberService {
 
     public PreLoginResponse preLogin(Map<String, String> loginInfo) {
         Member member = memberRepository.findByMemberId(loginInfo.get("memberId"))
-                .orElseThrow();
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER_ID));
+
 
         PreLoginResponse preLoginResponse = null;
 
@@ -341,7 +344,6 @@ public class MemberService {
         }
         return preLoginResponse;
     }
-
 
 
 
@@ -372,4 +374,12 @@ public class MemberService {
         }
     }
 
+    @Transactional
+    public ProfileResponse getProfile(String memberId) {
+
+        final Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER_ID));
+
+        return ProfileResponse.from(member);
+    }
 }
