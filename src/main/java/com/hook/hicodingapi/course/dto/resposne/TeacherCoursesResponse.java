@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -41,7 +42,6 @@ public class TeacherCoursesResponse {
                 course.getStaff().getMemberName(),
                 course.getDayStatus(),
                 course.getTimeStatus()
-
         );
     }
 }

@@ -1,4 +1,4 @@
-package com.hook.hicodingapi.classroom;
+package com.hook.hicodingapi.classroom.domain;
 
 import lombok.AccessLevel;
 import lombok.Getter;
