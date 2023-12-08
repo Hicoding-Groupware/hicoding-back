@@ -42,6 +42,8 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             "AND (:cosCode is not null) ")
     List<Student> findStudentsByAndSignupStatus(@Param("cosCode") Long cosCode, @Param("atdDate") LocalDate atdDate);
 
+    boolean existsByStdCodeAndRecordListCourseCosCode(Long stdCode, Long cosCode);
+
 
 
     /*@Query(value = "SELECT STD_CODE as StdCode, STD_NAME as StdName, STD_BIRTH as StdBirth, " +

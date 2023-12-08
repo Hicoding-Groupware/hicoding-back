@@ -22,12 +22,15 @@ public class DailyAttendanceResponse {
     private final AttendanceStatusType attendanceStatus;
 
     public static DailyAttendanceResponse from(Student student, LocalDate atdDate) {
-//        AttendanceStatusType status =
-//                student.getAttendStdCode().isEmpty() ? null : student.getAttendStdCode().get(0).getAtdStatus();
 
         AttendanceStatusType status = student.getAttendStdCode().isEmpty() || !studentHasAttendanceOnDate(student, atdDate)
                 ? null
                 : student.getAttendStdCode().get(0).getAtdStatus();
+        // 학생의 attendStdCode 목록이 비어 있으면(즉, 출석 기록이 없으면),
+        // 또는 학생이 지정한 날짜(atdDate)에 출석 기록이 없으면,
+        // status에 null을 할당한다.
+        // 그렇지 않으면, student.getAttendStdCode().get(0).getAtdStatus()를 통해 첫 번째 출석 기록의 상태를 가져와서
+        // status에 할당한다.
 
         return
                 new DailyAttendanceResponse(
