@@ -2,29 +2,25 @@ package com.hook.hicodingapi.member.domain.repository;
 
 import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.member.dto.request.MemberInquiryRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import javax.swing.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class MemberRepositoryCriteria {
+public class MemberCriteriaRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
     public List<Member> searchMembers(final MemberInquiryRequest searchDTO) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Member> query = criteriaBuilder.createQuery(Member.class);
-        Root<Member> root = query.from(Member.class);
+        final CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        final CriteriaQuery<Member> query = criteriaBuilder.createQuery(Member.class);
+        final Root<Member> root = query.from(Member.class);
 
         List<Predicate> predicates = new ArrayList<>();
 
@@ -113,8 +109,7 @@ public class MemberRepositoryCriteria {
 
         query.where(predicates.toArray(new Predicate[0]));
 
-        List<Member> member = entityManager.createQuery(query).getResultList();
-
-        return entityManager.createQuery(query).getResultList();
+        final List<Member> member = entityManager.createQuery(query).getResultList();
+        return member;
     }
 }

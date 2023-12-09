@@ -155,7 +155,6 @@ public class Member {
     }
 
 public Member(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, LocalDate memberBirth, GenderType memberGender) {
-
         this.memberPwd = memberPwd;
         this.postNo = postNo;
         this.address = address;

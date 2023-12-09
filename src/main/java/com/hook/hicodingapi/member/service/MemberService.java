@@ -6,14 +6,13 @@ import com.hook.hicodingapi.common.exception.NotFoundException;
 import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.member.domain.repository.MemberRepository;
-import com.hook.hicodingapi.member.domain.repository.MemberRepositoryCriteria;
+import com.hook.hicodingapi.member.domain.repository.MemberCriteriaRepository;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.domain.type.MemberStatus;
 import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
 import com.hook.hicodingapi.member.dto.request.MemberInquiryRequest;
 import com.hook.hicodingapi.member.dto.response.MemberCreationResponse;
 import com.hook.hicodingapi.member.dto.response.MemberInquiryResponse;
-import com.hook.hicodingapi.student.dto.response.StudentCourse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +24,6 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,7 +40,7 @@ import static com.hook.hicodingapi.informationProvider.service.InformationProvid
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final MemberRepositoryCriteria memberRepositoryCriteria;
+    private final MemberCriteriaRepository memberCriteriaRepository;
     private final PasswordEncoder passwordEncoder;
     @PersistenceContext
     private EntityManager entityManager;
@@ -277,7 +275,7 @@ public class MemberService {
     @Transactional(readOnly = true)
     public List<MemberInquiryResponse> getDetailMembers(final MemberInquiryRequest memberInquiryRequest) {
 
-        final List<Member> members = memberRepositoryCriteria.searchMembers(memberInquiryRequest);
+        final List<Member> members = memberCriteriaRepository.searchMembers(memberInquiryRequest);
 
 //        List<MemberInquiryResponse> mbrInquiryResponseList = members
 //                .stream().map((member) -> MemberInquiryResponse.from(member))

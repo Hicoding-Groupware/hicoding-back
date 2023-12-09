@@ -1,8 +1,12 @@
 package com.hook.hicodingapi.board.domain.repository;
 
-import com.hook.hicodingapi.board.domain.Board;
-import com.hook.hicodingapi.member.domain.Member;
+import com.hook.hicodingapi.board.domain.Post;
+import com.hook.hicodingapi.board.domain.type.BoardType;
+import com.hook.hicodingapi.common.domain.type.StatusType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BoardRepository extends JpaRepository<Board, Long> {
+import java.util.Optional;
+
+public interface BoardRepository extends JpaRepository<Post, Long> {
+        Optional<Post> findByPostNoAndBoardTypeAndStatus(Long postNo, BoardType boardType, StatusType statusType);
 }
