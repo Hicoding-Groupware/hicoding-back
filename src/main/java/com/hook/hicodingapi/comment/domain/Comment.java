@@ -1,6 +1,6 @@
 package com.hook.hicodingapi.comment.domain;
 
-import com.hook.hicodingapi.board.domain.Board;
+import com.hook.hicodingapi.board.domain.Post;
 import com.hook.hicodingapi.common.domain.BaseEntity;
 import com.hook.hicodingapi.common.domain.type.StatusType;
 import com.hook.hicodingapi.member.domain.Member;
@@ -35,7 +35,7 @@ public class Comment extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "postNo")
-    private Board postNo;
+    private Post postNo;
 
     @ManyToOne
     @JoinColumn(name = "memberNo")
@@ -46,5 +46,5 @@ public class Comment extends BaseEntity {
     private Comment parent;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    private List<Comment> childrenList;
 }
