@@ -31,9 +31,11 @@ public class CourseCreateRequest {
     private final LocalDate cosEdt;
     @Min(value = 1)
     private final int capacity;
+    private final String cosNotice;
     @NotNull
     private final DayStatusType dayStatus;
     @NotNull
     private final TimeStatusType timeStatus;
+
 
 }

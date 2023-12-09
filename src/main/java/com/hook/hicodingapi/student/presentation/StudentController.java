@@ -3,6 +3,7 @@ package com.hook.hicodingapi.student.presentation;
 import com.hook.hicodingapi.common.paging.Pagenation;
 import com.hook.hicodingapi.common.paging.PagingButtonInfo;
 import com.hook.hicodingapi.common.paging.PagingResponse;
+import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
 import com.hook.hicodingapi.student.dto.response.StudentCourseResponse;
@@ -84,9 +85,13 @@ public class StudentController {
     /* 코스명 조회 */
     @GetMapping("/students/searchCosName")
     public ResponseEntity<PagingResponse> getCourseName(@RequestParam(defaultValue = "1") final Integer page,
-                                                        @RequestParam final String cosName) {
+                                                        @RequestParam(required = false) final String cosName
+                                                        ) {
 
-        final Page<StudentCourseResponse> courses = studentService.getCourseName(page, cosName);
+        LocalDate currentDay = LocalDate.now();
+
+
+        final Page<StudentCourseResponse> courses = studentService.getCourseName(page, cosName, currentDay);
         final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(courses);
         final PagingResponse pagingResponse = PagingResponse.of(courses.getContent(), pagingButtonInfo);
 
