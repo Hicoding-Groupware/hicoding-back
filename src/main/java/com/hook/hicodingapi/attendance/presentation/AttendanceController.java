@@ -1,6 +1,7 @@
 package com.hook.hicodingapi.attendance.presentation;
 
 import com.hook.hicodingapi.attendance.dto.request.AttendanceRegistRequest;
+import com.hook.hicodingapi.attendance.dto.request.AttendanceUpdateRequest;
 import com.hook.hicodingapi.attendance.dto.response.DailyAttendanceResponse;
 import com.hook.hicodingapi.attendance.service.AttendanceService;
 import com.hook.hicodingapi.course.domain.repository.CourseRepository;
@@ -11,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
@@ -39,17 +41,22 @@ public class AttendanceController {
 
     /* 5. 출석 등록 */
     @PostMapping("/day")
-    public ResponseEntity<Void> save(@RequestBody @Valid AttendanceRegistRequest registAttendance,
-                                     @AuthenticationPrincipal CustomUser customUser
+    public ResponseEntity<Void> save(@RequestBody @Valid List<AttendanceRegistRequest> registAttendance
     ) {
-        /* 출결 데이터 미등록 확인 */
-        attendanceService.validateAttendanceCreate(registAttendance.getStatus(), customUser);
-
         /* 등록 데이터 저장 */
-        attendanceService.save(registAttendance, customUser);
+        attendanceService.save(registAttendance);
 
         return ResponseEntity.ok().build();
     }
 
+    /* 6. 출석 수정 */
+    @PutMapping("/day/{atdDate}")
+    public ResponseEntity<Void> update(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate atdDate,
+                                        @RequestBody List<AttendanceUpdateRequest> updateAttendance
+    ) {
 
+        attendanceService.update(atdDate, updateAttendance);
+
+        return ResponseEntity.ok().build();
+    }
 }

@@ -58,4 +58,13 @@ public class Attendance {
         );
     }
 
+
+    public void update(LocalDate atdDate, Course cosCode, Student stdCode, Long atdCode, AttendanceStatusType atdStatus) {
+        this.atdDate = atdDate;
+        this.cosCode = cosCode;
+        this.stdCode = stdCode;
+        this.atdCode = atdCode;
+        this.atdStatus = atdStatus;
+
+    }
 }

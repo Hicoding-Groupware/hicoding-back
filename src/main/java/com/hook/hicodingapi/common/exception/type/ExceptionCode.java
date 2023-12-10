@@ -36,11 +36,11 @@ public enum ExceptionCode {
 
     NOT_ALLOWED_EARLY_ATTENDANCE(6000, "출결 여부를 미리 등록 할 수 없습니다."),
 
-    ALREADY_CHECKED_IN(6001, "이미 출석 등록이 완료 되었습니다."),
+    CONFLICT_ATTENDANCE_DATA(6001, "이미 출석이 완료 되었습니다."),
 
-    CONFLICT_ATTENDANCE_DATA(6002, "이미 출석이 완료 되었습니다."),
+    ENDROLLMENT_NOT_FOUND(6002, "이 과정을 듣지 않는 학생입니다."),
 
-    ENDROLLMENT_NOT_FOUND(6003, "이 과정을 듣지 않는 학생입니다.");
+    NOT_FOUND_ATD_CODE(6003, "이 출석코드는 수정할 수 없습니다.");
 
     private final int code;
     private final String message;
