@@ -1,6 +1,7 @@
 package com.hook.hicodingapi.record.presentation;
 
 import com.hook.hicodingapi.record.dto.request.StudentCosRegistRequest;
+import com.hook.hicodingapi.record.dto.response.RecordListResponse;
 import com.hook.hicodingapi.record.service.RecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,6 +36,14 @@ public class RecordController {
        return ResponseEntity.created(URI.create("/students/record/" + recCode)).build();
     }
 
+    /* 수강 조회 */
+    @GetMapping("/students/record/{stdCode}")
+    public ResponseEntity<List<RecordListResponse>> getRecordList(@PathVariable final Long stdCode) {
+
+        List<RecordListResponse> recordList = recordService.getRecordList(stdCode);
+
+        return ResponseEntity.ok(recordList);
+    }
 
 
 

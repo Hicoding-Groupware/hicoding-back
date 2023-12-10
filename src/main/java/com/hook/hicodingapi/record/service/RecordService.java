@@ -7,6 +7,7 @@ import com.hook.hicodingapi.record.domain.Record;
 import com.hook.hicodingapi.record.domain.repository.RecordCourseRepository;
 import com.hook.hicodingapi.record.domain.repository.RecordRepository;
 import com.hook.hicodingapi.record.dto.request.StudentCosRegistRequest;
+import com.hook.hicodingapi.record.dto.response.RecordListResponse;
 import com.hook.hicodingapi.student.domain.Student;
 import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.*;
 
@@ -73,4 +77,13 @@ public class RecordService {
     }
 
 
+    @Transactional(readOnly = true)
+    public List<RecordListResponse> getRecordList(Long stdCode) {
+
+        List<Record> records = recordRepository.findByStdCode(stdCode);
+        return records.stream()
+                .map(record -> RecordListResponse.from(record))
+                .collect(Collectors.toList());
+
+    }
 }
