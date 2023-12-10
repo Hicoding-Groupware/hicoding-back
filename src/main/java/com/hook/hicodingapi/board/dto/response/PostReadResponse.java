@@ -5,11 +5,13 @@ import com.hook.hicodingapi.comment.domain.Comment;
 import com.hook.hicodingapi.member.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @AllArgsConstructor
 @Getter
+@Setter
 public class PostReadResponse {
     private Long no;
     private String title;
@@ -19,6 +21,7 @@ public class PostReadResponse {
     private boolean isPublic;
     private boolean isNoticePost;
     private Member writer;
+    private List<PostReadResponse> childrenList;
     private List<Comment> commentList;
 
     public static PostReadResponse from(final Post newPost) {
@@ -31,6 +34,7 @@ public class PostReadResponse {
                 newPost.isPublic(),
                 newPost.isNoticePost(),
                 newPost.getWriter(),
+                null,
                 newPost.getCommentList()
         );
     }

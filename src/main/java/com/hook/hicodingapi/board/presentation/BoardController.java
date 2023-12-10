@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.hook.hicodingapi.common.ApiURIConstants.*;
 
@@ -22,6 +23,17 @@ import static com.hook.hicodingapi.common.ApiURIConstants.*;
 public class BoardController {
 
     private final BoardService boardService;
+
+    // 게시글 전체 조회
+    @GetMapping("/{boardType}/post")
+    public ResponseEntity<List<PostReadResponse>> getRequestedAllPost(@PathVariable final String boardType) {
+
+        final BoardType convertedBoardType = BoardType.fromValue(boardType);
+
+        final List<Post> findPostList = boardService.findAllPost(convertedBoardType);
+        final List<PostReadResponse> postReadResponseList = boardService.convertHierarchicalPostList(findPostList);
+        return ResponseEntity.ok(postReadResponseList);
+    }
 
     // 게시글 조회
     @GetMapping("/{boardType}/post/{postNo}")
