@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Post, Long> {
-        Optional<Post> findByPostNoAndBoardTypeAndStatus(Long postNo, BoardType boardType, StatusType statusType);
+    Optional<Post> findByPostNoAndStatus(Long postNo, StatusType status);
+    Optional<Post> findByPostNoAndBoardTypeAndStatus(Long postNo, BoardType boardType, StatusType statusType);
 }

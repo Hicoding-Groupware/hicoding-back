@@ -37,8 +37,14 @@ public enum ExceptionCode {
     NOT_FOUND_POSTS_CODE(1001, "게시글들을 가져올 수 없습니다."),
     NOT_FOUND_BOARD_TYPE_CODE(1002, "해당 게시판 타입과 일치하지 않습니다."),
     NOT_FOUND_WRITER_CODE(1003, "게시글 작성자가 존재하지 않습니다."),
-    NOT_FOUND_CREATION_CODE(1004, "게시글을 생성할 수 없습니다."),
-    FAIL_CONVERT_HIERARCHICAL_CODE(1005, "게시글 목록 구조 분해를 할 수 없습니다.");
+    FAIL_CREATION_POST_CODE(1004, "게시글을 생성할 수 없습니다."),
+    FAIL_CONVERT_HIERARCHICAL_CODE(1005, "게시글 목록 구조 분해를 할 수 없습니다."),
+    
+    // 댓글
+    NOT_FOUND_COMMENT_CODE(2000, "댓글을 가져올 수 없습니다."),
+    NOT_FOUND_COMMENTS_CODE(2001, "댓글들을 가져올 수 없습니다."),
+    FAIL_CREATION_COMMENT_CODE(2004, "댓글을 생성할 수 없습니다."),
+    CONFLICT_PARENT_AND_CHILD_COMMENT_CODE(2005, "부모 댓글과 자식 댓글의 게시글 번호가 일치하지 않습니다.");
 
     private final int code;
     private final String message;
