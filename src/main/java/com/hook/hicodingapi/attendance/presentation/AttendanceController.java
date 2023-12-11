@@ -58,5 +58,6 @@ public class AttendanceController {
         attendanceService.update(atdDate, updateAttendance);
 
         return ResponseEntity.ok().build();
+
     }
 }

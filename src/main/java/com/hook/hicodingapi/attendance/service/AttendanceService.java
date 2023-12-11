@@ -15,6 +15,7 @@ import com.hook.hicodingapi.student.domain.Student;
 import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.asm.Advice;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
@@ -35,7 +36,6 @@ public class AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final StudentRepository studentRepository;
     private final CourseRepository courseRepository;
-    private final MemberRepository memberRepository;
 
 
     /* 5. 출석 등록 */
@@ -113,7 +113,7 @@ public class AttendanceService {
 //    }
 
     /* 6. 출석 수정 */
-    public void update(LocalDate atdDate, List<AttendanceUpdateRequest> attendanceRequests) {
+    public List<Attendance> update(LocalDate atdDate, List<AttendanceUpdateRequest> attendanceRequests) {
         // 기존 출석 정보 조회
         List<Attendance> existingAttendances = attendanceRepository.findByAtdDateAndAtdStatusNot(atdDate, SICK_LEAVE);
 
@@ -140,6 +140,8 @@ public class AttendanceService {
             }
         }
         // 업데이트된 출석 정보를 저장
-        attendanceRepository.saveAll(existingAttendances);
+//        attendanceRepository.saveAll(existingAttendances);
+        return existingAttendances;
+
     }
 }
