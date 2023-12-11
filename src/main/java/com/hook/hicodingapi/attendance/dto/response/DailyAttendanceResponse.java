@@ -14,6 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
 @RequiredArgsConstructor(access = PRIVATE)
 public class DailyAttendanceResponse {
 
+    private final Long cosCode;
     private final String cosName;
     private final Long stdCode;
     private final String stdName;
@@ -34,6 +35,7 @@ public class DailyAttendanceResponse {
 
         return
                 new DailyAttendanceResponse(
+                        student.getRecordList().get(0).getCourse().getCosCode(),
                         student.getRecordList().get(0).getCourse().getCosName(),
                         student.getStdCode(),
                         student.getStdName(),

@@ -115,7 +115,8 @@ public class StudentService {
 
     @Transactional
     public List<DailyAttendanceResponse> getAttendanceForDay(Long cosCode, LocalDate defaultAtdDate) {
-        List<Student> students = studentRepository.findStudentsByAndSignupStatus(cosCode, defaultAtdDate);
+        List<Student> students = studentRepository.findStudentsBySignupStatus(cosCode, defaultAtdDate);
+        System.out.println("Number of students: " + students.size());
 
         if(students.isEmpty()) {
             return Collections.emptyList();

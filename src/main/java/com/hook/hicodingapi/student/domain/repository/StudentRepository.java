@@ -1,5 +1,6 @@
 package com.hook.hicodingapi.student.domain.repository;
 
+import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.student.domain.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,32 +17,53 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
     Page<Student> findByStdNameContaining(Pageable studentPageable, String stdName);
+
     @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
     Page<Student> findByCreatedAtGreaterThanEqual(Pageable studentPageable, LocalDateTime startDateTime);
+
     @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
     Page<Student> findByCreatedAtLessThanEqual(Pageable studentPageable, LocalDateTime endDateTime);
+
     @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
     Page<Student> findByCreatedAtBetween(Pageable studentPageable, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
     @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
     Page<Student> findByStdNameContainingAndCreatedAtGreaterThanEqual(Pageable studentPageable, String stdName, LocalDateTime startDateTime);
+
     @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
     Page<Student> findByStdNameContainingAndCreatedAtLessThanEqual(Pageable studentPageable, String stdName, LocalDateTime endDateTime);
+
     @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
     Page<Student> findByStdNameContainingAndCreatedAtBetween(Pageable studentPageable, String stdName, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
 
-
-
-
+    //    @Query("SELECT s, a.atdStatus " +
+//            "FROM Student s " +
+//            "LEFT JOIN s.recordList r " +
+//            "LEFT JOIN r.course c " +
+//            "LEFT JOIN s.attendStdCode a " +
+//            "ON a.atdDate = :atdDate " +
+//            "WHERE c.cosCode = :cosCode " +
+//            "AND r.signupStatus = 'NORMAL'")
+//@Query("SELECT s, a.atdStatus " +
+//        "FROM Student s " +
+//        "LEFT JOIN s.attendStdCode a " +
+//        "ON a.atdDate = :atdDate " +
+//        "LEFT JOIN s.recordList r " +
+//        "LEFT JOIN r.course c " +
+//        "WHERE c.cosCode = :cosCode " +
+//        "AND r.signupStatus = 'NORMAL' " +
+//        "AND a.atdDate = :atdDate")
+//    List<Student> findStudentsBySignupStatus(@Param("cosCode") Long cosCode, @Param("atdDate") LocalDate atdDate);
     @Query("SELECT s, a.atdStatus " +
             "FROM Student s " +
-            "JOIN FETCH s.recordList r " +
             "LEFT JOIN s.attendStdCode a " +
             "ON a.atdDate = :atdDate " +
-            "WHERE r.signupStatus = 'NORMAL' " +
-            "AND (:cosCode is not null) ")
-    List<Student> findStudentsByAndSignupStatus(@Param("cosCode") Long cosCode, @Param("atdDate") LocalDate atdDate);
-
+            "LEFT JOIN s.recordList r " +
+            "LEFT JOIN r.course c " +
+            "WHERE c.cosCode = :cosCode " +
+            "AND r.signupStatus = 'NORMAL'")
+    List<Student> findStudentsBySignupStatus(@Param("cosCode") Long cosCode, @Param("atdDate") LocalDate atdDate);
     boolean existsByStdCodeAndRecordListCourseCosCode(Long stdCode, Long cosCode);
 
 
