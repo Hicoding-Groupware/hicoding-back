@@ -3,6 +3,7 @@ package com.hook.hicodingapi.common.domain;
 import com.hook.hicodingapi.common.domain.type.StatusType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -16,10 +17,11 @@ import java.time.LocalDateTime;
 import static com.hook.hicodingapi.common.domain.type.StatusType.USABLE;
 import static javax.persistence.EnumType.STRING;
 
-@Getter
 @MappedSuperclass
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@Getter
+@Setter
 public abstract class BaseEntity {
 
     @CreatedDate

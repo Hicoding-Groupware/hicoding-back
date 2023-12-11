@@ -1,9 +1,8 @@
 package com.hook.hicodingapi.board.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hook.hicodingapi.board.domain.type.BoardType;
 import com.hook.hicodingapi.board.dto.request.PostCreationRequest;
-import com.hook.hicodingapi.board.dto.request.PostUpdateRequest;
+import com.hook.hicodingapi.board.dto.request.PostEditRequest;
 import com.hook.hicodingapi.comment.domain.Comment;
 import com.hook.hicodingapi.common.domain.BaseEntity;
 import com.hook.hicodingapi.common.domain.type.StatusType;
@@ -52,10 +51,6 @@ public class Post extends BaseEntity {
     private Integer likesCount = 0;
 
     @NotNull
-    @Enumerated(value = STRING)
-    private StatusType status = USABLE;
-
-    @NotNull
     private boolean isPublic;
 
     @NotNull
@@ -72,7 +67,7 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "parent")
     private List<Post> childrenList;
 
-    @OneToMany(mappedBy = "postNo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "postCode", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList;
 
     private Post(String title, String content, BoardType boardType, boolean isPublic, boolean isNoticePost) {
@@ -96,10 +91,11 @@ public class Post extends BaseEntity {
         );
     }
 
-    public void update(PostUpdateRequest postUpdateRequest) {
-        this.postTitle = postUpdateRequest.getTitle();
-        this.postContent = postUpdateRequest.getContent();
-        this.isPublic = postUpdateRequest.isPublic();
-        this.isNoticePost = postUpdateRequest.isNoticePost();
+    public void update(PostEditRequest postEditRequest) {
+        this.postTitle = postEditRequest.getTitle();
+        this.postContent = postEditRequest.getContent();
+        this.isPublic = postEditRequest.isPublic();
+        this.isNoticePost = postEditRequest.isNoticePost();
+        this.status = postEditRequest.getStatus();
     }
 }

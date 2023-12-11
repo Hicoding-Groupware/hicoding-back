@@ -28,8 +28,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
-import static com.hook.hicodingapi.common.ApiURIConstants.BASE_PATH;
-import static com.hook.hicodingapi.common.ApiURIConstants.MEMBER_PATH;
+import static com.hook.hicodingapi.common.ApiURIConstants.*;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -58,6 +57,8 @@ public class SecurityConfig {
                 // method / url / pattern
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers(BASE_PATH + MEMBER_PATH + "/**").permitAll()
+                .antMatchers(BASE_PATH + BOARD_PATH + "/**").permitAll()
+                .antMatchers(BASE_PATH + COMMENT_PATH + "/**").permitAll()
                 .antMatchers(BASE_PATH + "/login", BASE_PATH + "/member/pre/login", BASE_PATH +"/member/memberInfo").permitAll()
 //                .antMatchers("/api/v1/products-management/**", "/api/vi/products/**").hasRole("ADMIN")
                 .anyRequest().authenticated()

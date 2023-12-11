@@ -9,7 +9,7 @@ import javax.persistence.Enumerated;
 
 import static javax.persistence.EnumType.STRING;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 public class PostCreationRequest {
     final private String title;
