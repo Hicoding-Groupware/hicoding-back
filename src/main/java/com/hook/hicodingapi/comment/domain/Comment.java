@@ -1,21 +1,15 @@
 package com.hook.hicodingapi.comment.domain;
 
 import com.hook.hicodingapi.board.domain.Post;
-import com.hook.hicodingapi.comment.dto.request.CommentCreationRequest;
 import com.hook.hicodingapi.common.domain.BaseEntity;
-import com.hook.hicodingapi.common.domain.type.StatusType;
 import com.hook.hicodingapi.member.domain.Member;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static com.hook.hicodingapi.common.domain.type.StatusType.USABLE;
-import static javax.persistence.EnumType.STRING;
 
 @Entity
 @Table(name = "tbl_comment")

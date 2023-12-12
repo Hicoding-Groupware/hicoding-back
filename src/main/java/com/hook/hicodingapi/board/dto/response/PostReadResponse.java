@@ -20,6 +20,7 @@ import static javax.persistence.EnumType.STRING;
 @Getter
 @Setter
 public class PostReadResponse {
+
     private Long no;
     private String title;
     private String content;
