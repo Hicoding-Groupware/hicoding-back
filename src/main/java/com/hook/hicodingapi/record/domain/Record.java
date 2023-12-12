@@ -1,5 +1,6 @@
 package com.hook.hicodingapi.record.domain;
 
+import com.hook.hicodingapi.attendance.domain.Attendance;
 import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.record.domain.type.SignupStatusType;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import javax.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.hook.hicodingapi.record.domain.type.SignupStatusType.NORMAL;
 import static javax.persistence.EnumType.STRING;
@@ -45,6 +47,7 @@ public class Record {
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDate registedDate;
+
 
     public Record(Long stdCode, Course course) {
 

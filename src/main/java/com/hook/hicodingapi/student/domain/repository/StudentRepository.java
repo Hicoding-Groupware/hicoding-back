@@ -1,5 +1,6 @@
 package com.hook.hicodingapi.student.domain.repository;
 
+import com.hook.hicodingapi.attendance.domain.type.AttendanceStatusType;
 import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.student.domain.Student;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -55,15 +58,21 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 //        "AND r.signupStatus = 'NORMAL' " +
 //        "AND a.atdDate = :atdDate")
 //    List<Student> findStudentsBySignupStatus(@Param("cosCode") Long cosCode, @Param("atdDate") LocalDate atdDate);
-    @Query("SELECT s, a.atdStatus " +
+    @Query("SELECT DISTINCT s, a.atdStatus " +
             "FROM Student s " +
-            "LEFT JOIN s.attendStdCode a " +
-            "ON a.atdDate = :atdDate " +
-            "LEFT JOIN s.recordList r " +
-            "LEFT JOIN r.course c " +
-            "WHERE c.cosCode = :cosCode " +
-            "AND r.signupStatus = 'NORMAL'")
+            "JOIN s.recordList r " +
+            "JOIN r.course c " +
+            "LEFT JOIN c.attendCosCode a " +
+            "ON a.stdCode.stdCode = s.stdCode " +
+            "AND a.atdDate = :atdDate " +
+            "WHERE r.signupStatus = 'NORMAL' " +
+            "AND c.cosCode = :cosCode")
     List<Student> findStudentsBySignupStatus(@Param("cosCode") Long cosCode, @Param("atdDate") LocalDate atdDate);
+
+    List<Student> findByStdCodeAndRecordListCourseCosCode(Long stdCode, Long cosCode);
+
+    List<Student> findStudentByAttendStdCodeAtdDateAndRecordListCourseCosCode(LocalDate atdDate, Long cosCode);
+
     boolean existsByStdCodeAndRecordListCourseCosCode(Long stdCode, Long cosCode);
 
 

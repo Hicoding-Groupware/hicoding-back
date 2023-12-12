@@ -27,7 +27,4 @@ public class AttendanceRegistRequest {
     private final Long stdCode;
     @Min(value = 1)
     private final Long cosCode;
-
-
-
 }
