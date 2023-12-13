@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 
 
 import static com.hook.hicodingapi.msg.domain.type.ReadStatusType.NOTREAD;
+import static com.hook.hicodingapi.msg.domain.type.ReadStatusType.READED;
 import static com.hook.hicodingapi.msg.domain.type.ReceiverStatusType.RECEIVER_USABLE;
 import static com.hook.hicodingapi.msg.domain.type.SenderStatusType.SENDER_USABLE;
 
@@ -52,15 +53,19 @@ public class Message {
 
     @Enumerated(value = STRING)
     @Column(nullable = false)
-    private final SenderStatusType senderStatus = SENDER_USABLE;
+    private  SenderStatusType senderStatus = SENDER_USABLE;
 
     @Enumerated(value = STRING)
     @Column(nullable = false)
-    private final ReceiverStatusType receiverStatus = RECEIVER_USABLE;
+    private  ReceiverStatusType receiverStatus = RECEIVER_USABLE;
 
     @Enumerated(value = STRING)
     @Column(nullable = false)
-    private final ReadStatusType readStatus = NOTREAD;
+    private  ReadStatusType readStatus = NOTREAD;
+
+    @OneToOne(mappedBy = "message")
+    private File file;
+
 
 
     public Message(String msgContent, Member sender, Member receiver) {
@@ -76,5 +81,15 @@ public class Message {
                 sender,
                 receiver
         );
+    }
+
+    /*public void update(LocalDateTime readAt, ReadStatusType readStatus) {
+        this.readAt = LocalDateTime.now();
+        this.readStatus = READED;
+    }*/
+
+    public void update() {
+        this.readAt = LocalDateTime.now();
+        this.readStatus = READED;
     }
 }

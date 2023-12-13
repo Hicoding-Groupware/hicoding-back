@@ -5,14 +5,18 @@ import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Getter
 public class MessageCreateRequest {
 
-    @Min(value = 1)
-    private final Long receiver;
+    @NotEmpty
+    private final List<Long> receivers;
 
     @NotBlank
     private final String msgContent;
+
+
 }

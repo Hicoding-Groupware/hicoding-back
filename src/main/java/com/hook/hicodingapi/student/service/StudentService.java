@@ -130,7 +130,7 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<StudentsRecordResponse> getMutiSearch(Integer page, String sort, String stdName, LocalDate startDate, LocalDate endDate) {
+    public Page<StudentsRecordResponse> getMultiSearch(Integer page, String sort, String stdName, LocalDate startDate, LocalDate endDate) {
 
         LocalDateTime startDateTime = null;
         LocalDateTime endDateTime = null;

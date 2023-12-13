@@ -57,6 +57,7 @@ public class SecurityConfig {
                 // 이 때 OPTIONS 메서드로 서버에 사전 요청을 보내 권한을 확인함
                 // method / url / pattern
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/msgFile/**").permitAll()
                 .antMatchers(BASE_PATH + MEMBER_PATH + "/**").permitAll()
                 .antMatchers(BASE_PATH + "/login", BASE_PATH + "/member/pre/login", BASE_PATH +"/member/memberInfo").permitAll()
 //                .antMatchers("/api/v1/products-management/**", "/api/vi/products/**").hasRole("ADMIN")

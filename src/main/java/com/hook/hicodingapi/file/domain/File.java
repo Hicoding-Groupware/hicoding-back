@@ -39,22 +39,21 @@ public class File extends BaseEntity {
     private String extension;
 
     @Column(nullable = false)
-    private String size;
+    private Long size;
 
     @Enumerated(value = STRING)
     @Column(nullable = false)
     private AccessStatus accessStatus = MESSAGE;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "msgNo")
     private Message message;
-
 
 
     @Column(nullable = false)
     private String fileUrl;
 
-    public File(String fileName, String extension, String size, Message message, String fileUrl) {
+    public File(String fileName, String extension, Long size, Message message, String fileUrl) {
         this.fileName = fileName;
         this.extension = extension;
         this.size = size;
@@ -63,7 +62,7 @@ public class File extends BaseEntity {
     }
 
 
-    public static File of(String fileName, String extension, String size, Message message, String fileUrl) {
+    public static File of(String fileName, String extension, Long size, Message message, String fileUrl) {
         return new File(
                 fileName,
                 extension,

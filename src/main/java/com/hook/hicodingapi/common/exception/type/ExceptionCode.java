@@ -36,7 +36,9 @@ public enum ExceptionCode {
     /*------------ 파일 exceptionCode --------------*/
     FAIL_TO_UPLOAD_FILE(1001, "파일 저장에 실패하였습니다."),
 
-    FAIL_TO_DELETE_FILE(1002, "파일 삭제에 실패하였습니다.");
+    FAIL_TO_DELETE_FILE(1002, "파일 삭제에 실패하였습니다."),
+
+    NOT_FOUND_FILE_NO(1003, "파일을 찾을 수 없습니다.");
 
 
     private final int code;
