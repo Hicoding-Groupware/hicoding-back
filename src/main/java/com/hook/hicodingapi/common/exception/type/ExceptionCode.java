@@ -32,6 +32,10 @@ public enum ExceptionCode {
 
     ACCESS_DENIED(4003, "허가 되지 않은 요청입니다."),
 
+    /*-------------------사진 업로드--------------------------------*/
+    FAIL_TO_UPLOAD_FILE(1001, "파일 저장에 실패하였습니다."),
+    FAIL_TO_DELETE_FILE(1002, "파일 삭제에 실패하였습니다."),
+
     /* 게시판 */
     NOT_FOUND_POST_CODE(1000, "게시글을 가져올 수 없습니다."),
     NOT_FOUND_POSTS_CODE(1001, "게시글들을 가져올 수 없습니다."),
@@ -40,7 +44,7 @@ public enum ExceptionCode {
     NOT_FOUND_READ_MEMBER_CODE(1004, "조회한 멤버를 가져올 수 없습니다"),
     FAIL_CREATION_POST_CODE(1005, "게시글을 생성할 수 없습니다."),
     FAIL_CONVERT_HIERARCHICAL_CODE(1006, "게시글 목록 구조 분해를 할 수 없습니다."),
-    
+
     // 댓글
     NOT_FOUND_COMMENT_CODE(2000, "댓글을 가져올 수 없습니다."),
     NOT_FOUND_COMMENTS_CODE(2001, "댓글들을 가져올 수 없습니다."),
