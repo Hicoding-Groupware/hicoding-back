@@ -27,20 +27,6 @@ public class DailyAttendanceResponse {
 
     public static DailyAttendanceResponse from(Student student, LocalDate atdDate) {
 
-//        AttendanceStatusType status = student.getAttendStdCode().isEmpty() || !studentHasAttendanceOnDate(student, atdDate)
-//                ? null
-//                : student.getAttendStdCode().get(0).getAtdStatus();
-//
-//        return
-//                new DailyAttendanceResponse(
-//                        student.getRecordList().get(0).getCourse().getCosCode(),
-//                        student.getRecordList().get(0).getCourse().getCosName(),
-//                        student.getStdCode(),
-//                        student.getStdName(),
-//                        student.getStdBirth(),
-//                        student.getStdPhone(),
-//                        status
-//                );
         AttendanceStatusType status = null;
 
         // 첫 번째 등록된 수업만 고려합니다.
