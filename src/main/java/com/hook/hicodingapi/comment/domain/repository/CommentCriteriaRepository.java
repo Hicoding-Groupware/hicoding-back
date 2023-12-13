@@ -1,10 +1,10 @@
 package com.hook.hicodingapi.comment.domain.repository;
 
-import com.hook.hicodingapi.board.domain.Post;
-import com.hook.hicodingapi.board.domain.type.BoardType;
 import com.hook.hicodingapi.comment.domain.Comment;
 import com.hook.hicodingapi.comment.domain.type.CommentCriteriaConditionType;
 import com.hook.hicodingapi.common.domain.repository.BaseCriteriaRepository;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,11 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.hook.hicodingapi.board.domain.type.BoardCriteriaConditionType.ALL_POST;
 import static com.hook.hicodingapi.common.domain.type.StatusType.USABLE;
 
 @Repository
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommentCriteriaRepository {
 
     private final BaseCriteriaRepository<Comment> baseCriteriaRepository;

@@ -4,7 +4,6 @@ import com.hook.hicodingapi.common.exception.NotFoundException;
 import lombok.Getter;
 
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_BOARD_TYPE_CODE;
-import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_STD_CODE;
 
 @Getter
 public enum BoardType {

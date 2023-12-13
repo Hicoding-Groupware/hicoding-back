@@ -5,6 +5,7 @@ import com.hook.hicodingapi.board.domain.repository.BoardRecordRepository;
 import com.hook.hicodingapi.board.domain.type.BoardRecordType;
 import com.hook.hicodingapi.common.exception.CustomException;
 import com.hook.hicodingapi.member.domain.Member;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.List;
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.*;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Transactional
 public class BoardRecordService {
 

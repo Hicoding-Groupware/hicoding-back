@@ -5,7 +5,6 @@ import com.hook.hicodingapi.board.domain.type.BoardCriteriaConditionType;
 import com.hook.hicodingapi.board.domain.type.BoardType;
 import com.hook.hicodingapi.common.domain.repository.BaseCriteriaRepository;
 import lombok.*;
-import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
