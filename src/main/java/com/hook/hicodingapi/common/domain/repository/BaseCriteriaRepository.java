@@ -1,6 +1,9 @@
 package com.hook.hicodingapi.common.domain.repository;
 
 import lombok.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -35,5 +38,23 @@ public class BaseCriteriaRepository<T> {
         // 생성된 TypedQuery를 실행하고 결과를 가져오는 부분, getResultList()는 쿼리 실핼 및 결과를 List<Entity>로 반환
         // 만약 값이 없다면 빈 리스트 반환
         return Optional.of(query.getResultList());
+    }
+
+    public Page<T> generatePageCriteriaQuery(CriteriaQuery<T> criteriaQuery, Pageable pageable, Long entityTotal) {
+        // 1. 여러 단계를 거쳐 작성한 criteriaQuery를 TypedQuery<Entity>로 변환 후
+        // 2. getResultList() 메소드를 호출하여 최종적으로 쿼리를 실행하고 결과를 가져오는 부분
+        // 3. TypedQuery는 반환될 엔터티 클래스를 지정한 쿼리
+        TypedQuery<T> query = entityManager.createQuery(criteriaQuery);
+
+        // 쿼리 실행 및 결과를 Page<T>로 반환
+        List<T> resultList = query.setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .getResultList();
+
+        // 생성된 TypedQuery를 실행하고 결과를 가져오는 부분, getResultList()는 쿼리 실핼 및 결과를 List<Entity>로 반환
+        // 만약 값이 없다면 빈 리스트 반환
+        //return Optional.of(query.getResultList());
+
+        return new PageImpl<>(resultList, pageable, entityTotal);
     }
 }

@@ -2,15 +2,9 @@ package com.hook.hicodingapi.board.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hook.hicodingapi.board.domain.type.BoardRecordType;
-import com.hook.hicodingapi.board.domain.type.BoardType;
-import com.hook.hicodingapi.board.dto.request.PostCreationRequest;
 import com.hook.hicodingapi.member.domain.Member;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -23,7 +17,7 @@ import static javax.persistence.EnumType.STRING;
 @Entity
 @Table(name = "tbl_board_record")
 @EntityListeners(AuditingEntityListener.class)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
 public class BoardRecord {

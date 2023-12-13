@@ -11,6 +11,7 @@ import com.hook.hicodingapi.comment.dto.response.CommentReadResponse;
 import com.hook.hicodingapi.common.domain.type.StatusType;
 import com.hook.hicodingapi.common.exception.CustomException;
 import com.hook.hicodingapi.member.domain.repository.MemberRepository;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ import java.util.Map;
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.*;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Transactional
 public class CommentService {
 
@@ -114,9 +115,9 @@ public class CommentService {
     }
 
     // 게시글의 대댓글을 가진 댓글들을 구조 분해시켜 응답 DTO에 담는다.
+    // 대댓글이 없는 댓글(부모)은 List에 담고, 대댓글은 부모를 불러(체인) 연결하는 계층 알고리즘
     public List<CommentReadResponse> convertHierarchicalCommentList(final List<Comment> commentList) {
 
-        // 대댓글이 없는 댓글(부모)은 List에 담고, 대댓글은 부모를 불러(체인) 연결하는 계층 알고리즘
         List<CommentReadResponse> commentReadResponseList = new ArrayList<>();
         Map<Long, CommentReadResponse> commentReadResponseHashMap = new HashMap<>();
 

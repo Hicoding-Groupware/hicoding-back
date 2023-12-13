@@ -4,17 +4,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hook.hicodingapi.comment.domain.Comment;
 import com.hook.hicodingapi.common.domain.type.StatusType;
 import com.hook.hicodingapi.member.domain.Member;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 
 import static javax.persistence.EnumType.STRING;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Setter
 public class CommentCreationResponse {

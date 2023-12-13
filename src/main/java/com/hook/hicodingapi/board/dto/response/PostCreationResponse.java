@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hook.hicodingapi.board.domain.Post;
 import com.hook.hicodingapi.common.domain.type.StatusType;
 import com.hook.hicodingapi.member.domain.Member;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 
 import static javax.persistence.EnumType.STRING;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class PostCreationResponse {
     private Long no;

@@ -16,6 +16,7 @@ import com.hook.hicodingapi.common.domain.type.StatusType;
 import com.hook.hicodingapi.common.exception.CustomException;
 import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.member.domain.repository.MemberRepository;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,12 +26,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.hook.hicodingapi.board.domain.type.BoardRecordType.LIKES;
-import static com.hook.hicodingapi.board.domain.type.BoardRecordType.VIEWS;
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.*;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Transactional
 public class BoardService {
 
@@ -39,10 +38,10 @@ public class BoardService {
     private final BoardCriteriaRepository boardCriteriaRepository;
     private final BoardRecordService boardRecordService;
 
-    // 답글을 가진 게시글들을 구조 분해시켜 응답 DTO에 담는다.
+    // 게시글의 대댓글을 가진 댓글들을 구조 분해시켜 응답 DTO에 담는다.
+    // 대댓글이 없는 댓글(부모)은 List에 담고, 대댓글은 부모를 불러(체인) 연결하는 계층 알고리즘
     public List<PostReadResponse> convertHierarchicalPostList(final List<Post> postList) {
 
-        // 답글이 없는 게시글(부모)는 List에 담고, 답글 게시글은 부모를 불러(체인) 연결하는 계층 알고리즘
         List<PostReadResponse> postReadResponseList = new ArrayList<>();
         Map<Long, PostReadResponse> postReadResponseHashMap = new HashMap<>();
 
@@ -95,16 +94,16 @@ public class BoardService {
 
         }
 
-        if (commentList != null) {
-            if (postReadResponse.getCommentList() == null) {
-                postReadResponse.setCommentList(new ArrayList<>());
-
-                commentList.forEach(childComment -> {
-                    final CommentReadResponse convertedComment = CommentReadResponse.from(childComment);
-                    postReadResponse.getCommentList().add(convertedComment);
-                });
-            }
-        }
+//        if (commentList != null) {
+//            if (postReadResponse.getCommentList() == null) {
+//                postReadResponse.setCommentList(new ArrayList<>());
+//
+//                commentList.forEach(childComment -> {
+//                    final CommentReadResponse convertedComment = CommentReadResponse.from(childComment);
+//                    postReadResponse.getCommentList().add(convertedComment);
+//                });
+//            }
+//        }
     }
 
     // 게시판 기록 갱신 및 상태 값 처리 로직 (조회수, 좋아요....)
@@ -148,7 +147,7 @@ public class BoardService {
     }
 
     // 게시글 조회
-    public Post readPost(final BoardType boardType, final BoardRecordType boardRecordType, final Long memberNo, final Long postNo) {
+    public Post findPost(final BoardType boardType, final BoardRecordType boardRecordType, final Long memberNo, final Long postNo) {
         final Post findPost = findPost(boardType, postNo);
         final Member findMember = memberRepository.findByMemberNo(memberNo)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_READ_MEMBER_CODE));
@@ -164,7 +163,9 @@ public class BoardService {
                 boardRecordService.findBoardRecordList(postNo, boardRecordType);
 
         List<Member> postMemberList = new ArrayList<>(boardRecordList.size());
-        boardRecordList.forEach(boardRecord -> {postMemberList.add(boardRecord.getRecorder());});
+        boardRecordList.forEach(boardRecord -> {
+            postMemberList.add(boardRecord.getRecorder());
+        });
 
         return postMemberList;
     }

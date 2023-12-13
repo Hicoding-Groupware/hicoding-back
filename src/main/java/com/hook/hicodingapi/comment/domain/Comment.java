@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Entity
 @Table(name = "tbl_comment")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
 public class Comment extends BaseEntity {

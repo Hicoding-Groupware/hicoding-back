@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hook.hicodingapi.comment.domain.Comment;
 import com.hook.hicodingapi.common.domain.type.StatusType;
 import com.hook.hicodingapi.member.domain.Member;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,7 @@ import java.util.List;
 import static com.hook.hicodingapi.common.domain.type.StatusType.USABLE;
 import static javax.persistence.EnumType.STRING;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Setter
 public class CommentReadResponse {

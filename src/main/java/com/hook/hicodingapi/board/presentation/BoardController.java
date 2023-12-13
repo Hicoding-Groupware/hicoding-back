@@ -9,8 +9,11 @@ import com.hook.hicodingapi.board.dto.response.LikesPostResponse;
 import com.hook.hicodingapi.board.dto.response.PostCreationResponse;
 import com.hook.hicodingapi.board.dto.response.PostReadResponse;
 import com.hook.hicodingapi.board.service.BoardService;
+import com.hook.hicodingapi.common.paging.CustomPagination;
+import com.hook.hicodingapi.common.paging.PagingResponse;
 import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.member.dto.response.PostMembersResponse;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,18 +26,21 @@ import static com.hook.hicodingapi.common.ApiURIConstants.*;
 
 @RestController
 @RequestMapping(BASE_PATH + BOARD_PATH)
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class BoardController {
 
     private final BoardService boardService;
 
     // 게시글 전체 가져오기
-    @GetMapping("/{boardType}/post")
-    public ResponseEntity<List<PostReadResponse>> getRequestedAllPosts(@PathVariable final String boardType) {
+    @GetMapping("/{boardType}/posts/{requestPage}")
+    public ResponseEntity<PagingResponse> getRequestedAllPosts(@PathVariable(required = true) final String boardType,
+                                                                       @PathVariable(required = true) final int requestPage) {
 
         final List<Post> findPostList = boardService.findBoardAllPosts(BoardType.fromValue(boardType));
         final List<PostReadResponse> postReadResponseList = boardService.convertHierarchicalPostList(findPostList);
-        return ResponseEntity.ok(postReadResponseList);
+        final PagingResponse pagingResponse = CustomPagination.getPagingResponse(postReadResponseList, postReadResponseList.size(), requestPage, null, null);
+
+        return ResponseEntity.ok(pagingResponse);
     }
 
     // 게시글 조회
@@ -44,7 +50,7 @@ public class BoardController {
                                                              final Long memberNo,
                                                              final String boardRecordType) {
 
-        final Post findPost = boardService.readPost(BoardType.fromValue(boardType), BoardRecordType.fromValue(boardRecordType), memberNo, postNo);
+        final Post findPost = boardService.findPost(BoardType.fromValue(boardType), BoardRecordType.fromValue(boardRecordType), memberNo, postNo);
         final PostReadResponse postReadResponse = PostReadResponse.from(findPost);
 
         // 게시글의 자식들을 응답 객체의 자식들로 변환시킨다.
