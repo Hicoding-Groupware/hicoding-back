@@ -1,26 +1,21 @@
 package com.hook.hicodingapi.comment.domain;
 
-import com.hook.hicodingapi.board.domain.Board;
+import com.hook.hicodingapi.board.domain.Post;
 import com.hook.hicodingapi.common.domain.BaseEntity;
-import com.hook.hicodingapi.common.domain.type.StatusType;
 import com.hook.hicodingapi.member.domain.Member;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static javax.persistence.EnumType.STRING;
+import java.util.Optional;
 
 @Entity
 @Table(name = "tbl_comment")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@ToString
+@Setter
 public class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,22 +24,27 @@ public class Comment extends BaseEntity {
     @NotNull
     private String cmtContent;
 
-    @NotNull
-    @Enumerated(value = STRING)
-    private StatusType status;
-
     @ManyToOne
     @JoinColumn(name = "postNo")
-    private Board postNo;
+    private Post postCode;
 
     @ManyToOne
     @JoinColumn(name = "memberNo")
-    private Member memberNo;
+    private Member writer;
 
     @ManyToOne
     @JoinColumn(name = "refCmtNo")
     private Comment parent;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments = new ArrayList<>();
+    // cascade = CascadeType.ALL, orphanRemoval = true
+    @OneToMany(mappedBy = "parent")
+    private List<Comment> childrenList;
+
+    private Comment(final String content) {
+        this.cmtContent = content;
+    }
+
+    public static Optional<Comment> of(final String content) {
+        return Optional.of(new Comment(content));
+    }
 }

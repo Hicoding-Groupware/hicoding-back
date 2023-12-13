@@ -1,14 +1,12 @@
 package com.hook.hicodingapi.member.domain;
 
 import com.hook.hicodingapi.informationProvider.domain.type.GenderType;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.domain.type.MemberStatus;
 import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -120,6 +118,8 @@ public class Member {
         this.endedAt = endedAt;
     }
 
+
+
     public static Member of(String memberId, String memberPwd, MemberCreationRequest memberCreationRequest, Integer registrationNo, LocalDateTime joinedAt) {
         return new Member(
                 memberId,
@@ -145,6 +145,9 @@ public class Member {
         );
     }
 
+
+
+
     public void update(MemberRole memberRole, MemberStatus memberStatus) {
         this.memberRole = memberRole;
         this.memberStatus = memberStatus;
@@ -155,7 +158,6 @@ public class Member {
     }
 
 public Member(String memberPwd, String postNo, String address, String detailAddress, String memberEmail, String memberPhone, LocalDate memberBirth, GenderType memberGender) {
-
         this.memberPwd = memberPwd;
         this.postNo = postNo;
         this.address = address;
@@ -196,4 +198,26 @@ public Member(String memberPwd, String postNo, String address, String detailAddr
 
 }
 
+     public void update(String postNo, String address, String detailAddress, String memberEmail, String memberPhone, LocalDate memberBirth, GenderType memberGender) {
+         this.postNo = postNo;
+         this.address = address;
+         this.detailAddress = detailAddress;
+         this.memberEmail = memberEmail;
+         this.memberPhone = memberPhone;
+         this.memberBirth = memberBirth;
+         this.memberGender = memberGender;
+    }
+
+    public void updateMemberProfileUrl(String memberProfile) {
+        this.memberProfile = memberProfile;
+    }
+
+
+    public void updateMemberProfile(String memberProfile) {
+        this.memberProfile = memberProfile;
+    }
+
+    public void updateProfile(String memberProfile) {
+        this.memberProfile = memberProfile;
+    }
 }

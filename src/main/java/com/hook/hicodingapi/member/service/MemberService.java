@@ -1,12 +1,13 @@
 package com.hook.hicodingapi.member.service;
+import com.hook.hicodingapi.common.util.FileUploadUtils;
 import com.hook.hicodingapi.informationProvider.domain.type.GenderType;
-import com.hook.hicodingapi.member.dto.request.MemberUpdateRequest;
+import com.hook.hicodingapi.member.dto.request.*;
 import com.hook.hicodingapi.member.dto.response.PreLoginResponse;
 import com.hook.hicodingapi.common.exception.NotFoundException;
 import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.member.domain.repository.MemberRepository;
-import com.hook.hicodingapi.member.domain.repository.MemberRepositoryCriteria;
+import com.hook.hicodingapi.member.domain.repository.MemberCriteriaRepository;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.domain.type.MemberStatus;
 import com.hook.hicodingapi.member.dto.request.MemberCreationRequest;
@@ -16,19 +17,19 @@ import com.hook.hicodingapi.member.dto.response.MemberInquiryResponse;
 import com.hook.hicodingapi.member.dto.response.ProfileResponse;
 import com.hook.hicodingapi.student.dto.response.StudentCourse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -44,8 +45,14 @@ import static com.hook.hicodingapi.informationProvider.service.InformationProvid
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final MemberRepositoryCriteria memberRepositoryCriteria;
+    private final MemberCriteriaRepository memberCriteriaRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${image.image-url}")
+    private String IMAGE_URL;
+    @Value("${image.image-dir}")
+    private String IMAGE_DIR;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -279,7 +286,7 @@ public class MemberService {
     @Transactional(readOnly = true)
     public List<MemberInquiryResponse> getDetailMembers(final MemberInquiryRequest memberInquiryRequest) {
 
-        final List<Member> members = memberRepositoryCriteria.searchMembers(memberInquiryRequest);
+        final List<Member> members = memberCriteriaRepository.searchMembers(memberInquiryRequest);
 
 //        List<MemberInquiryResponse> mbrInquiryResponseList = members
 //                .stream().map((member) -> MemberInquiryResponse.from(member))
@@ -347,7 +354,36 @@ public class MemberService {
 
 
 
-    public void memberUpdate(MemberUpdateRequest memberUpdateRequest) {
+//    public void memberUpdate(MemberUpdateRequest memberUpdateRequest) {
+//
+//        Optional<Member> optionalMember = memberRepository.findByMemberId(memberUpdateRequest.getMemberId());
+//
+//
+//        if (optionalMember.isPresent()) {
+//            Member member = optionalMember.get();
+//             /* 업데이트 할때 비밀번호 암호화해줌 */
+//            member.update(
+//                    passwordEncoder.encode(memberUpdateRequest.getMemberPwd()),
+//                    memberUpdateRequest.getPostNo(),
+//                    memberUpdateRequest.getAddress(),
+//                    memberUpdateRequest.getDetailAddress(),
+//                    memberUpdateRequest.getMemberEmail(),
+//                    memberUpdateRequest.getMemberPhone(),
+//                    memberUpdateRequest.getMemberBirth(),
+//                    memberUpdateRequest.getMemberGender(),
+//                    "Y"
+//            );
+//        } else {
+//
+//            throw new NotFoundException(NOT_FOUND_MEMBER_ID);
+//
+//
+//        }
+//    }
+
+
+
+    public void memberUpdate(final MemberUpdateRequest memberUpdateRequest) {
 
         Optional<Member> optionalMember = memberRepository.findByMemberId(memberUpdateRequest.getMemberId());
 
@@ -373,6 +409,76 @@ public class MemberService {
 
         }
     }
+    private String getRandomName() {
+        return UUID.randomUUID().toString().replace("-", "");
+    }
+
+
+  // public void save(MultipartFile memberProfile, MemberProfileUpdate memberProfileUpdate) {
+  //     /* 전달 된 파일을 서버의 지정 경로에 저장 */
+  //     String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, getRandomName(), memberProfile);
+
+  //     Optional<Member> optionalMember = memberRepository.findByMemberId(memberProfileUpdate.getMemberId());
+
+  //    final Member newMember = Member.of(
+  //            IMAGE_URL + replaceFileName
+  //    )
+
+
+  // }
+  public void save(MultipartFile memberProfile, MemberProfileUpdate memberProfileUpdate) {
+      String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, getRandomName(), memberProfile);
+
+
+      Optional<Member> optionalMember = memberRepository.findByMemberId(memberProfileUpdate.getMemberId());
+
+      if (optionalMember.isPresent()){
+          Member existingMember = optionalMember.get();
+          existingMember.updateMemberProfile(IMAGE_URL + replaceFileName);
+
+          memberRepository.save(existingMember);
+      }else {
+          throw new NotFoundException(NOT_FOUND_MEMBER_ID);
+      }
+
+  }
+
+   public void memberProfileUpdate(MemberProfileUpdate memberProfileUpdate, MultipartFile memberProfile) {
+       Optional<Member> optionalMember = memberRepository.findByMemberId(memberProfileUpdate.getMemberId());
+
+       if (memberProfile != null){
+           String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, getRandomName(), memberProfile);
+           FileUploadUtils.deleteFile(IMAGE_DIR, optionalMember.get().getMemberProfile().replace(IMAGE_URL, ""));
+           optionalMember.get().updateMemberProfileUrl(IMAGE_URL + replaceFileName);
+       }
+
+   }
+
+
+    public void memberUpdateWithoutPassword(MemberUpdateRequestWithoutPassword memberUpdateRequestWithoutPassword) {
+
+                Optional<Member> optionalMember = memberRepository.findByMemberId(memberUpdateRequestWithoutPassword.getMemberId());
+
+
+        if (optionalMember.isPresent()) {
+            Member member = optionalMember.get();
+             /* 업데이트 할때 비밀번호 암호화해줌 */
+            member.update(
+                    memberUpdateRequestWithoutPassword.getPostNo(),
+                    memberUpdateRequestWithoutPassword.getAddress(),
+                    memberUpdateRequestWithoutPassword.getDetailAddress(),
+                    memberUpdateRequestWithoutPassword.getMemberEmail(),
+                    memberUpdateRequestWithoutPassword.getMemberPhone(),
+                    memberUpdateRequestWithoutPassword.getMemberBirth(),
+                    memberUpdateRequestWithoutPassword.getMemberGender()
+            );
+        } else {
+
+            throw new NotFoundException(NOT_FOUND_MEMBER_ID);
+
+
+        }
+    }
 
     @Transactional
     public ProfileResponse getProfile(String memberId) {
@@ -380,6 +486,37 @@ public class MemberService {
         final Member member = memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MEMBER_ID));
 
-        return ProfileResponse.from(member);
+        return ProfileResponse.from(member, passwordEncoder);
     }
+
+
+    public void deleteProfile(String memberId) {
+        final Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow( () -> new NotFoundException(NOT_FOUND_MEMBER_ID));
+
+        if (member.getMemberProfile() != null){
+            FileUploadUtils.deleteFile(IMAGE_DIR, member.getMemberProfile().replace(IMAGE_URL, ""));
+            String deleteProfile = null;
+            member.updateProfile(deleteProfile);
+        }
+
+    }
+
+
+    //       public void delete(String memberId) {
+ //       Optional<Member> optionalMember = memberRepository.findByMemberId(memberId);
+//
+ //       if (optionalMember.isPresent()){
+ //           Member deleteProfile = optionalMember.get();
+ //           if (deleteProfile.getMemberProfile() != null){
+ //               FileUploadUtils.deleteFile(IMAGE_DIR, deleteProfile.getMemberProfile());
+ //           }
+//
+ //       }else {
+ //           throw new NotFoundException(NOT_FOUND_MEMBER_ID);
+//
+ //       }
+ //   }
+
+
 }

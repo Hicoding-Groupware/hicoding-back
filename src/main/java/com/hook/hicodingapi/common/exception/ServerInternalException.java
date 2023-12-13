@@ -8,6 +8,8 @@ import lombok.Getter;
 public class ServerInternalException extends CustomException{
 
     public ServerInternalException(final ExceptionCode exceptionCode) {
-            super(exceptionCode);
+        super(exceptionCode);
     }
+
+
 }

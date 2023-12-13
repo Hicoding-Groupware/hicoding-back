@@ -1,5 +1,6 @@
 package com.hook.hicodingapi.common.util;
 
+
 /* 필요한 메소드 정의 위해 util 디렉토리에 만든다 */
 
 import com.hook.hicodingapi.common.exception.ServerInternalException;
@@ -31,20 +32,17 @@ public class FileUploadUtils {
                 Files.createDirectories(uploadPath);
 
             /* 파일명 생성 */
-            // 뒤에 있는 확장자만 따로 분리하기 위한 작업
             String replaceFileName = fileName + "." + FilenameUtils.getExtension(multipartFile.getOriginalFilename());
 
             /* 파일 저장 */
-            Path filePath = uploadPath.resolve(replaceFileName);    // 경로 + 파일명 = filePath
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);     // StandardCopyOption.REPLACE_EXISTING => 존재하면 교체하겠다라는 의미
-
+            Path filePath = uploadPath.resolve(replaceFileName);  //경로와 파일명 합친걸 filePath에다가 저장
+            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 
             return replaceFileName;
 
         } catch (IOException e) {
             throw new ServerInternalException(FAIL_TO_UPLOAD_FILE);
         }
-
     }
 
     public static void deleteFile(String uploadDir, String fileName) {
@@ -54,18 +52,17 @@ public class FileUploadUtils {
             Path filePath = uploadPath.resolve(fileName);
             Files.delete(filePath);
         } catch (IOException e) {
-            throw new ServerInternalException(FAIL_TO_DELETE_FILE);     //new RuntimeException(e);
+            throw new ServerInternalException(FAIL_TO_DELETE_FILE);
         }
+
+
     }
 
-
-
-
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+

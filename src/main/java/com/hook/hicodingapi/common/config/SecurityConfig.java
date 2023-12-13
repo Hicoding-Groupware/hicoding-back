@@ -28,8 +28,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
-import static com.hook.hicodingapi.common.ApiURIConstants.BASE_PATH;
-import static com.hook.hicodingapi.common.ApiURIConstants.MEMBER_PATH;
+import static com.hook.hicodingapi.common.ApiURIConstants.*;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -57,8 +56,11 @@ public class SecurityConfig {
                 // 이 때 OPTIONS 메서드로 서버에 사전 요청을 보내 권한을 확인함
                 // method / url / pattern
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/profileimgs/**").permitAll()  //이거 해야지 사진 나옴
                 .antMatchers(HttpMethod.GET, "/msgFile/**").permitAll()
                 .antMatchers(BASE_PATH + MEMBER_PATH + "/**").permitAll()
+                .antMatchers(BASE_PATH + BOARD_PATH + "/**").permitAll()
+                .antMatchers(BASE_PATH + COMMENT_PATH + "/**").permitAll()
                 .antMatchers(BASE_PATH + "/login", BASE_PATH + "/member/pre/login", BASE_PATH +"/member/memberInfo").permitAll()
 //                .antMatchers("/api/v1/products-management/**", "/api/vi/products/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
