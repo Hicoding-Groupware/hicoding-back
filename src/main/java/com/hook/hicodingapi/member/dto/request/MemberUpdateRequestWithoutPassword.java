@@ -4,18 +4,12 @@ import com.hook.hicodingapi.informationProvider.domain.type.GenderType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Getter
 @RequiredArgsConstructor
-public class MemberUpdateRequest {
-
-
+public class MemberUpdateRequestWithoutPassword {
     private String memberId;
-
-    private String memberPwd;
 
     private String postNo;
 
@@ -30,7 +24,5 @@ public class MemberUpdateRequest {
     private LocalDate memberBirth;
 
     private GenderType memberGender;
-
-    private String loginStatus;
 
 }
