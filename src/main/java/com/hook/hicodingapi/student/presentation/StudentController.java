@@ -49,13 +49,13 @@ public class StudentController {
 
     /* 원생 조회 및 검색조건 모두 포함 */
     @GetMapping("/students")
-    public ResponseEntity<PagingResponse> getMutiSearch(@RequestParam(defaultValue = "1") final Integer page,
+    public ResponseEntity<PagingResponse> getMultiSearch(@RequestParam(defaultValue = "1") final Integer page,
                                                   @RequestParam(required = false) final String sort,
                                                   @RequestParam(required = false) final String stdName,
                                                   @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")  final LocalDate startDate,
                                                   @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDate endDate){
 
-        final Page<StudentsRecordResponse> students = studentService.getMutiSearch(page, sort, stdName, startDate, endDate);
+        final Page<StudentsRecordResponse> students = studentService.getMultiSearch(page, sort, stdName, startDate, endDate);
         final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(students);
         final PagingResponse pagingResponse = PagingResponse.of(students.getContent(), pagingButtonInfo);
         return ResponseEntity.ok(pagingResponse);

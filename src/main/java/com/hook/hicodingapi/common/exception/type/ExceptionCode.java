@@ -32,9 +32,12 @@ public enum ExceptionCode {
 
     ACCESS_DENIED(4003, "허가 되지 않은 요청입니다."),
 
-    /*-------------------사진 업로드--------------------------------*/
+    /*------------ 파일 및 사진 exceptionCode --------------*/
     FAIL_TO_UPLOAD_FILE(1001, "파일 저장에 실패하였습니다."),
+
     FAIL_TO_DELETE_FILE(1002, "파일 삭제에 실패하였습니다."),
+
+    NOT_FOUND_FILE_NO(1003, "파일을 찾을 수 없습니다."),
 
     /* 게시판 */
     NOT_FOUND_POST_CODE(1000, "게시글을 가져올 수 없습니다."),

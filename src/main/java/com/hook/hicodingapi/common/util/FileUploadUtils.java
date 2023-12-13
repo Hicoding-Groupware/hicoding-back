@@ -1,6 +1,10 @@
 package com.hook.hicodingapi.common.util;
 
+
+/* 필요한 메소드 정의 위해 util 디렉토리에 만든다 */
+
 import com.hook.hicodingapi.common.exception.ServerInternalException;
+import com.hook.hicodingapi.file.domain.File;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -10,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.FAIL_TO_DELETE_FILE;
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.FAIL_TO_UPLOAD_FILE;
