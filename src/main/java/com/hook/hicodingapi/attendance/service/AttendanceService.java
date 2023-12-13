@@ -48,7 +48,7 @@ public class AttendanceService {
             Student student = getStudent(registAttendance.getStdCode());
             Course cosCode = getCourse(registAttendance.getCosCode());
 
-            Attendance newAttendance = Attendance.of(
+            Attendance newAttendance = Attendance.of( // final?
                     student,
                     registAttendance.getStatus(),
                     cosCode
@@ -86,31 +86,6 @@ public class AttendanceService {
 
 
 
-    /* 6. 출석 수정 */
-//    public void update(LocalDate atdDate, List<AttendanceUpdateRequest> attendanceRequests) {
-//
-//        Optional<Attendance> optionalAttendance = attendanceRepository.findByAtdDateAndAtdStatusNot(atdDate, SICK_LEAVE);
-//        Attendance attendance =  optionalAttendance.orElseThrow(() -> new NotFoundException(NOT_FOUND_ATD_CODE));
-//
-//
-//        AttendanceUpdateRequest request = attendanceRequests.get(0);
-//
-//        // Find Course and Student entities by their IDs
-//        Course course = courseRepository.findById(request.getCosCode())
-//                .orElseThrow(() -> new NotFoundException(NOT_FOUND_COS_CODE));
-//
-//        Student student = studentRepository.findById(request.getStdCode())
-//                .orElseThrow(() -> new NotFoundException(NOT_FOUND_STD_CODE));
-//
-//        attendance.update(
-//                request.getAtdDate(),
-//                course,
-//                student,
-//                request.getAtdCode(),
-//                request.getStatus()
-//        );
-//
-//    }
 
     /* 6. 출석 수정 */
     public List<Attendance> update(LocalDate atdDate, List<AttendanceUpdateRequest> attendanceRequests) {
