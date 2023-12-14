@@ -12,8 +12,11 @@ import com.hook.hicodingapi.member.domain.repository.MemberRepository;
 import com.hook.hicodingapi.msg.domain.Message;
 import com.hook.hicodingapi.msg.dto.request.MessageCreateRequest;
 import com.hook.hicodingapi.msg.domain.repository.MessageRepository;
+import com.hook.hicodingapi.msg.dto.request.MessageReceiverDeleteRequest;
 import com.hook.hicodingapi.msg.dto.response.MessageDetailReceiveResponse;
-import com.hook.hicodingapi.msg.dto.response.MessageResponse;
+import com.hook.hicodingapi.msg.dto.response.MessageDetailSendResponse;
+import com.hook.hicodingapi.msg.dto.response.MessageReceiveResponse;
+import com.hook.hicodingapi.msg.dto.response.MessageSendResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,6 +45,7 @@ import static com.hook.hicodingapi.common.exception.type.ExceptionCode.ACCESS_DE
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_FILE_NO;
 import static com.hook.hicodingapi.msg.domain.type.ReadStatusType.NOTREAD;
 import static com.hook.hicodingapi.msg.domain.type.ReceiverStatusType.RECEIVER_USABLE;
+import static com.hook.hicodingapi.msg.domain.type.SenderStatusType.SENDER_USABLE;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -177,16 +181,16 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public Page<MessageResponse> getMsgs(Integer page, CustomUser customUser) {
+    public Page<MessageReceiveResponse> getReceiveMsgs(Integer page, CustomUser customUser) {
 
         Page<Message> msgs = messageRepository.findByReceiverMemberNoAndReceiverStatus(getPageable(page), customUser.getMemberNo(), RECEIVER_USABLE);
 
-        return msgs.map(message -> MessageResponse.from(message));
+        return msgs.map(message -> MessageReceiveResponse.from(message));
     }
 
 
 
-    public MessageDetailReceiveResponse getDetailMsgs(Long msgNo, CustomUser customUser) {
+    public MessageDetailReceiveResponse getReceiveDetailMsgs(Long msgNo, CustomUser customUser) {
 
         // 먼저 쪽지 조회(로그인한 사람 받은쪽지 전체 조회)
         Message messages = messageRepository.findByReceiverMemberNoAndMsgNo(customUser.getMemberNo(), msgNo);
@@ -198,11 +202,40 @@ public class MessageService {
             messages.update();
             log.info("readAt : {}", messages.getReadAt());
             log.info("readStatus : {}", messages.getReadStatus());
-            messageRepository.save(messages);
+            //messageRepository.save(messages);
         }
 
         final Message message = messageRepository.findByReceiverMemberNoAndMsgNo(customUser.getMemberNo(), msgNo);
 
         return MessageDetailReceiveResponse.from(message);
+    }
+
+    public Page<MessageSendResponse> getSendMsgs(Integer page, CustomUser customUser) {
+        Page<Message> msgs = messageRepository.findBySenderMemberNoAndSenderStatus(getPageable(page), customUser.getMemberNo(), SENDER_USABLE);
+
+        return msgs.map(message -> MessageSendResponse.from(message));
+    }
+
+    public MessageDetailSendResponse getSendDetailMsgs(Long msgNo, CustomUser customUser) {
+
+        final Message message = messageRepository.findBySenderMemberNoAndMsgNo(customUser.getMemberNo(), msgNo);
+        return MessageDetailSendResponse.from(message);
+    }
+
+    public void receiverDelete(Long msgNo, CustomUser customUser) {
+
+        // 메세지 조회(로그인한사람의 받은메세지이면서 받은메세지상태가 삭제가 아닌 메세지)
+        Message message = messageRepository.findByReceiverMemberNoAndMsgNoAndReceiverStatus(customUser.getMemberNo(), msgNo, RECEIVER_USABLE);
+
+        log.info("message : {}", message);
+        message.receiverDelete();
+
+    }
+
+    public void senderDelete(Long msgNo, CustomUser customUser) {
+
+        Message message = messageRepository.findBySenderMemberNoAndMsgNoAndSenderStatus(customUser.getMemberNo(), msgNo, SENDER_USABLE);
+
+        message.senderDelete();
     }
 }

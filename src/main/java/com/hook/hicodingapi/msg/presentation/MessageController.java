@@ -5,9 +5,11 @@ import com.hook.hicodingapi.common.paging.PagingButtonInfo;
 import com.hook.hicodingapi.common.paging.PagingResponse;
 import com.hook.hicodingapi.jwt.CustomUser;
 import com.hook.hicodingapi.msg.dto.request.MessageCreateRequest;
+import com.hook.hicodingapi.msg.dto.request.MessageReceiverDeleteRequest;
 import com.hook.hicodingapi.msg.dto.response.MessageDetailReceiveResponse;
 import com.hook.hicodingapi.msg.dto.response.MessageDetailSendResponse;
-import com.hook.hicodingapi.msg.dto.response.MessageResponse;
+import com.hook.hicodingapi.msg.dto.response.MessageReceiveResponse;
+import com.hook.hicodingapi.msg.dto.response.MessageSendResponse;
 import com.hook.hicodingapi.msg.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -23,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
@@ -87,7 +90,7 @@ public class MessageController {
     public ResponseEntity<MessageDetailReceiveResponse> getDetailMsgs(@PathVariable final Long msgNo,
                                                                @AuthenticationPrincipal CustomUser customUser) {
 
-        final MessageDetailReceiveResponse messageDetailReceiveResponse = messageService.getDetailMsgs(msgNo, customUser);
+        final MessageDetailReceiveResponse messageDetailReceiveResponse = messageService.getReceiveDetailMsgs(msgNo, customUser);
 
         return ResponseEntity.ok(messageDetailReceiveResponse);
     }
@@ -97,23 +100,53 @@ public class MessageController {
     public ResponseEntity<MessageDetailSendResponse> getSendDetailMsgs(@PathVariable final Long msgNo,
                                                                        @AuthenticationPrincipal CustomUser customUser) {
 
-        return null;
+        final MessageDetailSendResponse messageDetailSendResponse = messageService.getSendDetailMsgs(msgNo, customUser);
+
+        return ResponseEntity.ok(messageDetailSendResponse);
     }
 
 
 
     /* 받은 쪽지함(로그인한 사람, 삭제 안한 쪽지) */
-    @GetMapping("/msgs")
-    public ResponseEntity<PagingResponse> getMsgs(
+    @GetMapping("/msgs/receiver")
+    public ResponseEntity<PagingResponse> getReceiveMsgs(
             @RequestParam(defaultValue = "1") final Integer page,
             @AuthenticationPrincipal CustomUser customUser
     ){
-        final Page<MessageResponse> msgs = messageService.getMsgs(page, customUser);
+        final Page<MessageReceiveResponse> msgs = messageService.getReceiveMsgs(page, customUser);
         final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(msgs);
         final PagingResponse pagingResponse = PagingResponse.of(msgs.getContent(), pagingButtonInfo);
         return ResponseEntity.ok(pagingResponse);
     }
 
-    /* 보낸 쪽지함(로그인한 사람) */
+    /* 보낸 쪽지함(로그인한 사람, 삭제 안한 쪽지) */
+    @GetMapping("/msgs/sender")
+    public ResponseEntity<PagingResponse> getSenderMsgs(
+            @RequestParam(defaultValue = "1") final Integer page,
+            @AuthenticationPrincipal CustomUser customUser){
+
+        final Page<MessageSendResponse> msgs = messageService.getSendMsgs(page, customUser);
+        final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(msgs);
+        final PagingResponse pagingResponse = PagingResponse.of(msgs.getContent(), pagingButtonInfo);
+        return ResponseEntity.ok(pagingResponse);
+    }
+
+    /* 받은 쪽지 삭제(로그인한 사람) => ReceiverStatus = RECEIVER_DELETED */
+    @PutMapping("/msgs/receiver/{msgNo}")
+    public ResponseEntity<Void> receiverDelete(@PathVariable final Long msgNo,
+                                               @AuthenticationPrincipal CustomUser customUser) {
+
+        messageService.receiverDelete(msgNo, customUser);
+        return ResponseEntity.created(URI.create("/msg/receiver/" + msgNo)).build();
+    }
+
+    /* 보낸 쪽지 삭제(로그인한 사람) => private  SenderStatusType = SENDER_USABLE */
+    @PutMapping("/msgs/sender/{msgNo}")
+    public ResponseEntity<Void> senderDelete(@PathVariable final Long msgNo,
+                                             @AuthenticationPrincipal CustomUser customUser) {
+
+        messageService.senderDelete(msgNo, customUser);
+        return ResponseEntity.created(URI.create("/msg/sender/" + msgNo)).build();
+    }
 
 }
