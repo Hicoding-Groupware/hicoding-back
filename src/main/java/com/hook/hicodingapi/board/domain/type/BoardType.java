@@ -7,13 +7,9 @@ import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND
 
 @Getter
 public enum BoardType {
-    ALL_BOARD("all-board"),
-    NOTICE_NOTIFICATION("notice-notification"),
-    NOTICE_BOARD("notice-board"),
-    STAFF_NOTIFICATION("staff-notification"),
-    STAFF_BOARD("staff-board"),
-    TEACHER_NOTIFICATION("teacher-notification"),
-    TEACHER_BOARD("teacher-board");
+    BOARD("board"),
+    NOTIFICATION("notification"),
+    REF_ROOM("refRoom");
 
     private final String value;
 
