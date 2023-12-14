@@ -17,6 +17,7 @@ public class MessageSendResponse {
     private final LocalDateTime readAt;
     private final String fileName;
     private final String fileUrl;
+    private final Long fileNo;
     private final ReadStatusType readStatus;
 
     public static MessageSendResponse from(Message message) {
@@ -37,6 +38,7 @@ public class MessageSendResponse {
                 message.getReadAt(),
                 fileName,
                 fileUrl,
+                message.getFile().getFileNo(),
                 message.getReadStatus()
         );
     }
