@@ -16,7 +16,7 @@ import java.util.Optional;
 import static com.hook.hicodingapi.common.domain.type.StatusType.USABLE;
 
 @Repository
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 public class CommentCriteriaRepository {
 
     private final BaseCriteriaRepository<Comment> baseCriteriaRepository;

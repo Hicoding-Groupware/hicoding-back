@@ -29,7 +29,7 @@ import java.util.Map;
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.*;
 
 @Service
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 @Transactional
 public class BoardService {
 

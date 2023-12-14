@@ -44,7 +44,7 @@ public class MessageController {
         messageService.send(messageRequest, msgFile, customUser);
 
 
-        return ResponseEntity.ok().build();  // URI => 메세지 상세조회용
+        return ResponseEntity.ok().build();
     }
 
 
