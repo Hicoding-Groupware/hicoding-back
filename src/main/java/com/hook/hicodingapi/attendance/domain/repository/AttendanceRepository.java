@@ -12,6 +12,11 @@ import java.util.Optional;
 
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
+
+    // 기존 등록
     boolean existsByStdCodeStdCodeAndCosCodeCosCodeAndAtdDate(Long stdCode, Long cosCode, LocalDate now);
+
+    // 임시 등록 + 날짜 상관없이 등록 가능
+//    boolean existsByStdCodeStdCodeAndCosCodeCosCode(Long stdCode, Long cosCode);
     List<Attendance> findByAtdDateAndAtdStatusNot(LocalDate atdDate, AttendanceStatusType status);
 }
