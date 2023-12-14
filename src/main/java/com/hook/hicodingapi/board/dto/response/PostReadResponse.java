@@ -40,10 +40,13 @@ public class PostReadResponse {
     private final LocalDateTime modifiedAt;
 
     private Member writer;
+    private Long parentNo;
     private List<PostReadResponse> childrenList;
     //private List<CommentReadResponse> commentList;
 
     public static PostReadResponse from(final Post newPost) {
+        final Post parent = newPost.getParent();
+
         return new PostReadResponse(
                 newPost.getPostNo(),
                 newPost.getPostTitle(),
@@ -56,6 +59,7 @@ public class PostReadResponse {
                 newPost.getCreatedAt(),
                 newPost.getModifiedAt(),
                 newPost.getWriter(),
+                parent != null ? parent.getPostNo() : null,
                 null
                 //null
         );

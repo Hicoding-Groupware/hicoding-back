@@ -32,6 +32,9 @@ public enum ExceptionCode {
 
     ACCESS_DENIED(4003, "허가 되지 않은 요청입니다."),
 
+    // 회원
+    NOT_FOUND_MEMBER_ROLE_CODE(5002, "회원 권한이 일치하지 않습니다."),
+
     /* 게시판 */
     NOT_FOUND_POST_CODE(1000, "게시글을 가져올 수 없습니다."),
     NOT_FOUND_POSTS_CODE(1001, "게시글들을 가져올 수 없습니다."),

@@ -19,7 +19,7 @@ import static com.hook.hicodingapi.common.ApiURIConstants.*;
 
 @RestController
 @RequestMapping(BASE_PATH + COMMENT_PATH)
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
