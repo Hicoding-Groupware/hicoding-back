@@ -134,10 +134,45 @@ public class MemberController {
         return ResponseEntity.ok(preLoginResponse);
     }
 
+    @PostMapping("/img")
+    public ResponseEntity<Void> save(@RequestPart final MemberProfileUpdate memberProfileUpdate,
+                                     @RequestPart final MultipartFile memberProfile){
+
+        memberService.save(memberProfile, memberProfileUpdate);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+
+
     @PutMapping("/memberInfo")
     public ResponseEntity<Void> update(@RequestBody final MemberUpdateRequest memberUpdateRequest){
 
         memberService.memberUpdate(memberUpdateRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+
+    }
+
+
+    /*사진만 업데이트*/
+   @PutMapping("/memberProfile")
+   public ResponseEntity<Void> update(@RequestPart final MemberProfileUpdate memberProfileUpdate,
+                                      @RequestPart(required = false) final MultipartFile memberProfile){
+
+       memberService.memberProfileUpdate(memberProfileUpdate, memberProfile);
+
+       return ResponseEntity.status(HttpStatus.CREATED).build();
+
+   }
+
+
+
+    /* 비밀 번호 제외 하고 업데이트 */
+    @PutMapping("/memberInfowithoutPassword")
+    public ResponseEntity<Void> update(@RequestBody final MemberUpdateRequestWithoutPassword memberUpdateRequestWithoutPassword){
+
+        memberService.memberUpdateWithoutPassword(memberUpdateRequestWithoutPassword);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
 
@@ -150,6 +185,14 @@ public class MemberController {
         ProfileResponse profileResponse = memberService.getProfile(user.getUsername());
 
         return ResponseEntity.ok(profileResponse);
+    }
+
+    @DeleteMapping("/deleteProfile")
+    public ResponseEntity<Void> delete(@AuthenticationPrincipal User user){
+
+        memberService.deleteProfile(user.getUsername());
+
+        return ResponseEntity.noContent().build();
     }
 
 
