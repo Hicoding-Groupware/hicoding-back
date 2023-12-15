@@ -30,11 +30,12 @@ public class AttendanceController {
     @GetMapping("/day/{cosCode}")
     public ResponseEntity<List<DailyAttendanceResponse>> getAttendances(
             @PathVariable final Long cosCode,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate atdDate
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate atdDate,
+            @RequestParam(required = false) Long atdCode
     ) {
         LocalDate defaultAtdDate = atdDate != null ? atdDate : LocalDate.now();
 
-        List<DailyAttendanceResponse> dailyAttendanceResponses = studentService.getAttendanceForDay(cosCode, defaultAtdDate);
+        List<DailyAttendanceResponse> dailyAttendanceResponses = studentService.getAttendanceForDay(cosCode, defaultAtdDate, atdCode);
 
         return ResponseEntity.ok(dailyAttendanceResponses);
     }
