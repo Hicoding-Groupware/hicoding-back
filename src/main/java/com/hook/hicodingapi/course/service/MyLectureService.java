@@ -21,9 +21,12 @@ public class MyLectureService {
 
     private final MyLectureRepository myLectureRepository;
 
+
     private Pageable getPageable(final Integer page) {
         return PageRequest.of(page -1, 3, Sort.by("cosEdt").descending());
     }
+
+
 
     /* 1. 진행 중인 강의 조회 - 페이징, 개강일 ~ 종강일 사이의 날짜 포함 하여 조회 (강사) */
     @Transactional(readOnly = true)
