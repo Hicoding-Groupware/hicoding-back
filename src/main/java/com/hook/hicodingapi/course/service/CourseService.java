@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_COS_CODE;
 
@@ -38,16 +39,28 @@ public class CourseService {
     private final MemberRepository memberRepository;
     private final ClassroomRepository classroomRepository;
 
+    private LocalDate sdt = LocalDate.now();
+    private LocalDate edt = LocalDate.now();
+
     private Pageable getPageable(final Integer page){
 
-        return PageRequest.of(page-1,  10, Sort.by("cosCode").descending());
+        return PageRequest.of(page-1,  5, Sort.by("cosCode").descending());
     }
 
-    //과정 조회(강사)
+    //과정 조회(진행중)
     @Transactional(readOnly = true)
-    public Page<TeacherCoursesResponse> getTeacherCourses(final Integer page){
+    public Page<TeacherCoursesResponse> getProceedingCourses(final Integer page){
 
-        Page<Course> courses = courseRepository.findByStatusNot(getPageable(page), CourseStatusType.DELETED);
+        Page<Course> courses = courseRepository.findByStatusNotAndCosSdtLessThanEqualAndCosEdtGreaterThanEqual(getPageable(page), CourseStatusType.DELETED, sdt, edt);
+
+        return courses.map(course -> TeacherCoursesResponse.from(course));
+    }
+
+    //과정 조회(예정)
+    @Transactional(readOnly = true)
+    public Page<TeacherCoursesResponse> getExpectedCourses(final Integer page){
+
+        Page<Course> courses = courseRepository.findByStatusNotAndCosSdtGreaterThan(getPageable(page), CourseStatusType.DELETED, sdt);
 
         return courses.map(course -> TeacherCoursesResponse.from(course));
     }
@@ -119,7 +132,7 @@ public class CourseService {
                 courseRequest.getCurCnt(),
                 courseRequest.getDayStatus(),
                 courseRequest.getTimeStatus(),
-                courseRequest.getStatus()
+                courseRequest.getCosNotice()
         );
     }
 

@@ -134,7 +134,7 @@ public class Course {
 
         public void update (String cosName, Lecture lecture, Member teacher, Member staff, Classroom classroom,
                 LocalDate cosSdt, LocalDate cosEdt,int capacity, int curCnt, DayStatusType dayStatus,
-                TimeStatusType timeStatus, CourseStatusType status){
+                TimeStatusType timeStatus, String cosNotice){
             this.cosName = cosName;
             this.lecCode = lecture;
             this.teacher = teacher;
@@ -146,8 +146,8 @@ public class Course {
             this.curCnt = curCnt;
             this.dayStatus = dayStatus;
             this.timeStatus = timeStatus;
-            this.status = status;
-        }
+            this.cosNotice = cosNotice;
+    }
 
 
 
