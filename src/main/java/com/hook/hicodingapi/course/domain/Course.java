@@ -1,7 +1,6 @@
 package com.hook.hicodingapi.course.domain;
 
 import com.hook.hicodingapi.attendance.domain.Attendance;
-import com.hook.hicodingapi.classroom.Classroom;
 import com.hook.hicodingapi.classroom.domain.Classroom;
 import com.hook.hicodingapi.course.domain.type.CourseStatusType;
 import com.hook.hicodingapi.course.domain.type.DayStatusType;

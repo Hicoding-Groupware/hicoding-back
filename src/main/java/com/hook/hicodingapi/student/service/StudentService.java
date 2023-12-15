@@ -1,27 +1,19 @@
 package com.hook.hicodingapi.student.service;
 
-import com.hook.hicodingapi.attendance.domain.Attendance;
-import com.hook.hicodingapi.attendance.domain.repository.AttendanceRepository;
-import com.hook.hicodingapi.attendance.domain.type.AttendanceStatusType;
 import com.hook.hicodingapi.attendance.dto.response.DailyAttendanceResponse;
-import com.hook.hicodingapi.common.exception.ConflictException;
 import com.hook.hicodingapi.common.exception.NotFoundException;
 import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.course.domain.repository.CourseRepository;
-import com.hook.hicodingapi.record.domain.Record;
 import com.hook.hicodingapi.student.domain.Student;
 import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
-import com.hook.hicodingapi.student.dto.response.StudentCourse;
 import com.hook.hicodingapi.student.dto.response.StudentCourseResponse;
 import com.hook.hicodingapi.student.dto.response.StudentDetailResponse;
 import com.hook.hicodingapi.student.dto.response.StudentsRecordResponse;
-import com.hook.hicodingapi.student.dto.response.*;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,7 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.fasterxml.jackson.databind.type.LogicalType.Map;
@@ -124,14 +117,13 @@ public class StudentService {
 
     /* 출석 조회 */
     @Transactional
-    public List<DailyAttendanceResponse> getAttendanceForDay(Long cosCode, LocalDate atdDate) {
+    public List<DailyAttendanceResponse> getAttendanceForDay(Long cosCode, LocalDate atdDate, Long atdCode) {
         List<Student> students = studentRepository.findStudentsBySignupStatus(cosCode, atdDate);
 
         return students.stream()
                 .map(student -> DailyAttendanceResponse.from(student, atdDate))
                 .collect(Collectors.toList());
     }
-
 
     @Transactional(readOnly = true)
     public Page<StudentsRecordResponse> getMultiSearch(Integer page, String sort, String stdName, LocalDate startDate, LocalDate endDate) {

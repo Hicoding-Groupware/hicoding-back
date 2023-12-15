@@ -50,10 +50,10 @@ public class StudentController {
     /* 원생 조회 및 검색조건 모두 포함 */
     @GetMapping("/students")
     public ResponseEntity<PagingResponse> getMultiSearch(@RequestParam(defaultValue = "1") final Integer page,
-                                                  @RequestParam(required = false) final String sort,
-                                                  @RequestParam(required = false) final String stdName,
-                                                  @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")  final LocalDate startDate,
-                                                  @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDate endDate){
+                                                         @RequestParam(required = false) final String sort,
+                                                         @RequestParam(required = false) final String stdName,
+                                                         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")  final LocalDate startDate,
+                                                         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDate endDate){
 
         final Page<StudentsRecordResponse> students = studentService.getMultiSearch(page, sort, stdName, startDate, endDate);
         final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(students);
@@ -86,7 +86,7 @@ public class StudentController {
     @GetMapping("/students/searchCosName")
     public ResponseEntity<PagingResponse> getCourseName(@RequestParam(defaultValue = "1") final Integer page,
                                                         @RequestParam(required = false) final String cosName
-                                                        ) {
+    ) {
 
         LocalDate currentDay = LocalDate.now();
 

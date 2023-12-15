@@ -4,15 +4,11 @@ import com.hook.hicodingapi.attendance.dto.request.AttendanceRegistRequest;
 import com.hook.hicodingapi.attendance.dto.request.AttendanceUpdateRequest;
 import com.hook.hicodingapi.attendance.dto.response.DailyAttendanceResponse;
 import com.hook.hicodingapi.attendance.service.AttendanceService;
-import com.hook.hicodingapi.course.domain.repository.CourseRepository;
-import com.hook.hicodingapi.jwt.CustomUser;
 import com.hook.hicodingapi.student.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
@@ -30,11 +26,12 @@ public class AttendanceController {
     @GetMapping("/day/{cosCode}")
     public ResponseEntity<List<DailyAttendanceResponse>> getAttendances(
             @PathVariable final Long cosCode,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate atdDate
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate atdDate,
+            @RequestParam(required = false) Long atdCode
     ) {
         LocalDate defaultAtdDate = atdDate != null ? atdDate : LocalDate.now();
 
-        List<DailyAttendanceResponse> dailyAttendanceResponses = studentService.getAttendanceForDay(cosCode, defaultAtdDate);
+        List<DailyAttendanceResponse> dailyAttendanceResponses = studentService.getAttendanceForDay(cosCode, defaultAtdDate, atdCode);
 
         return ResponseEntity.ok(dailyAttendanceResponses);
     }
@@ -52,7 +49,7 @@ public class AttendanceController {
     /* 6. 출석 수정 */
     @PutMapping("/day/{atdDate}")
     public ResponseEntity<Void> update(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate atdDate,
-                                        @RequestBody List<AttendanceUpdateRequest> updateAttendance
+                                       @RequestBody List<AttendanceUpdateRequest> updateAttendance
     ) {
 
         attendanceService.update(atdDate, updateAttendance);
