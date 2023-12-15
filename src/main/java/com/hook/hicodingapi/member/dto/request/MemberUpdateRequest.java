@@ -12,23 +12,23 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class MemberUpdateRequest {
 
-    @NotBlank
+
     private String memberId;
-    @NotBlank
+
     private String memberPwd;
-    @NotBlank
+
     private String postNo;
-    @NotBlank
+
     private String address;
-    @NotBlank
+
     private String detailAddress;
-    @NotBlank
+
     private String memberEmail;
-    @NotBlank
+
     private String memberPhone;
-    @NotBlank
+
     private LocalDate memberBirth;
-    @NotNull
+
     private GenderType memberGender;
 
     private String loginStatus;

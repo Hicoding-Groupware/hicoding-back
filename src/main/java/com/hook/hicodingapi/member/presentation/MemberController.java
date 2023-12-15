@@ -10,10 +10,14 @@ import com.hook.hicodingapi.member.dto.response.MemberCreationResponse;
 import com.hook.hicodingapi.member.dto.request.MemberInformationRequest;
 import com.hook.hicodingapi.member.dto.response.MemberInquiryResponse;
 import com.hook.hicodingapi.member.dto.response.PreLoginResponse;
+import com.hook.hicodingapi.member.dto.response.ProfileResponse;
 import com.hook.hicodingapi.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -118,6 +122,10 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
+
+    /*---------------------- 민서존 -------------------------------------------------------------------------------------------------------------------*/
+
+    /* 로그인 */
     @PostMapping("/pre/login")
     public ResponseEntity<PreLoginResponse> preLogin(@RequestBody Map<String, String> loginInfo) {
 
@@ -125,6 +133,17 @@ public class MemberController {
 
         return ResponseEntity.ok(preLoginResponse);
     }
+
+    @PostMapping("/img")
+    public ResponseEntity<Void> save(@RequestPart final MemberProfileUpdate memberProfileUpdate,
+                                     @RequestPart final MultipartFile memberProfile){
+
+        memberService.save(memberProfile, memberProfileUpdate);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+
 
     @PutMapping("/memberInfo")
     public ResponseEntity<Void> update(@RequestBody final MemberUpdateRequest memberUpdateRequest){
@@ -134,6 +153,55 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
 
     }
+
+
+    /*사진만 업데이트*/
+   @PutMapping("/memberProfile")
+   public ResponseEntity<Void> update(@RequestPart final MemberProfileUpdate memberProfileUpdate,
+                                      @RequestPart(required = false) final MultipartFile memberProfile){
+
+       memberService.memberProfileUpdate(memberProfileUpdate, memberProfile);
+
+       return ResponseEntity.status(HttpStatus.CREATED).build();
+
+   }
+
+
+
+    /* 비밀 번호 제외 하고 업데이트 */
+    @PutMapping("/memberInfowithoutPassword")
+    public ResponseEntity<Void> update(@RequestBody final MemberUpdateRequestWithoutPassword memberUpdateRequestWithoutPassword){
+
+        memberService.memberUpdateWithoutPassword(memberUpdateRequestWithoutPassword);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+
+    }
+
+    /* 마이페이지 조회 및 수정 */
+
+    @GetMapping("/profile")
+    public ResponseEntity<ProfileResponse> profile(@AuthenticationPrincipal User user){
+        ProfileResponse profileResponse = memberService.getProfile(user.getUsername());
+
+        return ResponseEntity.ok(profileResponse);
+    }
+
+    @DeleteMapping("/deleteProfile")
+    public ResponseEntity<Void> delete(@AuthenticationPrincipal User user){
+
+        memberService.deleteProfile(user.getUsername());
+
+        return ResponseEntity.noContent().build();
+    }
+
+    //동한
+    @GetMapping("/memberList")
+    public List<Member> getMemberList(){
+        return memberService.getMemberList();
+
+    }
+
 
 
 

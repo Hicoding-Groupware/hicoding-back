@@ -4,6 +4,7 @@ import com.hook.hicodingapi.attendance.domain.Attendance;
 import com.hook.hicodingapi.attendance.domain.repository.AttendanceRepository;
 import com.hook.hicodingapi.attendance.domain.type.AttendanceStatusType;
 import com.hook.hicodingapi.attendance.dto.response.DailyAttendanceResponse;
+import com.hook.hicodingapi.common.exception.ConflictException;
 import com.hook.hicodingapi.common.exception.NotFoundException;
 import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.course.domain.repository.CourseRepository;
@@ -12,6 +13,10 @@ import com.hook.hicodingapi.student.domain.Student;
 import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
+import com.hook.hicodingapi.student.dto.response.StudentCourse;
+import com.hook.hicodingapi.student.dto.response.StudentCourseResponse;
+import com.hook.hicodingapi.student.dto.response.StudentDetailResponse;
+import com.hook.hicodingapi.student.dto.response.StudentsRecordResponse;
 import com.hook.hicodingapi.student.dto.response.*;
 
 import lombok.RequiredArgsConstructor;
@@ -32,8 +37,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.fasterxml.jackson.databind.type.LogicalType.Map;
-import static com.hook.hicodingapi.attendance.domain.type.AttendanceStatusType.SICK_LEAVE;
-import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_STD_CODE;
+import static com.hook.hicodingapi.common.exception.type.ExceptionCode.*;
 import static com.hook.hicodingapi.course.domain.type.CourseStatusType.AVAILABLE;
 
 @Slf4j
@@ -59,7 +63,7 @@ public class StudentService {
     }
 
     private Pageable getCoursePageable(final Integer page) {
-        return PageRequest.of(page - 1, 15);
+        return PageRequest.of(page - 1, 5);
     }
     public Long regist(StudentRegistRequest registRequest) {
 
@@ -109,11 +113,12 @@ public class StudentService {
     }
 
     @Transactional(readOnly = true)
-    public Page<StudentCourseResponse> getCourseName(Integer page, String cosName) {
+    public Page<StudentCourseResponse> getCourseName(Integer page, String cosName, LocalDate currentDay) {
 
-        Page<Course> courses = courseRepository.findByCosNameContainsAndStatus(getCoursePageable(page), cosName, AVAILABLE);
+        Page<Course> resultCourses = courseRepository.findByCosNameContainsAndStatusAndCosEdtAfter(
+                getCoursePageable(page), cosName, AVAILABLE, currentDay);
+        return resultCourses.map(courseList -> StudentCourseResponse.from(courseList));
 
-        return courses.map(course -> StudentCourseResponse.from(course));
     }
 
 
@@ -129,7 +134,7 @@ public class StudentService {
 
 
     @Transactional(readOnly = true)
-    public Page<StudentsRecordResponse> getMutiSearch(Integer page, String sort, String stdName, LocalDate startDate, LocalDate endDate) {
+    public Page<StudentsRecordResponse> getMultiSearch(Integer page, String sort, String stdName, LocalDate startDate, LocalDate endDate) {
 
         LocalDateTime startDateTime = null;
         LocalDateTime endDateTime = null;

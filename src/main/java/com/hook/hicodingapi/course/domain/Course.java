@@ -2,6 +2,7 @@ package com.hook.hicodingapi.course.domain;
 
 import com.hook.hicodingapi.attendance.domain.Attendance;
 import com.hook.hicodingapi.classroom.Classroom;
+import com.hook.hicodingapi.classroom.domain.Classroom;
 import com.hook.hicodingapi.course.domain.type.CourseStatusType;
 import com.hook.hicodingapi.course.domain.type.DayStatusType;
 import com.hook.hicodingapi.course.domain.type.TimeStatusType;
@@ -74,6 +75,9 @@ public class Course {
     @Column(nullable = false)
     private TimeStatusType timeStatus;
 
+    @Column
+    private String cosNotice;
+
     @Enumerated(value = STRING)
     @Column(nullable = false)
     private CourseStatusType status = AVAILABLE;
@@ -91,7 +95,7 @@ public class Course {
     private List<Attendance> attendCosCode;
 
     public Course(String cosName, Lecture lecture, Member teacher, Member staff, Classroom classroom, LocalDate cosSdt,
-                  LocalDate cosEdt, int capacity, DayStatusType dayStatus, TimeStatusType timeStatus) {
+                  LocalDate cosEdt, int capacity, String cosNotice, DayStatusType dayStatus, TimeStatusType timeStatus) {
         this.cosName = cosName;
         this.lecCode = lecture;
         this.teacher = teacher;
@@ -100,6 +104,7 @@ public class Course {
         this.cosSdt = cosSdt;
         this.cosEdt = cosEdt;
         this.capacity = capacity;
+        this.cosNotice = cosNotice;
         this.dayStatus = dayStatus;
         this.timeStatus = timeStatus;
     }
@@ -116,7 +121,7 @@ public class Course {
 
     public static Course of(
             final String cosName, final Lecture lecture, final Member teacher, final Member staff, final Classroom classroom,
-            final LocalDate cosSdt, final LocalDate cosEdt, final int capacity, final DayStatusType dayStatus,
+            final LocalDate cosSdt, final LocalDate cosEdt, final int capacity, final String cosNotice, final DayStatusType dayStatus,
             final TimeStatusType timeStatus) {
 
 
@@ -129,6 +134,7 @@ public class Course {
                     cosSdt,
                     cosEdt,
                     capacity,
+                    cosNotice,
                     dayStatus,
                     timeStatus
             );
@@ -136,7 +142,7 @@ public class Course {
 
         public void update (String cosName, Lecture lecture, Member teacher, Member staff, Classroom classroom,
                 LocalDate cosSdt, LocalDate cosEdt,int capacity, int curCnt, DayStatusType dayStatus,
-                TimeStatusType timeStatus, CourseStatusType status){
+                TimeStatusType timeStatus, String cosNotice){
             this.cosName = cosName;
             this.lecCode = lecture;
             this.teacher = teacher;
@@ -148,8 +154,8 @@ public class Course {
             this.curCnt = curCnt;
             this.dayStatus = dayStatus;
             this.timeStatus = timeStatus;
-            this.status = status;
-        }
+            this.cosNotice = cosNotice;
+    }
 
 
 

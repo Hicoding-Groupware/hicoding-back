@@ -2,6 +2,7 @@ package com.hook.hicodingapi.common.exception;
 
 import com.hook.hicodingapi.common.exception.type.ExceptionCode;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class CustomException extends RuntimeException {
