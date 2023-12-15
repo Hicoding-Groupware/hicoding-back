@@ -1,13 +1,10 @@
 package com.hook.hicodingapi.attendance.dto.response;
 
-import com.hook.hicodingapi.attendance.domain.Attendance;
 import com.hook.hicodingapi.attendance.domain.type.AttendanceStatusType;
 import com.hook.hicodingapi.student.domain.Student;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import java.time.LocalDate;
-import java.util.Comparator;
-
 import static lombok.AccessLevel.PRIVATE;
 
 @Getter
@@ -20,20 +17,11 @@ public class DailyAttendanceResponse {
     private final String stdName;
     private final LocalDate stdBirth;
     private final String stdPhone;
-    private final LocalDate atdDate;
-    private final Long atdCode;
     private final AttendanceStatusType attendanceStatus;
 
     public static DailyAttendanceResponse from(Student student, LocalDate atdDate) {
 
         AttendanceStatusType status = getAttendanceStatusOnDate(student, atdDate);
-
-        Long atdCode = student.getAttendStdCode()
-                .stream()
-                .filter(attendance -> atdDate.equals(attendance.getAtdDate()))
-                .max(Comparator.comparing(Attendance::getAtdDate))
-                .map(Attendance::getAtdCode)
-                .orElse(null);
 
         return new DailyAttendanceResponse(
                 student.getRecordList().get(0).getCourse().getCosCode(),
@@ -42,8 +30,6 @@ public class DailyAttendanceResponse {
                 student.getStdName(),
                 student.getStdBirth(),
                 student.getStdPhone(),
-                atdDate,
-                atdCode,
                 status
         );
     }
