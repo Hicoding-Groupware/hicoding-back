@@ -3,6 +3,7 @@ package com.hook.hicodingapi.attendance.domain;
 
 import com.hook.hicodingapi.attendance.domain.type.AttendanceStatusType;
 import com.hook.hicodingapi.course.domain.Course;
+import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.student.domain.Student;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,4 +42,29 @@ public class Attendance {
     @JoinColumn(name = "cosCode")
     private Course cosCode;
 
+    public Attendance(Student student, AttendanceStatusType status, Course cosCode) {
+        this.stdCode = student;
+        this.atdStatus = status;
+        this.cosCode = cosCode;
+    }
+
+
+    public static Attendance of(Student student, AttendanceStatusType status, Course cosCode) {
+
+        return new Attendance(
+                student,
+                status,
+                cosCode
+        );
+    }
+
+
+    public void update(LocalDate atdDate, Course cosCode, Student stdCode, Long atdCode, AttendanceStatusType atdStatus) {
+        this.atdDate = atdDate;
+        this.cosCode = cosCode;
+        this.stdCode = stdCode;
+        this.atdCode = atdCode;
+        this.atdStatus = atdStatus;
+
+    }
 }
