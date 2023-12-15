@@ -9,6 +9,7 @@ import com.hook.hicodingapi.common.paging.PagingButtonInfo;
 import com.hook.hicodingapi.common.paging.PagingResponse;
 import com.hook.hicodingapi.course.dto.resposne.TeacherCoursesResponse;
 import com.hook.hicodingapi.course.service.CourseService;
+import com.hook.hicodingapi.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,13 @@ import java.util.List;
 public class ClassroomController {
 
     private final ClassroomService classroomService;
+
+    @GetMapping("classrooms")
+    public List<Classroom> getClassroom(){
+
+        return classroomService.getClassrooms();
+
+    }
 
 
 }

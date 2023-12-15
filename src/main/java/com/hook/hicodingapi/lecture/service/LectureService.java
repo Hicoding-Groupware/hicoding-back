@@ -39,6 +39,7 @@ public class LectureService {
         return lectures.map(lecture -> TeacherLecturesResponse.from(lecture));
     }
 
+
     //강의등록
     public Long save(LectureCreateRequest lectureRequest) {
 

@@ -18,4 +18,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ClassroomService {
 
+    private final ClassroomRepository classroomRepository;
+
+    public List<Classroom> getClassrooms() {
+        return classroomRepository.findAll();
+    }
 }

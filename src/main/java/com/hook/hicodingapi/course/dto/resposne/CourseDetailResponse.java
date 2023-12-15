@@ -22,11 +22,14 @@ public class CourseDetailResponse {
     private final String techStack;
     private final LocalDate cosSdt;
     private final LocalDate cosEdt;
-    private final String roomCode;
+    private final Long roomCode;
+    private final String roomName;
     private final int capacity;
     private final int curCnt;
-    private final String teacher;
-    private final String staff;
+    private final Long teacherCode;
+    private final String teacherName;
+    private final Long staffCode;
+    private final String staffName;
     private final String staffPhone;
     private final String staffEmail;
     private final DayStatusType dayStatus;
@@ -42,10 +45,13 @@ public class CourseDetailResponse {
                 course.getLecCode().getTechStack(),
                 course.getCosSdt(),
                 course.getCosEdt(),
+                course.getClassroom().getRoomCode(),
                 course.getClassroom().getRoomName(),
                 course.getCapacity(),
                 course.getCurCnt(),
+                course.getTeacher().getMemberNo(),
                 course.getTeacher().getMemberName(),
+                course.getStaff().getMemberNo(),
                 course.getStaff().getMemberName(),
                 course.getStaff().getMemberPhone(),
                 course.getStaff().getMemberEmail(),
