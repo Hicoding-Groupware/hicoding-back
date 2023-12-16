@@ -1,5 +1,6 @@
 package com.hook.hicodingapi.course.domain;
 
+import com.hook.hicodingapi.attendance.domain.Attendance;
 import com.hook.hicodingapi.classroom.domain.Classroom;
 import com.hook.hicodingapi.course.domain.type.CourseStatusType;
 import com.hook.hicodingapi.course.domain.type.DayStatusType;
@@ -15,6 +16,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import static com.hook.hicodingapi.course.domain.type.CourseStatusType.AVAILABLE;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -86,6 +89,10 @@ public class Course {
     @Column
     private LocalDateTime modifiedAt;
 
+    @OneToMany
+    @JoinColumn(name = "cosCode")
+    private List<Attendance> attendCosCode;
+
     public Course(String cosName, Lecture lecture, Member teacher, Member staff, Classroom classroom, LocalDate cosSdt,
                   LocalDate cosEdt, int capacity, String cosNotice, DayStatusType dayStatus, TimeStatusType timeStatus) {
         this.cosName = cosName;
@@ -134,7 +141,7 @@ public class Course {
 
         public void update (String cosName, Lecture lecture, Member teacher, Member staff, Classroom classroom,
                 LocalDate cosSdt, LocalDate cosEdt,int capacity, int curCnt, DayStatusType dayStatus,
-                TimeStatusType timeStatus, CourseStatusType status){
+                TimeStatusType timeStatus, String cosNotice){
             this.cosName = cosName;
             this.lecCode = lecture;
             this.teacher = teacher;
@@ -146,8 +153,8 @@ public class Course {
             this.curCnt = curCnt;
             this.dayStatus = dayStatus;
             this.timeStatus = timeStatus;
-            this.status = status;
-        }
+            this.cosNotice = cosNotice;
+    }
 
 
 

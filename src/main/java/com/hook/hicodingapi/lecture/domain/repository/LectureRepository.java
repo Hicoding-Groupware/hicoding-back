@@ -13,4 +13,5 @@ public interface LectureRepository extends JpaRepository<Lecture, Long> {
     Page<Lecture> findByStatus(Pageable pageable, LectureStatusType lectureStatusType);
 
     Optional<Lecture> findByLecCodeAndStatusNot(Long lecCode, LectureStatusType lectureStatusType);
+
 }

@@ -209,6 +209,13 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
+    //동한
+    @GetMapping("/memberList")
+    public List<Member> getMemberList(){
+        return memberService.getMemberList();
+
+    }
+
 
 
 

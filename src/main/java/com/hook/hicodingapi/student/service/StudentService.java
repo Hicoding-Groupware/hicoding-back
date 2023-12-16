@@ -1,17 +1,13 @@
 package com.hook.hicodingapi.student.service;
 
-import com.hook.hicodingapi.attendance.domain.repository.AttendanceRepository;
 import com.hook.hicodingapi.attendance.dto.response.DailyAttendanceResponse;
-import com.hook.hicodingapi.common.exception.ConflictException;
 import com.hook.hicodingapi.common.exception.NotFoundException;
 import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.course.domain.repository.CourseRepository;
-import com.hook.hicodingapi.record.domain.Record;
 import com.hook.hicodingapi.student.domain.Student;
 import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
-import com.hook.hicodingapi.student.dto.response.StudentCourse;
 import com.hook.hicodingapi.student.dto.response.StudentCourseResponse;
 import com.hook.hicodingapi.student.dto.response.StudentDetailResponse;
 import com.hook.hicodingapi.student.dto.response.StudentsRecordResponse;
@@ -119,13 +115,13 @@ public class StudentService {
     }
 
 
+    /* 출석 조회 */
     @Transactional
-    public List<DailyAttendanceResponse> getAttendanceForDay(Long cosCode) {
-
-        List<Student> students = studentRepository.findStudentsByAndSignupStatus();
+    public List<DailyAttendanceResponse> getAttendanceForDay(Long cosCode, LocalDate atdDate, Long atdCode) {
+        List<Student> students = studentRepository.findStudentsBySignupStatus(cosCode, atdDate);
 
         return students.stream()
-                .map(DailyAttendanceResponse::from)
+                .map(student -> DailyAttendanceResponse.from(student, atdDate))
                 .collect(Collectors.toList());
     }
 

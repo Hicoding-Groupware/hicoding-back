@@ -513,4 +513,8 @@ public class MemberService {
 
 
 
+    //동한
+    public List<Member> getMemberList() {
+        return memberRepository.findAll();
+    }
 }
