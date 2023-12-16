@@ -1,4 +1,4 @@
-package com.hook.hicodingapi.main.course.service;
+package com.hook.hicodingapi.main.myCourse.service;
 
 import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.course.domain.repository.MyLectureRepository;

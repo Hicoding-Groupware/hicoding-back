@@ -1,13 +1,12 @@
-package com.hook.hicodingapi.main.course.presentation;
+package com.hook.hicodingapi.main.myCourse.presentation;
 
 
 import com.hook.hicodingapi.common.paging.Pagenation;
 import com.hook.hicodingapi.common.paging.PagingButtonInfo;
 import com.hook.hicodingapi.common.paging.PagingResponse;
 import com.hook.hicodingapi.course.dto.resposne.DetailCourseLectureResponse;
-import com.hook.hicodingapi.course.service.MyLectureService;
 import com.hook.hicodingapi.jwt.CustomUser;
-import com.hook.hicodingapi.main.course.service.MainMyLectureService;
+import com.hook.hicodingapi.main.myCourse.service.MainMyLectureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
