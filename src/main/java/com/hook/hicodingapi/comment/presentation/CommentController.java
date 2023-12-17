@@ -25,10 +25,9 @@ public class CommentController {
     private final CommentService commentService;
 
     // 게시글의 댓글 전체 조회
-    @GetMapping("/post/{postNo}/{requestPage}")
-    public ResponseEntity<PagingResponse> getRequestedAllComments(@PathVariable(required = true) final Long postNo,
-                                                                  @PathVariable(required = true) final int requestPage) {
-
+    @GetMapping("/{postNo}/{requestPage}")
+    public ResponseEntity<PagingResponse> getAllComments(@PathVariable(required = true) final Long postNo,
+                                                         @PathVariable(required = true) final int requestPage) {
         final List<Comment> findCommentList = commentService.findAllCommentsOfPost(postNo);
         final List<CommentReadResponse> commentReadResponseList = commentService.convertHierarchicalCommentList(findCommentList);
         final PagingResponse pagingResponse = CustomPagination.getPagingResponse(commentReadResponseList, commentReadResponseList.size(), requestPage, null, null);
@@ -38,8 +37,7 @@ public class CommentController {
 
     // 댓글 조회
     @GetMapping("/{commentNo}")
-    public ResponseEntity<CommentReadResponse> getRequestedComment(@PathVariable(required = true) final Long commentNo) {
-
+    public ResponseEntity<CommentReadResponse> getComment(@PathVariable(required = true) final Long commentNo) {
         final Comment findComment = commentService.findComment(commentNo);
         final CommentReadResponse commentReadResponse = CommentReadResponse.from(findComment);
         return ResponseEntity.ok(commentReadResponse);
@@ -47,8 +45,7 @@ public class CommentController {
 
     // 댓글 등록
     @PostMapping()
-    public ResponseEntity<CommentCreationResponse> saveRequestedPost(@RequestBody final CommentCreationRequest commentCreationRequest) {
-
+    public ResponseEntity<CommentCreationResponse> saveComment(@RequestBody final CommentCreationRequest commentCreationRequest) {
         final Comment createdComment = commentService.createComment(commentCreationRequest);
         final CommentCreationResponse commentCreationResponse = CommentCreationResponse.from(createdComment);
 
@@ -57,8 +54,7 @@ public class CommentController {
 
     // 댓글 수정
     @PutMapping("/{commentNo}")
-    public ResponseEntity<CommentReadResponse> updateRequestedComment(@PathVariable final Long commentNo, @RequestBody final CommentEditRequest commentEditRequest) {
-
+    public ResponseEntity<CommentReadResponse> updateComment(@PathVariable final Long commentNo, @RequestBody final CommentEditRequest commentEditRequest) {
         final Comment updatedComment = commentService.updateComment(commentNo, commentEditRequest);
         final CommentReadResponse commentReadResponse = CommentReadResponse.from(updatedComment);
         return ResponseEntity.ok(commentReadResponse);
@@ -66,8 +62,7 @@ public class CommentController {
 
     // 댓글 삭제
     @DeleteMapping("/{commentNo}")
-    public ResponseEntity<Void> deleteRequestedComment(@PathVariable final Long commentNo) {
-
+    public ResponseEntity<Void> deleteComment(@PathVariable final Long commentNo) {
         commentService.deleteComment(commentNo);
 
         return ResponseEntity.noContent().build();
