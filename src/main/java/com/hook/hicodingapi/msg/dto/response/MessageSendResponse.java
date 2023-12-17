@@ -13,6 +13,7 @@ public class MessageSendResponse {
 
     private final Long msgNo;
     private final String receiver;
+    private final String memberId;
     private final String msgContent;
     private final LocalDateTime readAt;
     private final String fileName;
@@ -24,21 +25,24 @@ public class MessageSendResponse {
         // file이 null일때 null로 가져옴
         String fileName = "";
         String fileUrl = "";
+        Long fileNo = null;
 
         if(message.getFile() != null) {
             fileName = message.getFile().getFileName();
             fileUrl = message.getFile().getFileUrl();
+            fileNo = message.getFile().getFileNo();
         }
 
 
         return new MessageSendResponse(
                 message.getMsgNo(),
                 message.getReceiver().getMemberName(),
+                message.getReceiver().getMemberId(),
                 message.getMsgContent(),
                 message.getReadAt(),
                 fileName,
                 fileUrl,
-                message.getFile().getFileNo(),
+                fileNo,
                 message.getReadStatus()
         );
     }

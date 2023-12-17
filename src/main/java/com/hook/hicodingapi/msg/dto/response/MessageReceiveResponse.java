@@ -13,6 +13,7 @@ public class MessageReceiveResponse {
 
     private final Long msgNo;
     private final String sender;
+    private final String memberId;
     private final String msgContent;
     private final LocalDateTime sendedAt;
     private final String fileName;
@@ -37,6 +38,7 @@ public class MessageReceiveResponse {
         return new MessageReceiveResponse(
                 message.getMsgNo(),
                 message.getSender().getMemberName(),
+                message.getSender().getMemberId(),
                 message.getMsgContent(),
                 message.getSendedAt(),
                 fileName,

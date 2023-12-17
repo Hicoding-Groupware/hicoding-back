@@ -13,10 +13,7 @@ import com.hook.hicodingapi.msg.domain.Message;
 import com.hook.hicodingapi.msg.dto.request.MessageCreateRequest;
 import com.hook.hicodingapi.msg.domain.repository.MessageRepository;
 import com.hook.hicodingapi.msg.dto.request.MessageReceiverDeleteRequest;
-import com.hook.hicodingapi.msg.dto.response.MessageDetailReceiveResponse;
-import com.hook.hicodingapi.msg.dto.response.MessageDetailSendResponse;
-import com.hook.hicodingapi.msg.dto.response.MessageReceiveResponse;
-import com.hook.hicodingapi.msg.dto.response.MessageSendResponse;
+import com.hook.hicodingapi.msg.dto.response.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -237,5 +234,14 @@ public class MessageService {
         Message message = messageRepository.findBySenderMemberNoAndMsgNoAndSenderStatus(customUser.getMemberNo(), msgNo, SENDER_USABLE);
 
         message.senderDelete();
+    }
+
+    @Transactional(readOnly = true)
+    public List<MemberListResponse> getMemberList(String memberName) {
+
+        List<Member> members = memberRepository.findByMemberNameContaining(memberName);
+        return members.stream()
+                .map(member -> MemberListResponse.from(member))
+                .collect(Collectors.toList());
     }
 }

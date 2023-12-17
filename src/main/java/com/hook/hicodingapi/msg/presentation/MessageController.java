@@ -6,10 +6,7 @@ import com.hook.hicodingapi.common.paging.PagingResponse;
 import com.hook.hicodingapi.jwt.CustomUser;
 import com.hook.hicodingapi.msg.dto.request.MessageCreateRequest;
 import com.hook.hicodingapi.msg.dto.request.MessageReceiverDeleteRequest;
-import com.hook.hicodingapi.msg.dto.response.MessageDetailReceiveResponse;
-import com.hook.hicodingapi.msg.dto.response.MessageDetailSendResponse;
-import com.hook.hicodingapi.msg.dto.response.MessageReceiveResponse;
-import com.hook.hicodingapi.msg.dto.response.MessageSendResponse;
+import com.hook.hicodingapi.msg.dto.response.*;
 import com.hook.hicodingapi.msg.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -28,6 +25,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @RestController
 @RequestMapping("/hc-app/v1")
@@ -147,6 +145,15 @@ public class MessageController {
 
         messageService.senderDelete(msgNo, customUser);
         return ResponseEntity.created(URI.create("/msg/sender/" + msgNo)).build();
+    }
+
+    /* 메세지 보낼 직원 조회 */
+    @GetMapping("/msgs/member")
+    public ResponseEntity<List<MemberListResponse>> getMemberList(@RequestParam(required = false) final String memberName) {
+
+        List<MemberListResponse> memberList = messageService.getMemberList(memberName);
+
+        return ResponseEntity.ok(memberList);
     }
 
 }
