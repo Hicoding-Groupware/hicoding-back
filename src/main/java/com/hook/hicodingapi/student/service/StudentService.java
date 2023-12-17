@@ -115,7 +115,7 @@ public class StudentService {
     }
 
 
-    /* 출석 조회 */
+    /* 4. 일별 출석 조회 */
     @Transactional
     public List<DailyAttendanceResponse> getAttendanceForDay(Long cosCode, LocalDate atdDate, Long atdCode) {
         List<Student> students = studentRepository.findStudentsBySignupStatus(cosCode, atdDate);

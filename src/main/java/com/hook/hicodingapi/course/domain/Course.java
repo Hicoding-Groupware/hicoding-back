@@ -7,6 +7,7 @@ import com.hook.hicodingapi.course.domain.type.DayStatusType;
 import com.hook.hicodingapi.course.domain.type.TimeStatusType;
 import com.hook.hicodingapi.lecture.domain.Lecture;
 import com.hook.hicodingapi.member.domain.Member;
+import com.hook.hicodingapi.record.domain.Record;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -92,6 +93,10 @@ public class Course {
     @OneToMany
     @JoinColumn(name = "cosCode")
     private List<Attendance> attendCosCode;
+
+    @OneToMany
+    @JoinColumn(name = "cosCode")
+    private List<Record> recordCosCode;
 
     public Course(String cosName, Lecture lecture, Member teacher, Member staff, Classroom classroom, LocalDate cosSdt,
                   LocalDate cosEdt, int capacity, String cosNotice, DayStatusType dayStatus, TimeStatusType timeStatus) {
