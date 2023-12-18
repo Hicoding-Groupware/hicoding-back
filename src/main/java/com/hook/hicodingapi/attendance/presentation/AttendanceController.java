@@ -64,7 +64,7 @@ public class AttendanceController {
     @GetMapping("/month/{cosCode}")
     public ResponseEntity<List<MonthAttendanceResponse>> getMonthAttendances(
             @PathVariable final Long cosCode,
-            @RequestParam(required = false) LocalDate atdDate
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate atdDate
     ) {
         LocalDate currentDate = LocalDate.now();
 

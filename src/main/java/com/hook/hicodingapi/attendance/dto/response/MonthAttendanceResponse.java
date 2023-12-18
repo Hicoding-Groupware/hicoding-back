@@ -2,6 +2,7 @@ package com.hook.hicodingapi.attendance.dto.response;
 
 import com.hook.hicodingapi.attendance.domain.Attendance;
 import com.hook.hicodingapi.attendance.domain.type.AttendanceStatusType;
+import com.hook.hicodingapi.course.domain.type.DayStatusType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,13 +24,14 @@ public class MonthAttendanceResponse {
     private final String stdName;
     private final Long atdCode;
     private final LocalDate atdDate;
+    private final DayStatusType dayStatus;
     private final AttendanceStatusType AttendanceStatus;
 
 
     public static MonthAttendanceResponse from(Attendance attendance) {
 
         return new MonthAttendanceResponse(
-            attendance.getStdCode().getRecordList().get(0).getCourse().getCosCode(),
+                attendance.getStdCode().getRecordList().get(0).getCourse().getCosCode(),
                 attendance.getStdCode().getRecordList().get(0).getCourse().getCosName(),
                 attendance.getStdCode().getRecordList().get(0).getCourse().getCosSdt(),
                 attendance.getStdCode().getRecordList().get(0).getCourse().getCosEdt(),
@@ -37,8 +39,9 @@ public class MonthAttendanceResponse {
                 attendance.getStdCode().getStdName(),
                 attendance.getAtdCode(),
                 attendance.getAtdDate(),
+                attendance.getCosCode().getDayStatus(),
                 attendance.getAtdStatus()
-                );
+        );
     }
 
 }
