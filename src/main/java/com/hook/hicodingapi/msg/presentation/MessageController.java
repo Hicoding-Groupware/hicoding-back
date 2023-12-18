@@ -5,12 +5,14 @@ import com.hook.hicodingapi.common.paging.PagingButtonInfo;
 import com.hook.hicodingapi.common.paging.PagingResponse;
 import com.hook.hicodingapi.jwt.CustomUser;
 import com.hook.hicodingapi.msg.dto.request.MessageCreateRequest;
-import com.hook.hicodingapi.msg.dto.request.MessageReceiverDeleteRequest;
+import com.hook.hicodingapi.msg.dto.request.MessageReceiveDelete;
+import com.hook.hicodingapi.msg.dto.request.MessageSendDelete;
 import com.hook.hicodingapi.msg.dto.response.*;
 import com.hook.hicodingapi.msg.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -105,13 +108,17 @@ public class MessageController {
 
 
 
-    /* 받은 쪽지함(로그인한 사람, 삭제 안한 쪽지) */
+    /* 받은 쪽지함(로그인한 사람, 삭제 안한 쪽지) 검색조건 모두 포함 */
     @GetMapping("/msgs/receiver")
     public ResponseEntity<PagingResponse> getReceiveMsgs(
             @RequestParam(defaultValue = "1") final Integer page,
+            @RequestParam(required = false) final String memberName,
+            @RequestParam(required = false) final String content,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")  final LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDate endDate,
             @AuthenticationPrincipal CustomUser customUser
     ){
-        final Page<MessageReceiveResponse> msgs = messageService.getReceiveMsgs(page, customUser);
+        final Page<MessageReceiveResponse> msgs = messageService.getReceiveMsgs(page, memberName, content, startDate, endDate, customUser);
         final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(msgs);
         final PagingResponse pagingResponse = PagingResponse.of(msgs.getContent(), pagingButtonInfo);
         return ResponseEntity.ok(pagingResponse);
@@ -121,30 +128,35 @@ public class MessageController {
     @GetMapping("/msgs/sender")
     public ResponseEntity<PagingResponse> getSenderMsgs(
             @RequestParam(defaultValue = "1") final Integer page,
+            @RequestParam(required = false) final String memberName,
+            @RequestParam(required = false) final String content,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")  final LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") final LocalDate endDate,
             @AuthenticationPrincipal CustomUser customUser){
 
-        final Page<MessageSendResponse> msgs = messageService.getSendMsgs(page, customUser);
+        final Page<MessageSendResponse> msgs = messageService.getSendMsgs(page, memberName, content, startDate, endDate, customUser);
         final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(msgs);
         final PagingResponse pagingResponse = PagingResponse.of(msgs.getContent(), pagingButtonInfo);
         return ResponseEntity.ok(pagingResponse);
     }
 
     /* 받은 쪽지 삭제(로그인한 사람) => ReceiverStatus = RECEIVER_DELETED */
-    @PutMapping("/msgs/receiver/{msgNo}")
-    public ResponseEntity<Void> receiverDelete(@PathVariable final Long msgNo,
+    @PutMapping("/msgs/receiver")
+    public ResponseEntity<Void> receiverDelete(@RequestBody MessageReceiveDelete messageReceiveDelete,
                                                @AuthenticationPrincipal CustomUser customUser) {
 
-        messageService.receiverDelete(msgNo, customUser);
-        return ResponseEntity.created(URI.create("/msg/receiver/" + msgNo)).build();
+            messageService.receiverDelete(messageReceiveDelete, customUser);
+
+        return ResponseEntity.ok().build();
     }
 
     /* 보낸 쪽지 삭제(로그인한 사람) => private  SenderStatusType = SENDER_USABLE */
-    @PutMapping("/msgs/sender/{msgNo}")
-    public ResponseEntity<Void> senderDelete(@PathVariable final Long msgNo,
+    @PutMapping("/msgs/sender")
+    public ResponseEntity<Void> senderDelete(@RequestBody MessageSendDelete messageSendDelete,
                                              @AuthenticationPrincipal CustomUser customUser) {
 
-        messageService.senderDelete(msgNo, customUser);
-        return ResponseEntity.created(URI.create("/msg/sender/" + msgNo)).build();
+        messageService.senderDelete(messageSendDelete, customUser);
+        return ResponseEntity.ok().build();
     }
 
     /* 메세지 보낼 직원 조회 */

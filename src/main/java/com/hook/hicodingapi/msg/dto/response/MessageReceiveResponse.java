@@ -18,7 +18,7 @@ public class MessageReceiveResponse {
     private final LocalDateTime sendedAt;
     private final String fileName;
     private final String fileUrl;
-
+    private final Long fileNo;
 
 
 
@@ -27,10 +27,12 @@ public class MessageReceiveResponse {
         // file이 null일때 null로 가져옴
         String fileName = "";
         String fileUrl = "";
+        Long fileNo = null;
 
         if(message.getFile() != null) {
             fileName = message.getFile().getFileName();
             fileUrl = message.getFile().getFileUrl();
+            fileNo = message.getFile().getFileNo();
         }
 
 
@@ -42,7 +44,8 @@ public class MessageReceiveResponse {
                 message.getMsgContent(),
                 message.getSendedAt(),
                 fileName,
-                fileUrl
+                fileUrl,
+                fileNo
         );
     }
 }
