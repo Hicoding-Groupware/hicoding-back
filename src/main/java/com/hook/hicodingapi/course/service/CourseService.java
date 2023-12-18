@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_COS_CODE;
+import static com.hook.hicodingapi.course.domain.type.CourseStatusType.AVAILABLE;
 
 @Service
 @Transactional
@@ -45,6 +46,13 @@ public class CourseService {
     private Pageable getPageable(final Integer page){
 
         return PageRequest.of(page-1,  5, Sort.by("cosCode").descending());
+    }
+
+
+    //모든 과정 조회
+    @Transactional(readOnly = true)
+    public List<Course> getCourses() {
+        return courseRepository.findByStatus( AVAILABLE);
     }
 
     //과정 조회(진행중)
@@ -69,7 +77,7 @@ public class CourseService {
     @Transactional(readOnly = true)
     public CourseDetailResponse getCourseDetail(Long cosCode) {
 
-        Course course = courseRepository.findByCosCodeAndStatus(cosCode, CourseStatusType.AVAILABLE)
+        Course course = courseRepository.findByCosCodeAndStatus(cosCode, AVAILABLE)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_COS_CODE));
 
         return CourseDetailResponse.from(course);

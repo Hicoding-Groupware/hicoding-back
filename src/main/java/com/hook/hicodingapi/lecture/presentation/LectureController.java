@@ -3,8 +3,10 @@ package com.hook.hicodingapi.lecture.presentation;
 import com.hook.hicodingapi.common.paging.Pagenation;
 import com.hook.hicodingapi.common.paging.PagingButtonInfo;
 import com.hook.hicodingapi.common.paging.PagingResponse;
+import com.hook.hicodingapi.course.dto.resposne.CourseDetailResponse;
 import com.hook.hicodingapi.lecture.dto.request.LectureCreateRequest;
 import com.hook.hicodingapi.lecture.dto.request.LectureUpdateRequest;
+import com.hook.hicodingapi.lecture.dto.response.LectureDetailResponse;
 import com.hook.hicodingapi.lecture.dto.response.TeacherLecturesResponse;
 import com.hook.hicodingapi.lecture.service.LectureService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,14 @@ public class LectureController {
         final PagingResponse pagingResponse = PagingResponse.of(lectures.getContent(), pagingButtonInfo);
 
         return ResponseEntity.ok(pagingResponse);
+    }
+
+    @GetMapping("/lectures/{lecCode}")//강의 상세 조회
+    public ResponseEntity<LectureDetailResponse> getLectureDetail(@PathVariable final Long lecCode) {
+
+        final LectureDetailResponse lectureDetailResponse = lectureService.getLectureDetail(lecCode);
+
+        return ResponseEntity.ok(lectureDetailResponse);
     }
 
 
