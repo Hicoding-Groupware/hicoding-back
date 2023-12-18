@@ -35,6 +35,8 @@ public class PostCreationResponse {
     private Long parentNo;
 
     public static PostCreationResponse from(final Post newPost) {
+
+        final Post parent = newPost.getParent();
         return new PostCreationResponse(
                 newPost.getPostNo(),
                 newPost.getPostTitle(),
@@ -46,6 +48,8 @@ public class PostCreationResponse {
                 newPost.getStatus(),
                 newPost.getCreatedAt(),
                 newPost.getWriter(),
+                parent == null ?
+                        null :
                 newPost.getParent().getPostNo()
         );
     }

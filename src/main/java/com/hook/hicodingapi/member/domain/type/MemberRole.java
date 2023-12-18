@@ -7,10 +7,11 @@ import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND
 
 @Getter
 public enum MemberRole {
-    ADMIN("admin"),
-    STAFF("staff"),
-    TEACHER("teacher"),
-    ALL("all");
+    ALL("00"),
+    ADMIN("01"),
+    STAFF("02"),
+    TEACHER("03");
+
 
     private final String roleNo;
 
