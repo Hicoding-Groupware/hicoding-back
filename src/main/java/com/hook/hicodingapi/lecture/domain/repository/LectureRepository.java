@@ -14,4 +14,5 @@ public interface LectureRepository extends JpaRepository<Lecture, Long> {
 
     Optional<Lecture> findByLecCodeAndStatusNot(Long lecCode, LectureStatusType lectureStatusType);
 
+    Optional<Lecture> findByLecCodeAndStatus(Long lecCode, LectureStatusType lectureStatusType);
 }

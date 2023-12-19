@@ -9,9 +9,6 @@ import com.hook.hicodingapi.course.dto.request.CourseUpdateRequest;
 import com.hook.hicodingapi.course.dto.resposne.CourseDetailResponse;
 import com.hook.hicodingapi.course.dto.resposne.TeacherCoursesResponse;
 import com.hook.hicodingapi.course.service.CourseService;
-import com.hook.hicodingapi.lecture.dto.request.LectureCreateRequest;
-import com.hook.hicodingapi.lecture.dto.request.LectureUpdateRequest;
-import com.hook.hicodingapi.lecture.dto.response.TeacherLecturesResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +24,13 @@ import java.net.URI;
 public class CourseController {
 
     private final CourseService courseService;
+
+    @GetMapping("courses")//전체 과정 (리스트)
+    public ResponseEntity<List<TeacherCoursesResponse>> getExpectedCourses() {
+        final List<TeacherCoursesResponse> courses = courseService.getCourses();
+        return ResponseEntity.ok(courses);
+    }
+
 
     @GetMapping("courses-proceeding")//과정 조회(진행중)
     public ResponseEntity<PagingResponse> getProceedingCourses(@RequestParam(defaultValue = "1") Integer page) {
