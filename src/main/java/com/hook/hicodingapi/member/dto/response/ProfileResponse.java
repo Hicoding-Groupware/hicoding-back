@@ -31,7 +31,6 @@ public class ProfileResponse {
     private final String memberProfile;
     private final GenderType memberGender;
     private final MemberRole memberRole;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private final LocalDateTime joinedAt;
 
 

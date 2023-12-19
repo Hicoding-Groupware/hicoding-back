@@ -23,6 +23,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_COS_CODE;
 
 @Service
@@ -31,99 +33,35 @@ import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND
 public class MainCourseService {
 
     private final CourseRepository courseRepository;
-    private final LectureRepository lectureRepository;
-    private final MemberRepository memberRepository;
-    private final ClassroomRepository classroomRepository;
+
+
+    private LocalDate sdt = LocalDate.now();
+    private LocalDate edt = LocalDate.now();
 
     private Pageable getPageable(final Integer page){
 
-        return PageRequest.of(page-1,  10, Sort.by("cosCode").descending());
+        return PageRequest.of(page-1,  6, Sort.by("cosCode").descending());
     }
 
-    //과정 조회(강사)
+    //과정 조회(진행중)
     @Transactional(readOnly = true)
-    public Page<TeacherCoursesResponse> getTeacherCourses(final Integer page){
+    public Page<TeacherCoursesResponse> getProceedingCourses(final Integer page){
 
-        Page<Course> courses = courseRepository.findByStatusNot(getPageable(page), CourseStatusType.DELETED);
+        Page<Course> courses = courseRepository.findByStatusNotAndCosSdtLessThanEqualAndCosEdtGreaterThanEqual(getPageable(page), CourseStatusType.DELETED, sdt, edt);
 
         return courses.map(course -> TeacherCoursesResponse.from(course));
     }
 
-    //과정 상세 조회
+    //과정 조회(예정)
     @Transactional(readOnly = true)
-    public CourseDetailResponse getCourseDetail(Long cosCode) {
+    public Page<TeacherCoursesResponse> getExpectedCourses(final Integer page){
 
-        Course course = courseRepository.findByCosCodeAndStatus(cosCode, CourseStatusType.AVAILABLE)
-                .orElseThrow(() -> new BadRequestException(NOT_FOUND_COS_CODE));
+        Page<Course> courses = courseRepository.findByStatusNotAndCosSdtGreaterThan(getPageable(page), CourseStatusType.DELETED, sdt);
 
-        return CourseDetailResponse.from(course);
+        return courses.map(course -> TeacherCoursesResponse.from(course));
     }
 
-    //과정 등록
-    public Long save(CourseCreateRequest courseRequest) {
 
-        Lecture lecture = lectureRepository.findById(courseRequest.getLecCode())
-                .orElseThrow(()->new BadRequestException(ExceptionCode.NOT_FOUND_LEC_CODE));
-        Member teacher = memberRepository.findById(courseRequest.getTeacher())
-                .orElseThrow(()->new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER_CODE));
-        Member staff = memberRepository.findById(courseRequest.getTeacher())
-                .orElseThrow(()->new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER_CODE));
-        Classroom  classroom = classroomRepository.findById(courseRequest.getRoomCode())
-                .orElseThrow(()->new BadRequestException(ExceptionCode.NOT_FOUND_ROOM_CODE));
 
-        final Course newCourse = Course.of(
-                courseRequest.getCosName(),
-                lecture,
-                teacher,
-                staff,
-                classroom,
-                courseRequest.getCosSdt(),
-                courseRequest.getCosEdt(),
-                courseRequest.getCapacity(),
-                courseRequest.getCosNotice(),
-                courseRequest.getDayStatus(),
-                courseRequest.getTimeStatus()
-        );
-
-        final Course course = courseRepository.save(newCourse);
-
-        return course.getCosCode();
-    }
-
-    //과정 수정
-    public void update(final Long cosCode, final CourseUpdateRequest courseRequest) {
-
-        Course course = courseRepository.findByCosCodeAndStatusNot(cosCode,CourseStatusType.DELETED)
-                .orElseThrow(()->new BadRequestException(NOT_FOUND_COS_CODE));
-        Lecture lecture = lectureRepository.findById(courseRequest.getLecCode())
-                .orElseThrow(()->new BadRequestException(ExceptionCode.NOT_FOUND_LEC_CODE));
-        Member teacher = memberRepository.findById(courseRequest.getTeacher())
-                .orElseThrow(()->new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER_CODE));
-        Member staff = memberRepository.findById(courseRequest.getTeacher())
-                .orElseThrow(()->new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER_CODE));
-        Classroom  classroom = classroomRepository.findById(courseRequest.getRoomCode())
-                .orElseThrow(()->new BadRequestException(ExceptionCode.NOT_FOUND_ROOM_CODE));
-
-        course.update(
-                courseRequest.getCosName(),
-                lecture,
-                teacher,
-                staff,
-                classroom,
-                courseRequest.getCosSdt(),
-                courseRequest.getCosEdt(),
-                courseRequest.getCapacity(),
-                courseRequest.getCurCnt(),
-                courseRequest.getDayStatus(),
-                courseRequest.getTimeStatus(),
-                courseRequest.getStatus()
-        );
-    }
-
-    //과정 삭제
-    public void delete(final Long cosCode) {
-
-        courseRepository.deleteById(cosCode);
-    }
 
 }
