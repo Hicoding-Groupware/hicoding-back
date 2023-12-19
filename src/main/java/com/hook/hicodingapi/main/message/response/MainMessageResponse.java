@@ -2,7 +2,7 @@ package com.hook.hicodingapi.main.message.response;
 
 import com.hook.hicodingapi.msg.domain.Message;
 import com.hook.hicodingapi.msg.domain.type.ReadStatusType;
-import com.hook.hicodingapi.msg.dto.response.MessageResponse;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
