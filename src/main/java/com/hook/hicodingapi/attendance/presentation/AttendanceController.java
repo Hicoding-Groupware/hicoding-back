@@ -1,21 +1,20 @@
 package com.hook.hicodingapi.attendance.presentation;
 
-
 import com.hook.hicodingapi.attendance.dto.request.AttendanceRegistRequest;
+import com.hook.hicodingapi.attendance.dto.request.AttendanceUpdateRequest;
 import com.hook.hicodingapi.attendance.dto.response.DailyAttendanceResponse;
+import com.hook.hicodingapi.attendance.dto.response.MonthAttendanceResponse;
 import com.hook.hicodingapi.attendance.service.AttendanceService;
-import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import com.hook.hicodingapi.student.service.StudentService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/hc-app/v1/attendance")
 @RequiredArgsConstructor
@@ -25,25 +24,61 @@ public class AttendanceController {
     private final StudentService studentService;
 
 
-    /* 5. 일별 출석표 조회 */
+    /* 4. 일별 출석표 조회 */
     @GetMapping("/day/{cosCode}")
     public ResponseEntity<List<DailyAttendanceResponse>> getAttendances(
-            @PathVariable final Long cosCode
+            @PathVariable final Long cosCode,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate atdDate,
+            @RequestParam(required = false) Long atdCode
     ) {
-        final List<DailyAttendanceResponse> dailyAttendanceResponses = studentService.getAttendanceForDay(cosCode);
+        LocalDate defaultAtdDate = atdDate != null ? atdDate : LocalDate.now();
+
+        List<DailyAttendanceResponse> dailyAttendanceResponses = studentService.getAttendanceForDay(cosCode, defaultAtdDate, atdCode);
 
         return ResponseEntity.ok(dailyAttendanceResponses);
     }
 
-    /* 6. 출석 등록 */
-//    @PostMapping("/day")
-//    public ResponseEntity<Void> save(@RequestParam @Valid final AttendanceRegistRequest registAttendance) {
-
+    /* 5. 출석 등록 */
+    @PostMapping("/day")
+    public ResponseEntity<Void> save(@RequestBody @Valid List<AttendanceRegistRequest> registAttendance
+    ) {
         /* 등록 데이터 저장 */
-//        final Long atdCode = attendanceService.save(registAttendance);
-//
-//        return ResponseEntity.created(URI.create("/hc-app/v1/attendance" + atdCode)).build();
-//    }
+        attendanceService.save(registAttendance);
 
+        return ResponseEntity.ok().build();
+    }
 
+    /* 6. 출석 수정 */
+    @PutMapping("/day/{atdDate}")
+    public ResponseEntity<Void> update(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate atdDate,
+                                       @RequestBody List<AttendanceUpdateRequest> updateAttendance
+    ) {
+
+        attendanceService.update(atdDate, updateAttendance);
+
+        return ResponseEntity.ok().build();
+
+    }
+
+    /* 7. 월별 출석부 조회 */
+    @GetMapping("/month/{cosCode}")
+    public ResponseEntity<List<MonthAttendanceResponse>> getMonthAttendances(
+            @PathVariable final Long cosCode,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate atdDate
+    ) {
+        LocalDate currentDate = LocalDate.now();
+
+        if (atdDate == null) {
+            atdDate = currentDate;
+        }
+
+        LocalDate firstDayOfMonth = atdDate.withDayOfMonth(1);
+        LocalDate lastDayOfMonth = atdDate.withDayOfMonth(atdDate.lengthOfMonth());
+
+        log.info("Fetching attendance data for course: {}, month: {}", cosCode, atdDate.getMonth());
+
+        List<MonthAttendanceResponse> monthAttendanceResponses = attendanceService.getAttendanceForMonth(cosCode, firstDayOfMonth, lastDayOfMonth, atdDate);
+
+        return ResponseEntity.ok(monthAttendanceResponses);
+    }
 }

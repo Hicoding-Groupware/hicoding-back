@@ -94,7 +94,7 @@ public class SecurityConfig {
         corsConfiguration.setAllowedHeaders(Arrays.asList(
                 "Access-Control-Allow-Origin", "Access-Control-Allow-Headers",
                 "Content-Type", "Authorization", "X-Requested-With", "Access-Token", "Refresh-Token"));
-        corsConfiguration.setExposedHeaders(Arrays.asList("Access-Token", "Refresh-Token"));
+        corsConfiguration.setExposedHeaders(Arrays.asList("Access-Token", "Refresh-Token", "Content-Disposition"));
         // 모든 요청 url 패턴에 대해 위의 설정을 적용한다.
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);

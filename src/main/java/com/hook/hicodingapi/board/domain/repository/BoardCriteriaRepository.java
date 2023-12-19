@@ -41,9 +41,9 @@ public class BoardCriteriaRepository {
         predicates.add(criteriaBuilder.equal(root.get("boardType"), boardType));
 
         // 권한이 All이라면 boardType에 맞는 모든 게시판을 가져온다.
-        if (role != MemberRole.ALL) {
+        //if (role != MemberRole.ALL) {
             predicates.add(criteriaBuilder.equal(root.get("role"), role));
-        }
+        //}
 
         // 정렬 조건은 criteriaQuery에 직접적으로 설정한다.
         criteriaQuery.orderBy(criteriaBuilder.asc(root.get("createdAt")));

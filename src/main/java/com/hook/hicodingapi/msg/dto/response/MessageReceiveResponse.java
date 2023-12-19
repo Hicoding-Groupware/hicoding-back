@@ -1,6 +1,7 @@
 package com.hook.hicodingapi.msg.dto.response;
 
 import com.hook.hicodingapi.msg.domain.Message;
+import com.hook.hicodingapi.msg.domain.type.ReadStatusType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -8,19 +9,20 @@ import java.time.LocalDateTime;
 
 @Getter
 @RequiredArgsConstructor
-public class MessageDetailReceiveResponse {
+public class MessageReceiveResponse {
 
     private final Long msgNo;
     private final String sender;
-    private final Long memberNo;
     private final String memberId;
-    private final LocalDateTime sendedAt;
     private final String msgContent;
+    private final LocalDateTime sendedAt;
     private final String fileName;
     private final String fileUrl;
     private final Long fileNo;
 
-    public static MessageDetailReceiveResponse from(Message message) {
+
+
+    public static MessageReceiveResponse from(Message message) {
 
         // file이 null일때 null로 가져옴
         String fileName = "";
@@ -33,13 +35,14 @@ public class MessageDetailReceiveResponse {
             fileNo = message.getFile().getFileNo();
         }
 
-        return new MessageDetailReceiveResponse(
+
+
+        return new MessageReceiveResponse(
                 message.getMsgNo(),
                 message.getSender().getMemberName(),
-                message.getSender().getMemberNo(),
                 message.getSender().getMemberId(),
-                message.getSendedAt(),
                 message.getMsgContent(),
+                message.getSendedAt(),
                 fileName,
                 fileUrl,
                 fileNo

@@ -22,6 +22,8 @@ public enum ExceptionCode {
 
     NOT_ENOUGH_CAPACITY(5003, "해당과정이 꽉찼습니다."),
 
+    INVALID_DATE_FOR_COURSE(5004, "날짜가 코스 유형과 일치하지 않습니다."),
+
     /*------------ 로그인 exceptionCode --------------*/
 
     FAIL_LOGIN(4000, "로그인에 실패하였습니다"),
@@ -39,6 +41,15 @@ public enum ExceptionCode {
     FAIL_TO_UPLOAD_FILE(1001, "파일 저장에 실패하였습니다."),
 
     FAIL_TO_DELETE_FILE(1002, "파일 삭제에 실패하였습니다."),
+    /*----------- 출석 체크 exceptionCode -------------*/
+
+    NOT_ALLOWED_EARLY_ATTENDANCE(6000, "출결 여부를 미리 등록 할 수 없습니다."),
+
+    CONFLICT_ATTENDANCE_DATA(6001, "이미 출석이 완료 되었습니다."),
+
+    ENDROLLMENT_NOT_FOUND(6002, "이 과정을 듣지 않는 학생입니다."),
+
+    NOT_FOUND_ATD_CODE(6003, "이 출석코드는 수정할 수 없습니다."),
 
     NOT_FOUND_FILE_NO(1003, "파일을 찾을 수 없습니다."),
 

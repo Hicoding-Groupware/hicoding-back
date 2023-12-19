@@ -53,12 +53,12 @@ public class BoardController {
     }
 
     // 게시글 조회
-    @GetMapping("/{postNo}/{recordType}/")
+    @GetMapping("/{postNo}/{recordType}/{memberNo}")
     public ResponseEntity<PostReadResponse> getPost(@PathVariable final String boardType,
                                                     @PathVariable final String role,
                                                     @PathVariable final Long postNo,
                                                     @PathVariable final String recordType,
-                                                    @RequestParam final Long memberNo) {
+                                                    @PathVariable final Long memberNo) {
         final Post findPost = boardService.getPost(BoardType.fromValue(boardType),
                 MemberRole.fromValue(role),
                 BoardRecordType.fromValue(recordType),
@@ -71,7 +71,7 @@ public class BoardController {
         // 게시글의 자식들을 응답 객체의 자식들로 변환시킨다.
         boardService.convertObjChildrenToReadResponseObjChildren(postReadResponse, findPost.getChildrenList(), findPost.getCommentList());
 
-        final URI location = URI.create(BASE_PATH + '/' + boardType + '/' + role + '/' + postNo);
+        final URI location = URI.create(BASE_PATH + '/' + boardType + '/' + role + '/' + postNo + '/' + recordType + '/' + memberNo);
         return ResponseEntity.created(location).body(postReadResponse);
     }
 
@@ -101,7 +101,8 @@ public class BoardController {
                 boardService.createPost(BoardType.fromValue(boardType), MemberRole.fromValue(role), postCreationReq
                 ));
 
-        return ResponseEntity.ok(creationResponse);
+        final URI location = URI.create(BASE_PATH + '/' + boardType + '/' + role + '/' + creationResponse.getNo() + "views" + creationResponse.getWriter().getMemberNo());
+        return ResponseEntity.created(location).body(creationResponse);
     }
 
     // 게시글 수정
@@ -121,7 +122,7 @@ public class BoardController {
     }
 
     // 게시글 삭제
-    @DeleteMapping( "/{postNo}")
+    @DeleteMapping("/{postNo}")
     public ResponseEntity<Void> deletePost(@PathVariable final String boardType,
                                            @PathVariable final String role,
                                            @PathVariable final Long postNo) {

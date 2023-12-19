@@ -6,7 +6,6 @@ import com.hook.hicodingapi.common.paging.PagingResponse;
 import com.hook.hicodingapi.jwt.CustomUser;
 import com.hook.hicodingapi.main.message.response.MainMessageResponse;
 import com.hook.hicodingapi.main.message.service.MainMessageService;
-import com.hook.hicodingapi.msg.dto.response.MessageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

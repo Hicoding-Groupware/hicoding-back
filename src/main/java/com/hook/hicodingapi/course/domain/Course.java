@@ -1,11 +1,13 @@
 package com.hook.hicodingapi.course.domain;
 
+import com.hook.hicodingapi.attendance.domain.Attendance;
 import com.hook.hicodingapi.classroom.domain.Classroom;
 import com.hook.hicodingapi.course.domain.type.CourseStatusType;
 import com.hook.hicodingapi.course.domain.type.DayStatusType;
 import com.hook.hicodingapi.course.domain.type.TimeStatusType;
 import com.hook.hicodingapi.lecture.domain.Lecture;
 import com.hook.hicodingapi.member.domain.Member;
+import com.hook.hicodingapi.record.domain.Record;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -15,6 +17,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import static com.hook.hicodingapi.course.domain.type.CourseStatusType.AVAILABLE;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -85,6 +89,16 @@ public class Course {
     @LastModifiedDate
     @Column
     private LocalDateTime modifiedAt;
+
+    @OneToMany
+    @JoinColumn(name = "cosCode")
+    private List<Attendance> attendCosCode;
+
+    @OneToMany
+    @JoinColumn(name = "cosCode")
+    private List<Record> recordCosCode;
+
+
 
     public Course(String cosName, Lecture lecture, Member teacher, Member staff, Classroom classroom, LocalDate cosSdt,
                   LocalDate cosEdt, int capacity, String cosNotice, DayStatusType dayStatus, TimeStatusType timeStatus) {

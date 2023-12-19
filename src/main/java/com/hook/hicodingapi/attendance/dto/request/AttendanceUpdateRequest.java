@@ -5,15 +5,22 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @RequiredArgsConstructor
 @Getter
-public class AttendanceRegistRequest {
+public class AttendanceUpdateRequest {
 
     @NotNull
-    private final AttendanceStatusType status;
-    @Min(value = 1)
-    private final Long stdCode;
+    private final Long atdCode;
+    @NotNull
+    private final LocalDate atdDate;
     @Min(value = 1)
     private final Long cosCode;
+    @Min(value = 1)
+    private final Long stdCode;
+    @NotNull
+    private final AttendanceStatusType status;
+
+
 }

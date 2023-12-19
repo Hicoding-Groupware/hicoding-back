@@ -17,7 +17,9 @@ import java.time.LocalDateTime;
 
 import static com.hook.hicodingapi.msg.domain.type.ReadStatusType.NOTREAD;
 import static com.hook.hicodingapi.msg.domain.type.ReadStatusType.READED;
+import static com.hook.hicodingapi.msg.domain.type.ReceiverStatusType.RECEIVER_DELETED;
 import static com.hook.hicodingapi.msg.domain.type.ReceiverStatusType.RECEIVER_USABLE;
+import static com.hook.hicodingapi.msg.domain.type.SenderStatusType.SENDER_DELETED;
 import static com.hook.hicodingapi.msg.domain.type.SenderStatusType.SENDER_USABLE;
 
 import static javax.persistence.EnumType.STRING;
@@ -83,13 +85,18 @@ public class Message {
         );
     }
 
-    /*public void update(LocalDateTime readAt, ReadStatusType readStatus) {
-        this.readAt = LocalDateTime.now();
-        this.readStatus = READED;
-    }*/
 
     public void update() {
         this.readAt = LocalDateTime.now();
         this.readStatus = READED;
+    }
+
+
+    public void receiverDelete() {
+        this.receiverStatus = RECEIVER_DELETED;
+    }
+
+    public void senderDelete() {
+        this.senderStatus = SENDER_DELETED;
     }
 }

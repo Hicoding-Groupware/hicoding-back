@@ -1,12 +1,18 @@
 package com.hook.hicodingapi.student.domain.repository;
 
+import com.hook.hicodingapi.attendance.domain.type.AttendanceStatusType;
+import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.student.domain.Student;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,29 +20,39 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
     Page<Student> findByStdNameContaining(Pageable studentPageable, String stdName);
+
     @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
     Page<Student> findByCreatedAtGreaterThanEqual(Pageable studentPageable, LocalDateTime startDateTime);
+
     @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
     Page<Student> findByCreatedAtLessThanEqual(Pageable studentPageable, LocalDateTime endDateTime);
+
     @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
     Page<Student> findByCreatedAtBetween(Pageable studentPageable, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
     @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
     Page<Student> findByStdNameContainingAndCreatedAtGreaterThanEqual(Pageable studentPageable, String stdName, LocalDateTime startDateTime);
+
     @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
     Page<Student> findByStdNameContainingAndCreatedAtLessThanEqual(Pageable studentPageable, String stdName, LocalDateTime endDateTime);
+
     @EntityGraph(attributePaths = {"recordList", "recordList.course", "recordList.course.teacher"})
     Page<Student> findByStdNameContainingAndCreatedAtBetween(Pageable studentPageable, String stdName, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
-    
 
-
-
-    @Query("SELECT s " +
+    /* 일별 출석부 */
+    @Query("SELECT DISTINCT s, a.atdStatus " +
             "FROM Student s " +
-            "JOIN FETCH s.recordList r " +
-            "WHERE r.signupStatus = 'NORMAL' ")
-    List<Student> findStudentsByAndSignupStatus();
+            "JOIN s.recordList r " +
+            "JOIN r.course c " +
+            "LEFT JOIN c.attendCosCode a " +
+            "ON a.stdCode.stdCode = s.stdCode " +
+            "AND a.atdDate = :atdDate " +
+            "WHERE r.signupStatus = 'NORMAL' " +
+            "AND c.cosCode = :cosCode")
+    List<Student> findStudentsBySignupStatus(@Param("cosCode") Long cosCode, @Param("atdDate") LocalDate atdDate);
 
+    boolean existsByStdCodeAndRecordListCourseCosCode(Long stdCode, Long cosCode);
 
 
 

@@ -53,6 +53,17 @@ public class File extends BaseEntity {
     @Column(nullable = false)
     private String fileUrl;
 
+    public File(Long fileNo, String fileName, String fileDescription, String extension, Long size, AccessStatus accessStatus, Message message, String fileUrl) {
+        this.fileNo = fileNo;
+        this.fileName = fileName;
+        this.fileDescription = fileDescription;
+        this.extension = extension;
+        this.size = size;
+        this.accessStatus = accessStatus;
+        this.message = message;
+        this.fileUrl = fileUrl;
+    }
+
     public File(String fileName, String extension, Long size, Message message, String fileUrl) {
         this.fileName = fileName;
         this.extension = extension;
