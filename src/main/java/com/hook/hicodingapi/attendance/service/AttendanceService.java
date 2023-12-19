@@ -75,12 +75,10 @@ public class AttendanceService {
         }
 
         // 출석 등록을 시도 하기 전에 오늘 이미 동일한, 학생, 강의, 날짜로 등록된 출석이 있는지 확인
-        // 기존 등록
         if (attendanceRepository.existsByStdCodeStdCodeAndCosCodeCosCodeAndAtdDate(
                 registAttendance.getStdCode(), registAttendance.getCosCode(), LocalDate.now())) {
             throw new ConflictException(CONFLICT_ATTENDANCE_DATA);
         }
-
     }
 
     private Student getStudent(Long stdCode) {

@@ -98,6 +98,8 @@ public class Course {
     @JoinColumn(name = "cosCode")
     private List<Record> recordCosCode;
 
+
+
     public Course(String cosName, Lecture lecture, Member teacher, Member staff, Classroom classroom, LocalDate cosSdt,
                   LocalDate cosEdt, int capacity, String cosNotice, DayStatusType dayStatus, TimeStatusType timeStatus) {
         this.cosName = cosName;
