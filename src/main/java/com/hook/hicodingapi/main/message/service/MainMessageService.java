@@ -1,15 +1,14 @@
 package com.hook.hicodingapi.main.message.service;
 
-import com.hook.hicodingapi.file.domain.repository.FileRepository;
+
 import com.hook.hicodingapi.jwt.CustomUser;
 import com.hook.hicodingapi.main.message.response.MainMessageResponse;
-import com.hook.hicodingapi.member.domain.repository.MemberRepository;
+
 import com.hook.hicodingapi.msg.domain.Message;
 import com.hook.hicodingapi.msg.domain.repository.MessageRepository;
-import com.hook.hicodingapi.msg.dto.response.MessageResponse;
+
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
