@@ -25,6 +25,12 @@ public class CourseController {
 
     private final CourseService courseService;
 
+    @GetMapping("courses")//전체 과정 (리스트)
+    public ResponseEntity<List<TeacherCoursesResponse>> getExpectedCourses() {
+        final List<TeacherCoursesResponse> courses = courseService.getCourses();
+        return ResponseEntity.ok(courses);
+    }
+
 
     @GetMapping("courses-proceeding")//과정 조회(진행중)
     public ResponseEntity<PagingResponse> getProceedingCourses(@RequestParam(defaultValue = "1") Integer page) {

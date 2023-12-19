@@ -24,6 +24,6 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     Optional<Course> findByCosCodeAndStatus(Long cosCode, CourseStatusType courseStatusType);
 
-    List<Course> findByStatus(CourseStatusType courseStatusType);
+    List<Course> findByStatusNot(CourseStatusType courseStatusType);
 
 }

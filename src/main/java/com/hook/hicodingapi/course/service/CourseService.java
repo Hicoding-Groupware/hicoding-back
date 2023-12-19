@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_COS_CODE;
 import static com.hook.hicodingapi.course.domain.type.CourseStatusType.AVAILABLE;
@@ -51,8 +52,11 @@ public class CourseService {
 
     //모든 과정 조회
     @Transactional(readOnly = true)
-    public List<Course> getCourses() {
-        return courseRepository.findByStatus( AVAILABLE);
+    public List<TeacherCoursesResponse> getCourses() {
+        List<Course> courses = courseRepository.findByStatusNot(CourseStatusType.DELETED);
+        return courses.stream()
+                .map(course -> TeacherCoursesResponse.from(course))
+                .collect(Collectors.toList());
     }
 
     //과정 조회(진행중)
