@@ -220,4 +220,5 @@ public Member(String memberPwd, String postNo, String address, String detailAddr
     public void updateProfile(String memberProfile) {
         this.memberProfile = memberProfile;
     }
+
 }

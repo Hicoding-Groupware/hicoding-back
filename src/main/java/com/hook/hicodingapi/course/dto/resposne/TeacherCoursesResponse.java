@@ -15,7 +15,6 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @RequiredArgsConstructor(access = PROTECTED)
 public class TeacherCoursesResponse {
-
     private final Long cosCode;
     private final String cosName;
     private final String lecCode;
