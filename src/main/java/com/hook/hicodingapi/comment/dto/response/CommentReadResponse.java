@@ -22,6 +22,7 @@ import static javax.persistence.EnumType.STRING;
 public class CommentReadResponse {
     private Long no;
     private String content;
+    private int depthLevel;
 
     @Enumerated(value = STRING)
     private StatusType status;
@@ -40,6 +41,7 @@ public class CommentReadResponse {
         return new CommentReadResponse(
                 comment.getCmtNo(),
                 comment.getCmtContent(),
+                0,
                 comment.getStatus(),
                 comment.getCreatedAt(),
                 comment.getModifiedAt(),

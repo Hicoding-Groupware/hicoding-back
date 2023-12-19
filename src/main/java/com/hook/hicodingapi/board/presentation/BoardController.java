@@ -2,19 +2,17 @@ package com.hook.hicodingapi.board.presentation;
 
 import com.hook.hicodingapi.board.domain.Post;
 import com.hook.hicodingapi.board.domain.type.BoardRecordType;
+import com.hook.hicodingapi.board.domain.type.BoardRole;
 import com.hook.hicodingapi.board.domain.type.BoardType;
 import com.hook.hicodingapi.board.dto.request.PostCreationRequest;
 import com.hook.hicodingapi.board.dto.request.PostEditRequest;
-import com.hook.hicodingapi.board.dto.response.LikesPostResponse;
 import com.hook.hicodingapi.board.dto.response.PostCreationResponse;
 import com.hook.hicodingapi.board.dto.response.PostReadResponse;
 import com.hook.hicodingapi.board.service.BoardService;
 import com.hook.hicodingapi.common.paging.CustomPagination;
 import com.hook.hicodingapi.common.paging.PagingResponse;
 import com.hook.hicodingapi.member.domain.Member;
-import com.hook.hicodingapi.member.domain.type.MemberRole;
 import com.hook.hicodingapi.member.dto.response.PostMembersResponse;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,12 +36,14 @@ public class BoardController {
                                                       @PathVariable final String role,
                                                       @RequestParam(defaultValue = "1") final int requestPage) {
 
-        final List<Post> findPostList = boardService.findBoardAllPosts(BoardType.fromValue(boardType), MemberRole.fromValue(role));
+        final List<Post> findPostList = boardService.findBoardAllPosts(BoardType.fromValue(boardType), BoardRole.fromValue(role));
         final List<PostReadResponse> postReadResponseList = boardService.convertHierarchicalPostList(findPostList);
+
         final PagingResponse pagingResponse =
                 CustomPagination.getPagingResponse(
+                        "Post",
                         postReadResponseList,
-                        postReadResponseList.size(),
+                        findPostList.size(),
                         requestPage,
                         null,
                         null
@@ -60,7 +60,7 @@ public class BoardController {
                                                     @PathVariable final String recordType,
                                                     @PathVariable final Long memberNo) {
         final Post findPost = boardService.getPost(BoardType.fromValue(boardType),
-                MemberRole.fromValue(role),
+                BoardRole.fromValue(role),
                 BoardRecordType.fromValue(recordType),
                 memberNo,
                 postNo
@@ -98,7 +98,7 @@ public class BoardController {
                                                          @PathVariable final String role,
                                                          @RequestBody final PostCreationRequest postCreationReq) {
         final PostCreationResponse creationResponse = PostCreationResponse.from(
-                boardService.createPost(BoardType.fromValue(boardType), MemberRole.fromValue(role), postCreationReq
+                boardService.createPost(BoardType.fromValue(boardType), BoardRole.fromValue(role), postCreationReq
                 ));
 
         final URI location = URI.create(BASE_PATH + '/' + boardType + '/' + role + '/' + creationResponse.getNo() + "views" + creationResponse.getWriter().getMemberNo());
@@ -111,7 +111,7 @@ public class BoardController {
                                                        @PathVariable final String role,
                                                        @PathVariable final Long postNo,
                                                        @RequestBody final PostEditRequest postEditRequest) {
-        final Post updatedPost = boardService.updatePost(BoardType.fromValue(boardType), MemberRole.fromValue(role), postNo, postEditRequest);
+        final Post updatedPost = boardService.updatePost(BoardType.fromValue(boardType), BoardRole.fromValue(role), postNo, postEditRequest);
         final PostReadResponse postReadResponse = PostReadResponse.from(updatedPost);
 
         // 응답 객체에 자식들을 이어붙인다.
@@ -126,7 +126,7 @@ public class BoardController {
     public ResponseEntity<Void> deletePost(@PathVariable final String boardType,
                                            @PathVariable final String role,
                                            @PathVariable final Long postNo) {
-        boardService.deletePost(BoardType.fromValue(boardType), MemberRole.fromValue(role), postNo);
+        boardService.deletePost(BoardType.fromValue(boardType), BoardRole.fromValue(role), postNo);
 
         return ResponseEntity.noContent().build();
     }

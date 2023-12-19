@@ -27,6 +27,7 @@ public class PostReadResponse {
     private String content;
     private int views;
     private int likesCnt;
+    private int depthLevel;
     private boolean isPublic;
     private boolean isNoticePost;
 
@@ -53,6 +54,7 @@ public class PostReadResponse {
                 newPost.getPostContent(),
                 newPost.getViews(),
                 newPost.getLikesCount(),
+                0,
                 newPost.isPublic(),
                 newPost.isNoticePost(),
                 newPost.getStatus(),

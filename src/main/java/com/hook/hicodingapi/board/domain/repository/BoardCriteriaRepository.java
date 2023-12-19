@@ -2,9 +2,9 @@ package com.hook.hicodingapi.board.domain.repository;
 
 import com.hook.hicodingapi.board.domain.Post;
 import com.hook.hicodingapi.board.domain.type.BoardCriteriaConditionType;
+import com.hook.hicodingapi.board.domain.type.BoardRole;
 import com.hook.hicodingapi.board.domain.type.BoardType;
 import com.hook.hicodingapi.common.domain.repository.BaseCriteriaRepository;
-import com.hook.hicodingapi.member.domain.type.MemberRole;
 import lombok.*;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +21,7 @@ public class BoardCriteriaRepository {
 
     private final BaseCriteriaRepository<Post> baseCriteriaRepository;
 
-    private CriteriaQuery<Post> findAllPosts(final CriteriaBuilder criteriaBuilder, final BoardType boardType, final MemberRole role) {
+    private CriteriaQuery<Post> findAllPosts(final CriteriaBuilder criteriaBuilder, final BoardType boardType, final BoardRole role) {
 
         // CriteriaQuery를 생성하는 부분, JPA에서 사용되는 쿼리를 동적으로 생성할 수 있게 해주는 인터페이스
         CriteriaQuery<Post> criteriaQuery = criteriaBuilder.createQuery(Post.class);
@@ -36,14 +36,14 @@ public class BoardCriteriaRepository {
         Join<Post, Post> selfJoin = root.join("parent", JoinType.LEFT);
 
         // 조건에 따른 필터링 로직은 predicates에 담는다.
-        predicates.add(criteriaBuilder.equal(root.get("status"), USABLE));
+//        predicates.add(criteriaBuilder.equal(root.get("status"), USABLE));
 
         predicates.add(criteriaBuilder.equal(root.get("boardType"), boardType));
 
-        // 권한이 All이라면 boardType에 맞는 모든 게시판을 가져온다.
-        //if (role != MemberRole.ALL) {
+        // 권한이 ALL이 아니라면 boardType에 맞는 모든 게시판을 가져온다.
+        if (role != BoardRole.ALL) {
             predicates.add(criteriaBuilder.equal(root.get("role"), role));
-        //}
+        }
 
         // 정렬 조건은 criteriaQuery에 직접적으로 설정한다.
         criteriaQuery.orderBy(criteriaBuilder.asc(root.get("createdAt")));
@@ -91,7 +91,7 @@ public class BoardCriteriaRepository {
     // 특정 조건에 따른 게시물 조회
     public Optional<List<Post>> getPostListByCondition(final BoardCriteriaConditionType conditionType,
                                                        final BoardType boardType,
-                                                       final MemberRole role,
+                                                       final BoardRole role,
                                                        final Long postNo) {
 
         CriteriaBuilder criteriaBuilder = baseCriteriaRepository.getEntityManager().getCriteriaBuilder();
