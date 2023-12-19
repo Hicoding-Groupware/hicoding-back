@@ -22,6 +22,8 @@ public enum ExceptionCode {
 
     NOT_ENOUGH_CAPACITY(5003, "해당과정이 꽉찼습니다."),
 
+    INVALID_DATE_FOR_COURSE(5004, "날짜가 코스 유형과 일치하지 않습니다."),
+
     /*------------ 로그인 exceptionCode --------------*/
 
     FAIL_LOGIN(4000, "로그인에 실패하였습니다"),

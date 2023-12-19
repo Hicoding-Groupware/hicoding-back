@@ -40,24 +40,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Page<Student> findByStdNameContainingAndCreatedAtBetween(Pageable studentPageable, String stdName, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
 
-    //    @Query("SELECT s, a.atdStatus " +
-//            "FROM Student s " +
-//            "LEFT JOIN s.recordList r " +
-//            "LEFT JOIN r.course c " +
-//            "LEFT JOIN s.attendStdCode a " +
-//            "ON a.atdDate = :atdDate " +
-//            "WHERE c.cosCode = :cosCode " +
-//            "AND r.signupStatus = 'NORMAL'")
-//@Query("SELECT s, a.atdStatus " +
-//        "FROM Student s " +
-//        "LEFT JOIN s.attendStdCode a " +
-//        "ON a.atdDate = :atdDate " +
-//        "LEFT JOIN s.recordList r " +
-//        "LEFT JOIN r.course c " +
-//        "WHERE c.cosCode = :cosCode " +
-//        "AND r.signupStatus = 'NORMAL' " +
-//        "AND a.atdDate = :atdDate")
-//    List<Student> findStudentsBySignupStatus(@Param("cosCode") Long cosCode, @Param("atdDate") LocalDate atdDate);
+    /* 일별 출석부 */
     @Query("SELECT DISTINCT s, a.atdStatus " +
             "FROM Student s " +
             "JOIN s.recordList r " +
@@ -68,10 +51,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             "WHERE r.signupStatus = 'NORMAL' " +
             "AND c.cosCode = :cosCode")
     List<Student> findStudentsBySignupStatus(@Param("cosCode") Long cosCode, @Param("atdDate") LocalDate atdDate);
-
-    List<Student> findByStdCodeAndRecordListCourseCosCode(Long stdCode, Long cosCode);
-
-    List<Student> findStudentByAttendStdCodeAtdDateAndRecordListCourseCosCode(LocalDate atdDate, Long cosCode);
 
     boolean existsByStdCodeAndRecordListCourseCosCode(Long stdCode, Long cosCode);
 

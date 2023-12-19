@@ -3,6 +3,7 @@ package com.hook.hicodingapi.record.domain;
 import com.hook.hicodingapi.attendance.domain.Attendance;
 import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.record.domain.type.SignupStatusType;
+import com.hook.hicodingapi.student.domain.Student;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -35,10 +36,12 @@ public class Record {
     @Column
     private LocalDateTime withdrawDate;
 
+    @Column
+    private Long stdCode;
+
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "stdCode")
 //    private Student student;
-    private Long stdCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cosCode")
