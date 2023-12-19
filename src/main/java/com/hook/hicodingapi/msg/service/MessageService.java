@@ -12,8 +12,9 @@ import com.hook.hicodingapi.member.domain.repository.MemberRepository;
 import com.hook.hicodingapi.msg.domain.Message;
 import com.hook.hicodingapi.msg.dto.request.MessageCreateRequest;
 import com.hook.hicodingapi.msg.domain.repository.MessageRepository;
-import com.hook.hicodingapi.msg.dto.response.MessageDetailReceiveResponse;
-import com.hook.hicodingapi.msg.dto.response.MessageResponse;
+import com.hook.hicodingapi.msg.dto.request.MessageReceiveDelete;
+import com.hook.hicodingapi.msg.dto.request.MessageSendDelete;
+import com.hook.hicodingapi.msg.dto.response.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +36,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,6 +46,7 @@ import static com.hook.hicodingapi.common.exception.type.ExceptionCode.ACCESS_DE
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_FILE_NO;
 import static com.hook.hicodingapi.msg.domain.type.ReadStatusType.NOTREAD;
 import static com.hook.hicodingapi.msg.domain.type.ReceiverStatusType.RECEIVER_USABLE;
+import static com.hook.hicodingapi.msg.domain.type.SenderStatusType.SENDER_USABLE;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -177,16 +182,77 @@ public class MessageService {
     }
 
     @Transactional(readOnly = true)
-    public Page<MessageResponse> getMsgs(Integer page, CustomUser customUser) {
+    public Page<MessageReceiveResponse> getReceiveMsgs(Integer page, String memberName, String content, LocalDate startDate, LocalDate endDate, CustomUser customUser) {
 
-        Page<Message> msgs = messageRepository.findByReceiverMemberNoAndReceiverStatus(getPageable(page), customUser.getMemberNo(), RECEIVER_USABLE);
+        LocalDateTime startDateTime = null;
+        LocalDateTime endDateTime = null;
 
-        return msgs.map(message -> MessageResponse.from(message));
+        if (startDate != null) {
+            startDateTime = startDate.atStartOfDay();
+        }
+        if (endDate != null) {
+            endDateTime = endDate.atTime(LocalTime.MAX);
+        }
+
+        if (startDate == null && endDate == null && memberName == null && content == null) {
+            Page<Message> msgs = messageRepository.findByReceiverMemberNoAndReceiverStatus(getPageable(page), customUser.getMemberNo(), RECEIVER_USABLE);
+            return msgs.map(message -> MessageReceiveResponse.from(message));
+        }
+        // 최근 메세지, 보낸 시작날짜 조회
+        else if (endDate == null && memberName == null && content == null) {
+            Page<Message> msgs = messageRepository.findByReceiverMemberNoAndReceiverStatusAndSendedAtGreaterThanEqual(getPageable(page), customUser.getMemberNo(), RECEIVER_USABLE, startDateTime);
+            return msgs.map(message -> MessageReceiveResponse.from(message));
+            // 최근 메세지, 보낸 이전날짜 조회
+        } else if (startDate == null && memberName == null && content == null) {
+            Page<Message> msgs = messageRepository.findByReceiverMemberNoAndReceiverStatusAndSendedAtLessThanEqual(getPageable(page), customUser.getMemberNo(), RECEIVER_USABLE, endDateTime);
+            return msgs.map(message -> MessageReceiveResponse.from(message));
+            // 최근 메세지, 보낸 기간조회
+        } else if (memberName == null && content == null) {
+            Page<Message> msgs = messageRepository.findByReceiverMemberNoAndReceiverStatusAndSendedAtBetween(getPageable(page), customUser.getMemberNo(), RECEIVER_USABLE, startDateTime, endDateTime);
+            return msgs.map(message -> MessageReceiveResponse.from(message));
+            // 최근 메세지, 이름조회
+        } else if (content == null && startDate == null && endDate == null) {
+            Page<Message> msgs = messageRepository.findByReceiverMemberNoAndReceiverStatusAndSenderMemberNameContaining(getPageable(page), customUser.getMemberNo(), RECEIVER_USABLE, memberName);
+            return msgs.map(message -> MessageReceiveResponse.from(message));
+        }
+        // 최근 메세지, 이름조회, 보낸 시작날짜
+        else if (content == null && endDate == null) {
+            Page<Message> msgs = messageRepository.findByReceiverMemberNoAndReceiverStatusAndSenderMemberNameContainingAndSendedAtGreaterThanEqual(getPageable(page), customUser.getMemberNo(), RECEIVER_USABLE, memberName, startDateTime);
+            return msgs.map(message -> MessageReceiveResponse.from(message));
+            // 최근 메세지, 이름조회, 보낸 이전날짜
+        } else if (content == null && startDate == null) {
+            Page<Message> msgs = messageRepository.findByReceiverMemberNoAndReceiverStatusAndSenderMemberNameContainingAndSendedAtLessThanEqual(getPageable(page), customUser.getMemberNo(), RECEIVER_USABLE, memberName, endDateTime);
+            return msgs.map(message -> MessageReceiveResponse.from(message));
+            // 최근 메세지, 이름조회, 보낸 기간조회
+        } else if (content == null) {
+            Page<Message> msgs = messageRepository.findByReceiverMemberNoAndReceiverStatusAndSenderMemberNameContainingAndSendedAtBetween(getPageable(page), customUser.getMemberNo(), RECEIVER_USABLE, memberName, startDateTime, endDateTime);
+            return msgs.map(message -> MessageReceiveResponse.from(message));
+            // 최근 메세지, 내용조회
+        } else if (memberName == null && startDate == null && endDate == null) {
+            Page<Message> msgs = messageRepository.findByReceiverMemberNoAndReceiverStatusAndMsgContentContaining(getPageable(page), customUser.getMemberNo(), RECEIVER_USABLE, content);
+            return msgs.map(message -> MessageReceiveResponse.from(message));
+            // 최근 메세지, 내용조회, 보낸 시작날짜
+        } else if (memberName == null && endDate == null) {
+            Page<Message> msgs = messageRepository.findByReceiverMemberNoAndReceiverStatusAndMsgContentContainingAndSendedAtGreaterThanEqual(getPageable(page), customUser.getMemberNo(), RECEIVER_USABLE, content, startDateTime);
+            return msgs.map(message -> MessageReceiveResponse.from(message));
+            // 최근 메세지, 내용조회, 보낸 이전날짜
+        } else if (memberName == null && startDate == null) {
+            Page<Message> msgs = messageRepository.findByReceiverMemberNoAndReceiverStatusAndMsgContentContainingAndSendedAtLessThanEqual(getPageable(page), customUser.getMemberNo(), RECEIVER_USABLE, content, endDateTime);
+            return msgs.map(message -> MessageReceiveResponse.from(message));
+            // 최근 메세지, 내용조회, 보낸 기간조회
+        } else if (memberName == null) {
+            Page<Message> msgs = messageRepository.findByReceiverMemberNoAndReceiverStatusAndMsgContentContainingAndSendedAtBetween(getPageable(page), customUser.getMemberNo(), RECEIVER_USABLE, content, startDateTime, endDateTime);
+            return msgs.map(message -> MessageReceiveResponse.from(message));
+        } else {
+            Page<Message> msgs = messageRepository.findByReceiverMemberNoAndReceiverStatus(getPageable(page), customUser.getMemberNo(), RECEIVER_USABLE);
+            return msgs.map(message -> MessageReceiveResponse.from(message));
+        }
+
     }
 
 
 
-    public MessageDetailReceiveResponse getDetailMsgs(Long msgNo, CustomUser customUser) {
+    public MessageDetailReceiveResponse getReceiveDetailMsgs(Long msgNo, CustomUser customUser) {
 
         // 먼저 쪽지 조회(로그인한 사람 받은쪽지 전체 조회)
         Message messages = messageRepository.findByReceiverMemberNoAndMsgNo(customUser.getMemberNo(), msgNo);
@@ -198,11 +264,111 @@ public class MessageService {
             messages.update();
             log.info("readAt : {}", messages.getReadAt());
             log.info("readStatus : {}", messages.getReadStatus());
-            messageRepository.save(messages);
+            //messageRepository.save(messages);
         }
 
         final Message message = messageRepository.findByReceiverMemberNoAndMsgNo(customUser.getMemberNo(), msgNo);
 
         return MessageDetailReceiveResponse.from(message);
+    }
+
+    public Page<MessageSendResponse> getSendMsgs(Integer page, String memberName, String content, LocalDate startDate, LocalDate endDate, CustomUser customUser) {
+        LocalDateTime startedDateTime = null;
+        LocalDateTime endedDateTime = null;
+
+        if (startDate != null) {
+            startedDateTime = startDate.atStartOfDay();
+        }
+        if (endDate != null) {
+            endedDateTime = endDate.atTime(LocalTime.MAX);
+        }
+
+        if (startDate == null && endDate == null && memberName == null && content == null) {
+            Page<Message> msgs = messageRepository.findBySenderMemberNoAndSenderStatus(getPageable(page), customUser.getMemberNo(), SENDER_USABLE);
+            return msgs.map(message -> MessageSendResponse.from(message));
+        }
+        // 최근 메세지, 보낸 시작날짜 조회
+        else if (endDate == null && memberName == null && content == null) {
+            Page<Message> msgs = messageRepository.findBySenderMemberNoAndSenderStatusAndReadAtGreaterThanEqual(getPageable(page), customUser.getMemberNo(), SENDER_USABLE, startedDateTime);
+            return msgs.map(message -> MessageSendResponse.from(message));
+            // 최근 메세지, 보낸 이전날짜 조회
+        } else if (startDate == null && memberName == null && content == null) {
+            Page<Message> msgs = messageRepository.findBySenderMemberNoAndSenderStatusAndReadAtLessThanEqual(getPageable(page), customUser.getMemberNo(), SENDER_USABLE, endedDateTime);
+            return msgs.map(message -> MessageSendResponse.from(message));
+            // 최근 메세지, 보낸 기간조회
+        } else if (memberName == null && content == null) {
+            Page<Message> msgs = messageRepository.findBySenderMemberNoAndSenderStatusAndReadAtBetween(getPageable(page), customUser.getMemberNo(), SENDER_USABLE, startedDateTime, endedDateTime);
+            return msgs.map(message -> MessageSendResponse.from(message));
+            // 최근 메세지, 이름조회
+        } else if (content == null && startDate == null && endDate == null) {
+            Page<Message> msgs = messageRepository.findBySenderMemberNoAndSenderStatusAndReceiverMemberNameContaining(getPageable(page), customUser.getMemberNo(), SENDER_USABLE, memberName);
+            return msgs.map(message -> MessageSendResponse.from(message));
+        }
+        // 최근 메세지, 이름조회, 보낸 시작날짜
+        else if (content == null && endDate == null) {
+            Page<Message> msgs = messageRepository.findBySenderMemberNoAndSenderStatusAndReceiverMemberNameContainingAndReadAtGreaterThanEqual(getPageable(page), customUser.getMemberNo(), SENDER_USABLE, memberName, startedDateTime);
+            return msgs.map(message -> MessageSendResponse.from(message));
+            // 최근 메세지, 이름조회, 보낸 이전날짜
+        } else if (content == null && startDate == null) {
+            Page<Message> msgs = messageRepository.findBySenderMemberNoAndSenderStatusAndReceiverMemberNameContainingAndReadAtLessThanEqual(getPageable(page), customUser.getMemberNo(), SENDER_USABLE, memberName, endedDateTime);
+            return msgs.map(message -> MessageSendResponse.from(message));
+            // 최근 메세지, 이름조회, 보낸 기간조회
+        } else if (content == null) {
+            Page<Message> msgs = messageRepository.findBySenderMemberNoAndSenderStatusAndReceiverMemberNameContainingAndReadAtBetween(getPageable(page), customUser.getMemberNo(), SENDER_USABLE, memberName, startedDateTime, endedDateTime);
+            return msgs.map(message -> MessageSendResponse.from(message));
+            // 최근 메세지, 내용조회
+        } else if (memberName == null && startDate == null && endDate == null) {
+            Page<Message> msgs = messageRepository.findBySenderMemberNoAndSenderStatusAndMsgContentContaining(getPageable(page), customUser.getMemberNo(), SENDER_USABLE, content);
+            return msgs.map(message -> MessageSendResponse.from(message));
+            // 최근 메세지, 내용조회, 보낸 시작날짜
+        } else if (memberName == null && endDate == null) {
+            Page<Message> msgs = messageRepository.findBySenderMemberNoAndSenderStatusAndMsgContentContainingAndReadAtGreaterThanEqual(getPageable(page), customUser.getMemberNo(), SENDER_USABLE, content, startedDateTime);
+            return msgs.map(message -> MessageSendResponse.from(message));
+            // 최근 메세지, 내용조회, 보낸 이전날짜
+        } else if (memberName == null && startDate == null) {
+            Page<Message> msgs = messageRepository.findBySenderMemberNoAndSenderStatusAndMsgContentContainingAndReadAtLessThanEqual(getPageable(page), customUser.getMemberNo(), SENDER_USABLE, content, endedDateTime);
+            return msgs.map(message -> MessageSendResponse.from(message));
+            // 최근 메세지, 내용조회, 보낸 기간조회
+        } else if (memberName == null) {
+            Page<Message> msgs = messageRepository.findBySenderMemberNoAndSenderStatusAndMsgContentContainingAndReadAtBetween(getPageable(page), customUser.getMemberNo(), SENDER_USABLE, content, startedDateTime, endedDateTime);
+            return msgs.map(message -> MessageSendResponse.from(message));
+        } else {
+            Page<Message> msgs = messageRepository.findBySenderMemberNoAndSenderStatus(getPageable(page), customUser.getMemberNo(), SENDER_USABLE);
+            return msgs.map(message -> MessageSendResponse.from(message));
+        }
+    }
+
+    public MessageDetailSendResponse getSendDetailMsgs(Long msgNo, CustomUser customUser) {
+
+        final Message message = messageRepository.findBySenderMemberNoAndMsgNo(customUser.getMemberNo(), msgNo);
+        return MessageDetailSendResponse.from(message);
+    }
+
+    public void receiverDelete(MessageReceiveDelete messageReceiveDelete, CustomUser customUser) {
+        List<Long> msgNos = messageReceiveDelete.getMsgNos();
+
+        for (Long msgNo : msgNos) {
+            Message message = messageRepository.findByReceiverMemberNoAndMsgNoAndReceiverStatus(customUser.getMemberNo(), msgNo, RECEIVER_USABLE);
+                message.receiverDelete();
+        }
+    }
+
+    public void senderDelete(MessageSendDelete messageSendDelete, CustomUser customUser) {
+        List<Long> msgNos = messageSendDelete.getMsgNos();
+
+        for (Long msgNo : msgNos) {
+            Message message = messageRepository.findBySenderMemberNoAndMsgNoAndSenderStatus(customUser.getMemberNo(), msgNo, SENDER_USABLE);
+
+            message.senderDelete();
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<MemberListResponse> getMemberList(String memberName) {
+
+        List<Member> members = memberRepository.findByMemberNameContaining(memberName);
+        return members.stream()
+                .map(member -> MemberListResponse.from(member))
+                .collect(Collectors.toList());
     }
 }

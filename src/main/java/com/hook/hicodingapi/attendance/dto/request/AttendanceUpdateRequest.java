@@ -1,8 +1,6 @@
 package com.hook.hicodingapi.attendance.dto.request;
 
 import com.hook.hicodingapi.attendance.domain.type.AttendanceStatusType;
-import com.hook.hicodingapi.course.domain.Course;
-import com.hook.hicodingapi.student.domain.Student;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import javax.validation.constraints.Min;

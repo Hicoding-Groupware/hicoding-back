@@ -23,13 +23,15 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     long count();
 
     Optional<Member> findByMemberNo(Long memberNo);
-
+    List<Member> findByMemberNameContaining(String memberName);
     /* 민서 존 */
 
     /* 아이디로 찾기 */
     Optional<Member> findByMemberId(String memberId);
 
     Optional<Member> findByRefreshToken(String refreshToken);
+
+
 
 
 }

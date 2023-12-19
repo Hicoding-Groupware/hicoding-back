@@ -3,16 +3,18 @@ package com.hook.hicodingapi.attendance.presentation;
 import com.hook.hicodingapi.attendance.dto.request.AttendanceRegistRequest;
 import com.hook.hicodingapi.attendance.dto.request.AttendanceUpdateRequest;
 import com.hook.hicodingapi.attendance.dto.response.DailyAttendanceResponse;
+import com.hook.hicodingapi.attendance.dto.response.MonthAttendanceResponse;
 import com.hook.hicodingapi.attendance.service.AttendanceService;
 import com.hook.hicodingapi.student.service.StudentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
-
+@Slf4j
 @RestController
 @RequestMapping("/hc-app/v1/attendance")
 @RequiredArgsConstructor
@@ -56,5 +58,27 @@ public class AttendanceController {
 
         return ResponseEntity.ok().build();
 
+    }
+
+    /* 7. 월별 출석부 조회 */
+    @GetMapping("/month/{cosCode}")
+    public ResponseEntity<List<MonthAttendanceResponse>> getMonthAttendances(
+            @PathVariable final Long cosCode,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate atdDate
+    ) {
+        LocalDate currentDate = LocalDate.now();
+
+        if (atdDate == null) {
+            atdDate = currentDate;
+        }
+
+        LocalDate firstDayOfMonth = atdDate.withDayOfMonth(1);
+        LocalDate lastDayOfMonth = atdDate.withDayOfMonth(atdDate.lengthOfMonth());
+
+        log.info("Fetching attendance data for course: {}, month: {}", cosCode, atdDate.getMonth());
+
+        List<MonthAttendanceResponse> monthAttendanceResponses = attendanceService.getAttendanceForMonth(cosCode, firstDayOfMonth, lastDayOfMonth, atdDate);
+
+        return ResponseEntity.ok(monthAttendanceResponses);
     }
 }

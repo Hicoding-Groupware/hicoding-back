@@ -26,8 +26,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.hook.hicodingapi.common.exception.type.ExceptionCode.NOT_FOUND_COS_CODE;
+import static com.hook.hicodingapi.course.domain.type.CourseStatusType.AVAILABLE;
 
 @Service
 @Transactional
@@ -45,6 +47,16 @@ public class CourseService {
     private Pageable getPageable(final Integer page){
 
         return PageRequest.of(page-1,  5, Sort.by("cosCode").descending());
+    }
+
+
+    //모든 과정 조회
+    @Transactional(readOnly = true)
+    public List<TeacherCoursesResponse> getCourses() {
+        List<Course> courses = courseRepository.findByStatusNot(CourseStatusType.DELETED);
+        return courses.stream()
+                .map(course -> TeacherCoursesResponse.from(course))
+                .collect(Collectors.toList());
     }
 
     //과정 조회(진행중)
@@ -69,7 +81,7 @@ public class CourseService {
     @Transactional(readOnly = true)
     public CourseDetailResponse getCourseDetail(Long cosCode) {
 
-        Course course = courseRepository.findByCosCodeAndStatus(cosCode, CourseStatusType.AVAILABLE)
+        Course course = courseRepository.findByCosCodeAndStatus(cosCode, AVAILABLE)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_COS_CODE));
 
         return CourseDetailResponse.from(course);

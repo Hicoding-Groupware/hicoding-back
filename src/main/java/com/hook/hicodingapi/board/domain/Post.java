@@ -1,12 +1,12 @@
 package com.hook.hicodingapi.board.domain;
 
+import com.hook.hicodingapi.board.domain.type.BoardRole;
 import com.hook.hicodingapi.board.domain.type.BoardType;
 import com.hook.hicodingapi.board.dto.request.PostCreationRequest;
 import com.hook.hicodingapi.board.dto.request.PostEditRequest;
 import com.hook.hicodingapi.comment.domain.Comment;
 import com.hook.hicodingapi.common.domain.BaseEntity;
 import com.hook.hicodingapi.member.domain.Member;
-import com.hook.hicodingapi.member.domain.type.MemberRole;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -41,7 +41,7 @@ public class Post extends BaseEntity {
     @NotNull
     @Enumerated(value = STRING)
     @Column(name = "MEMBER_ROLE")
-    private MemberRole role;
+    private BoardRole role;
 
     @NotNull
     @Enumerated(value = STRING)
@@ -75,7 +75,7 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "postCode", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList;
 
-    private Post(String title, String content, MemberRole role, BoardType boardType, boolean isPublic, boolean isNoticePost) {
+    private Post(String title, String content, BoardRole role, BoardType boardType, boolean isPublic, boolean isNoticePost) {
         this.postTitle = title;
         this.postContent = content;
         this.role = role;
@@ -85,7 +85,7 @@ public class Post extends BaseEntity {
     }
 
     public static Optional<Post> of(final BoardType boardType,
-                                    final MemberRole role,
+                                    final BoardRole role,
                                     final PostCreationRequest postCreationRequest) {
         return Optional.of(
                 new Post(
