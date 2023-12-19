@@ -44,6 +44,7 @@ public class CommentService {
         return findCommentList;
     }
 
+    @Transactional(readOnly = true)
     // 댓글 조회
     public Comment findComment(final Long commentNo) {
         final Comment readComment = commentRepository.findCommentByCmtNoAndStatus(commentNo, StatusType.USABLE)
@@ -72,7 +73,8 @@ public class CommentService {
         );
 
         final Comment parentComment = commentRepository.findCommentByCmtNoAndStatus(
-                commentCreationRequest.getParentNo(), StatusType.USABLE
+                commentCreationRequest.getParentNo(),
+                StatusType.USABLE
                 ).orElse(null);
         
         // 부모 댓글이 존재

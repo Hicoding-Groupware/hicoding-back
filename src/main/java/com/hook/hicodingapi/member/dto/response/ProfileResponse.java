@@ -16,6 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Getter
 @RequiredArgsConstructor(access = PRIVATE)
 public class ProfileResponse {
+    private final Long memberNo;
     private final String memberId;
     private final String memberPwd;
     private final String postNo;
@@ -33,20 +34,20 @@ public class ProfileResponse {
 
     public static ProfileResponse from(final Member member, PasswordEncoder passwordEncoder) {
         return new ProfileResponse(
-        member.getMemberId(),
-        passwordEncoder.encode(member.getMemberPwd()),
-        member.getPostNo(),
-        member.getAddress(),
-        member.getDetailAddress(),
-        member.getMemberName(),
-        member.getMemberPhone(),
-        member.getMemberEmail(),
-        member.getMemberBirth(),
-        member.getMemberProfile(),
-        member.getMemberGender(),
-        member.getMemberRole(),
-        member.getJoinedAt()
-
+                member.getMemberNo(),
+                member.getMemberId(),
+                passwordEncoder.encode(member.getMemberPwd()),
+                member.getPostNo(),
+                member.getAddress(),
+                member.getDetailAddress(),
+                member.getMemberName(),
+                member.getMemberPhone(),
+                member.getMemberEmail(),
+                member.getMemberBirth(),
+                member.getMemberProfile(),
+                member.getMemberGender(),
+                member.getMemberRole(),
+                member.getJoinedAt()
         );
 
     }
