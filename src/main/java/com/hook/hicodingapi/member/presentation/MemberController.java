@@ -1,5 +1,6 @@
 package com.hook.hicodingapi.member.presentation;
 
+import com.hook.hicodingapi.login.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.member.domain.MemberDataSender;
 import com.hook.hicodingapi.member.domain.type.MemberRole;
@@ -134,6 +135,7 @@ public class MemberController {
         return ResponseEntity.ok(preLoginResponse);
     }
 
+
     @PostMapping("/img")
     public ResponseEntity<Void> save(@RequestPart final MemberProfileUpdate memberProfileUpdate,
                                      @RequestPart final MultipartFile memberProfile){
@@ -153,6 +155,19 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
 
     }
+
+
+
+    @PostMapping("/memberPassword")
+    public ResponseEntity<Boolean> update(@AuthenticationPrincipal User user,
+                                       @RequestBody Member memberPwd){
+
+        Boolean password = memberService.memberPassWordUpdate(user.getUsername(), memberPwd);
+
+        return ResponseEntity.ok(password);
+
+    }
+
 
 
     /*사진만 업데이트*/
@@ -179,7 +194,6 @@ public class MemberController {
     }
 
     /* 마이페이지 조회 및 수정 */
-
     @GetMapping("/profile")
     public ResponseEntity<ProfileResponse> profile(@AuthenticationPrincipal User user){
         ProfileResponse profileResponse = memberService.getProfile(user.getUsername());

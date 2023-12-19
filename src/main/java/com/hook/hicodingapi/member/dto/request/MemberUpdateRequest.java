@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class MemberUpdateRequest {
 
-
     private String memberId;
 
     private String memberPwd;

@@ -1,6 +1,7 @@
 package com.hook.hicodingapi.member.service;
 import com.hook.hicodingapi.common.util.FileUploadUtils;
 import com.hook.hicodingapi.informationProvider.domain.type.GenderType;
+import com.hook.hicodingapi.login.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.hook.hicodingapi.member.dto.request.*;
 import com.hook.hicodingapi.member.dto.response.PreLoginResponse;
 import com.hook.hicodingapi.common.exception.NotFoundException;
@@ -414,18 +415,6 @@ public class MemberService {
     }
 
 
-  // public void save(MultipartFile memberProfile, MemberProfileUpdate memberProfileUpdate) {
-  //     /* 전달 된 파일을 서버의 지정 경로에 저장 */
-  //     String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, getRandomName(), memberProfile);
-
-  //     Optional<Member> optionalMember = memberRepository.findByMemberId(memberProfileUpdate.getMemberId());
-
-  //    final Member newMember = Member.of(
-  //            IMAGE_URL + replaceFileName
-  //    )
-
-
-  // }
   public void save(MultipartFile memberProfile, MemberProfileUpdate memberProfileUpdate) {
       String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, getRandomName(), memberProfile);
 
@@ -501,21 +490,26 @@ public class MemberService {
 
     }
 
+    public Boolean memberPassWordUpdate(String memberId, Member memberPwd) {
 
-    //       public void delete(String memberId) {
- //       Optional<Member> optionalMember = memberRepository.findByMemberId(memberId);
-//
- //       if (optionalMember.isPresent()){
- //           Member deleteProfile = optionalMember.get();
- //           if (deleteProfile.getMemberProfile() != null){
- //               FileUploadUtils.deleteFile(IMAGE_DIR, deleteProfile.getMemberProfile());
- //           }
-//
- //       }else {
- //           throw new NotFoundException(NOT_FOUND_MEMBER_ID);
-//
- //       }
- //   }
+        final Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow( () -> new NotFoundException(NOT_FOUND_MEMBER_ID));
+
+        String encodePassword = member.getMemberPwd();
+
+        if (!passwordEncoder.matches(memberPwd.getMemberPwd(),encodePassword )){
+            System.out.println("비밀번호가 일치하지 않습니다.");
+            return false;
+        }else {
+            System.out.println("비밀번호가 일치합니다");
+            return true;
+
+        }
+
+
+    }
+
+
 
 
     //동한
