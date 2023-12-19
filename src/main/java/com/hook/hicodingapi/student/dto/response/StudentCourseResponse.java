@@ -1,7 +1,6 @@
 package com.hook.hicodingapi.student.dto.response;
 
 import com.hook.hicodingapi.course.domain.Course;
-import com.hook.hicodingapi.record.domain.type.SignupStatusType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +33,4 @@ public class StudentCourseResponse {
         );
 
     }
-
-
 }

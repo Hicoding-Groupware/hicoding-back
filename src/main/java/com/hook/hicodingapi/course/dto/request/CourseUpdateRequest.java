@@ -38,8 +38,7 @@ public class CourseUpdateRequest {
     private final DayStatusType dayStatus;
     @NotNull
     private final TimeStatusType timeStatus;
-    @NotNull
-    private final CourseStatusType status;
+    private final String cosNotice;
 
 }
 

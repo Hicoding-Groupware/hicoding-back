@@ -22,6 +22,7 @@ public class DetailCourseLectureResponse {
     private final DayStatusType dayStatus;
     private final TimeStatusType timeStatus;
     private final int curCnt;
+    private final int capacity;
     private final String roomName;
     private final String lecName;
     private final String textbook;
@@ -40,6 +41,7 @@ public class DetailCourseLectureResponse {
                         course.getDayStatus(),
                         course.getTimeStatus(),
                         course.getCurCnt(),
+                        course.getCapacity(),
                         course.getClassroom().getRoomName(),
                         course.getLecCode().getLecName(),
                         course.getLecCode().getTextbook(),

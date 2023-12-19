@@ -1,17 +1,15 @@
 package com.hook.hicodingapi.student.service;
 
-import com.hook.hicodingapi.attendance.domain.repository.AttendanceRepository;
 import com.hook.hicodingapi.attendance.dto.response.DailyAttendanceResponse;
-import com.hook.hicodingapi.common.exception.ConflictException;
+import com.hook.hicodingapi.common.exception.InvalidDateException;
 import com.hook.hicodingapi.common.exception.NotFoundException;
 import com.hook.hicodingapi.course.domain.Course;
 import com.hook.hicodingapi.course.domain.repository.CourseRepository;
-import com.hook.hicodingapi.record.domain.Record;
+import com.hook.hicodingapi.course.domain.type.DayStatusType;
 import com.hook.hicodingapi.student.domain.Student;
 import com.hook.hicodingapi.student.domain.repository.StudentRepository;
 import com.hook.hicodingapi.student.dto.request.StudentRegistRequest;
 import com.hook.hicodingapi.student.dto.request.StudentUpdateRequest;
-import com.hook.hicodingapi.student.dto.response.StudentCourse;
 import com.hook.hicodingapi.student.dto.response.StudentCourseResponse;
 import com.hook.hicodingapi.student.dto.response.StudentDetailResponse;
 import com.hook.hicodingapi.student.dto.response.StudentsRecordResponse;
@@ -26,6 +24,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -119,15 +118,32 @@ public class StudentService {
     }
 
 
+    /* 4. 일별 출석 조회 */
     @Transactional
-    public List<DailyAttendanceResponse> getAttendanceForDay(Long cosCode) {
+    public List<DailyAttendanceResponse> getAttendanceForDay(Long cosCode, LocalDate atdDate, Long atdCode) {
+        Course course = courseRepository.findById(cosCode)
+                .orElseThrow(() -> new NotFoundException(NOT_FOUND_COS_CODE));
 
-        List<Student> students = studentRepository.findStudentsByAndSignupStatus();
+        if(!isDateValidForDayStatus(atdDate, course.getDayStatus())) {
+            throw new InvalidDateException(INVALID_DATE_FOR_COURSE);
+        }
+
+        List<Student> students = studentRepository.findStudentsBySignupStatus(cosCode, atdDate);
 
         return students.stream()
-                .map(DailyAttendanceResponse::from)
+                .map(student -> DailyAttendanceResponse.from(student, atdDate))
                 .collect(Collectors.toList());
     }
+
+    private boolean isDateValidForDayStatus(LocalDate date, DayStatusType dayStatus) {
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        if(dayStatus == DayStatusType.WEEKDAY) {
+            return !(dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY);
+        } else {
+            return (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY);
+        }
+    }
+
 
     @Transactional(readOnly = true)
     public Page<StudentsRecordResponse> getMultiSearch(Integer page, String sort, String stdName, LocalDate startDate, LocalDate endDate) {

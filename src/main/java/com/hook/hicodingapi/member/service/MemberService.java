@@ -489,7 +489,6 @@ public class MemberService {
         return ProfileResponse.from(member, passwordEncoder);
     }
 
-
     public void deleteProfile(String memberId) {
         final Member member = memberRepository.findByMemberId(memberId)
                 .orElseThrow( () -> new NotFoundException(NOT_FOUND_MEMBER_ID));
@@ -519,4 +518,8 @@ public class MemberService {
  //   }
 
 
+    //동한
+    public List<Member> getMemberList() {
+        return memberRepository.findAll();
+    }
 }

@@ -27,15 +27,26 @@ public class CourseController {
 
     private final CourseService courseService;
 
-    @GetMapping("courses")//과정 조회(강사)
-    public ResponseEntity<PagingResponse> getTeacherCourses(@RequestParam(defaultValue = "1") Integer page) {
+    @GetMapping("courses-proceeding")//과정 조회(진행중)
+    public ResponseEntity<PagingResponse> getProceedingCourses(@RequestParam(defaultValue = "1") Integer page) {
 
-        final Page<TeacherCoursesResponse> courses = courseService.getTeacherCourses(page);
+        final Page<TeacherCoursesResponse> courses = courseService.getProceedingCourses(page);
         final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(courses);
         final PagingResponse pagingResponse = PagingResponse.of(courses.getContent(), pagingButtonInfo);
 
         return ResponseEntity.ok(pagingResponse);
     }
+
+    @GetMapping("courses-expected")//과정 조회(예정)
+    public ResponseEntity<PagingResponse> getExpectedCourses(@RequestParam(defaultValue = "1") Integer page) {
+
+        final Page<TeacherCoursesResponse> courses = courseService.getExpectedCourses(page);
+        final PagingButtonInfo pagingButtonInfo = Pagenation.getPagingButtonInfo(courses);
+        final PagingResponse pagingResponse = PagingResponse.of(courses.getContent(), pagingButtonInfo);
+
+        return ResponseEntity.ok(pagingResponse);
+    }
+
 
     @GetMapping("/courses/{cosCode}")//과정 상세 조회
     public ResponseEntity<CourseDetailResponse> getCourseDetail(@PathVariable final Long cosCode) {
@@ -60,7 +71,7 @@ public class CourseController {
 
         courseService.update(cosCode, courseRequest);
 
-        return ResponseEntity.created(URI.create("/course-management/" + cosCode)).build();
+        return ResponseEntity.created(URI.create("/courses/" + cosCode)).build();
     }
 
     @DeleteMapping("/courses/{cosCode}")//과정 삭제

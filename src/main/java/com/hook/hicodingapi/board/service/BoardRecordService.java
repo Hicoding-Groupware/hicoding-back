@@ -5,9 +5,7 @@ import com.hook.hicodingapi.board.domain.repository.BoardRecordRepository;
 import com.hook.hicodingapi.board.domain.type.BoardRecordType;
 import com.hook.hicodingapi.common.exception.CustomException;
 import com.hook.hicodingapi.member.domain.Member;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +22,7 @@ public class BoardRecordService {
 
     private final BoardRecordRepository boardRecordRepository;
 
-    private static final int RECORD_LIMIT = 60;
+    private static final int RECORD_LIMIT = 1;
 
     // 회원을 BoardRecord에 기록 및 조회수나 좋아요 누적시키는 로직
     public boolean isPossibleRecord(final BoardRecordType boardRecordType,
@@ -47,7 +45,6 @@ public class BoardRecordService {
 
             isPossibleRecord = true;
         } else {
-
             // 있다면 현재 시간과 이전 읽은 시점의 시간의 차가 지정한 시간을 확인한다.
             final LocalDateTime preReadTime = recorderBoardRecord.getModifiedAt();
             final LocalDateTime currReadTime = LocalDateTime.now();

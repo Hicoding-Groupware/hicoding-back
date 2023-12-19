@@ -32,6 +32,7 @@ public class LectureController {
         return ResponseEntity.ok(pagingResponse);
     }
 
+
     @PostMapping("/lectures") //신규 강의 생성(행정)
     public ResponseEntity<Void> save(@RequestBody @Valid final LectureCreateRequest lectureRequest){
 
