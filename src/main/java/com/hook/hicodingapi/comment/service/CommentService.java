@@ -80,7 +80,7 @@ public class CommentService {
         // 부모 댓글이 존재
         if (parentComment != null) {
             // 부모 게시글이 생성 대댓글 게시글과 일치하지 않는다면 문제 
-            if (parentComment.getPostCode().getPostNo() != commentCreationRequest.getPostNo())
+            if (!parentComment.getPostCode().getPostNo().equals(commentCreationRequest.getPostNo()))
                 throw new CustomException(CONFLICT_PARENT_AND_CHILD_COMMENT_CODE);
 
             // 부모 댓글로 지정
@@ -112,7 +112,7 @@ public class CommentService {
 
         // 서브 자식이 있다면, 제목 앞에 [원 댓글이 삭제된 댓글]을 붙이게 한다.
         for (Comment childComment : deletionComment.getChildrenList()) {
-            childComment.setCmtContent("[원글이 삭제된 답글] " + childComment.getCmtContent());
+            childComment.setCmtContent("[원댓글이 삭제된 대댓글] " + childComment.getCmtContent());
         }
     }
 
@@ -127,13 +127,16 @@ public class CommentService {
             CommentReadResponse currCommentReadResponse = CommentReadResponse.from(comment);
             commentReadResponseHashMap.put(currCommentReadResponse.getNo(), currCommentReadResponse);
 
-            if (comment.getParent() != null) {
+            final Comment currCmtParent = comment.getParent();
+            if (currCmtParent != null) {
                 CommentReadResponse parent = commentReadResponseHashMap.get(comment.getParent().getCmtNo());
 
                 // 게시글 답글들이 있다면
                 if (parent.getChildrenList() == null)
                     parent.setChildrenList(new ArrayList<>());
 
+                // 부모의 자식 현재 위치를 표시
+                currCommentReadResponse.setDepthLevel(parent.getDepthLevel() + 1);
                 parent.getChildrenList().add(currCommentReadResponse);
             } else {
                 commentReadResponseList.add(currCommentReadResponse);

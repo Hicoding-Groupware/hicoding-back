@@ -30,7 +30,14 @@ public class CommentController {
                                                          @PathVariable(required = true) final int requestPage) {
         final List<Comment> findCommentList = commentService.findAllCommentsOfPost(postNo);
         final List<CommentReadResponse> commentReadResponseList = commentService.convertHierarchicalCommentList(findCommentList);
-        final PagingResponse pagingResponse = CustomPagination.getPagingResponse(commentReadResponseList, commentReadResponseList.size(), requestPage, null, null);
+        final PagingResponse pagingResponse =
+                CustomPagination.getPagingResponse(
+                        "Comment",
+                        commentReadResponseList,
+                        findCommentList.size(),
+                        requestPage,
+                        null,
+                        null);
 
         return ResponseEntity.ok(pagingResponse);
     }

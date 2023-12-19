@@ -38,7 +38,7 @@ public class CommentCriteriaRepository {
 
         // 조건에 따른 필터링 로직은 predicates에 담는다.
         predicates.add(criteriaBuilder.equal(root.get("postCode").get("postNo"), postNo));
-        predicates.add(criteriaBuilder.equal(root.get("status"), USABLE));
+//        predicates.add(criteriaBuilder.equal(root.get("status"), USABLE));
 
         // 정렬 조건은 criteriaQuery에 직접적으로 설정한다.
         criteriaQuery.orderBy(criteriaBuilder.asc(root.get("createdAt")));

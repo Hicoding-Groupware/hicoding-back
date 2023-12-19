@@ -6,6 +6,7 @@ import com.hook.hicodingapi.board.domain.repository.BoardCriteriaRepository;
 import com.hook.hicodingapi.board.domain.repository.BoardRepository;
 import com.hook.hicodingapi.board.domain.type.BoardCriteriaConditionType;
 import com.hook.hicodingapi.board.domain.type.BoardRecordType;
+import com.hook.hicodingapi.board.domain.type.BoardRole;
 import com.hook.hicodingapi.board.domain.type.BoardType;
 import com.hook.hicodingapi.board.dto.request.PostCreationRequest;
 import com.hook.hicodingapi.board.dto.request.PostEditRequest;
@@ -15,7 +16,6 @@ import com.hook.hicodingapi.common.domain.type.StatusType;
 import com.hook.hicodingapi.common.exception.CustomException;
 import com.hook.hicodingapi.member.domain.Member;
 import com.hook.hicodingapi.member.domain.repository.MemberRepository;
-import com.hook.hicodingapi.member.domain.type.MemberRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,13 +51,16 @@ public class BoardService {
 
             postReadResponseHashMap.put(currPostReadResponse.getNo(), currPostReadResponse);
 
-            if (currPost.getParent() != null) {
+            final Post currPostParent = currPost.getParent();
+            if (currPostParent != null) {
                 PostReadResponse parent = postReadResponseHashMap.get(currPost.getParent().getPostNo());
 
                 // 게시글 답글들이 있다면
                 if (parent.getChildrenList() == null)
                     parent.setChildrenList(new ArrayList<>());
 
+                // 자식 깊이 설정
+                currPostReadResponse.setDepthLevel(parent.getDepthLevel() + 1);
                 parent.getChildrenList().add(currPostReadResponse);
             } else {
                 postReadResponseList.add(currPostReadResponse);
@@ -125,7 +128,7 @@ public class BoardService {
     }
 
     // 게시글 가져오기
-    private Post findPost(final BoardType boardType, final MemberRole role, final Long postNo) {
+    private Post findPost(final BoardType boardType, final BoardRole role, final Long postNo) {
         final Post findPost = boardRepository.findByPostNoAndBoardTypeAndRoleAndStatus(postNo, boardType, role, StatusType.USABLE)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_POST_CODE));
 
@@ -134,7 +137,7 @@ public class BoardService {
 
     // 게시판의 게시글 전체 가져오기
     @Transactional(readOnly = true)
-    public List<Post> findBoardAllPosts(BoardType boardType, MemberRole role) {
+    public List<Post> findBoardAllPosts(final BoardType boardType, final BoardRole role) {
 
         final List<Post> findPostList = boardCriteriaRepository.getPostListByCondition(
                 BoardCriteriaConditionType.ALL_POST,
@@ -147,8 +150,16 @@ public class BoardService {
     }
 
     // 게시글 조회
-    public Post getPost(final BoardType boardType, final MemberRole role, final BoardRecordType boardRecordType, final Long memberNo, final Long postNo) {
-        final Post findPost = findPost(boardType, role, postNo);
+    public Post getPost(final BoardType boardType, final BoardRole role, final BoardRecordType boardRecordType, final Long memberNo, final Long postNo) {
+        Post findPost = null;
+        if(BoardRole.ALL != role) {
+            findPost = findPost(boardType, role, postNo);
+        }
+        else {
+            findPost = boardRepository.findByPostNoAndBoardTypeAndStatus(postNo, boardType, StatusType.USABLE)
+                    .orElseThrow(() -> new CustomException(NOT_FOUND_POST_CODE));
+        }
+
         final Member findMember = memberRepository.findByMemberNo(memberNo)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_READ_MEMBER_CODE));
 
@@ -171,7 +182,7 @@ public class BoardService {
     }
 
     // 게시글 등록
-    public Post createPost(final BoardType boardType, final MemberRole role, final PostCreationRequest postCreationReq) {
+    public Post createPost(final BoardType boardType, final BoardRole role, final PostCreationRequest postCreationReq) {
         final Post newPost = Post.of(boardType, role, postCreationReq)
                 .orElseThrow(() -> new CustomException(FAIL_CREATION_POST_CODE));
 
@@ -193,14 +204,14 @@ public class BoardService {
     }
 
     // 게시글 수정
-    public Post updatePost(final BoardType boardType, final MemberRole role, final Long postNo, final PostEditRequest postEditRequest) {
+    public Post updatePost(final BoardType boardType, final BoardRole role, final Long postNo, final PostEditRequest postEditRequest) {
         final Post editPost = findPost(boardType, role, postNo);
         editPost.update(postEditRequest);
         return editPost;
     }
 
     // 게시글 삭제
-    public void deletePost(final BoardType boardType, final MemberRole role, final Long postNo) {
+    public void deletePost(final BoardType boardType, final BoardRole role, final Long postNo) {
         final Post deletionPost = findPost(boardType, role, postNo);
 
         // 삭제 시 oneToMany children db 삭제되는지 확인 용도
@@ -211,7 +222,7 @@ public class BoardService {
 
         // 서브 자식이 있다면, 제목 앞에 [원글이 삭제된 답글]을 붙이게 한다.
         for (Post childPost : deletionPost.getChildrenList()) {
-            childPost.setPostContent("[원글이 삭제된 답글] " + childPost.getPostContent());
+            childPost.setPostTitle("[원글이 삭제된 답글] " + childPost.getPostContent());
         }
     }
 }
