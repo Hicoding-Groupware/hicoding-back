@@ -19,6 +19,7 @@ public class DetailCourseLectureResponse {
     private final String teacherMemberName;
     private final String staffMemberName;
     private final String staffMemberEmail;
+    private final String staffMemberPhone;
     private final DayStatusType dayStatus;
     private final TimeStatusType timeStatus;
     private final int curCnt;
@@ -27,6 +28,7 @@ public class DetailCourseLectureResponse {
     private final String lecName;
     private final String textbook;
     private final String techStack;
+    private final String cosNotice;
     private final LocalDate cosSdt;
     private final LocalDate cosEdt;
 
@@ -38,6 +40,7 @@ public class DetailCourseLectureResponse {
                         course.getTeacher().getMemberName(),
                         course.getStaff().getMemberName(),
                         course.getStaff().getMemberEmail(),
+                        course.getStaff().getMemberPhone(),
                         course.getDayStatus(),
                         course.getTimeStatus(),
                         course.getCurCnt(),
@@ -46,6 +49,7 @@ public class DetailCourseLectureResponse {
                         course.getLecCode().getLecName(),
                         course.getLecCode().getTextbook(),
                         course.getLecCode().getTechStack(),
+                        course.getCosNotice(),
                         course.getCosSdt(),
                         course.getCosEdt()
                 );
