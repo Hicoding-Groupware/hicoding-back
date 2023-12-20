@@ -94,7 +94,7 @@ public class CourseService {
                 .orElseThrow(()->new BadRequestException(ExceptionCode.NOT_FOUND_LEC_CODE));
         Member teacher = memberRepository.findById(courseRequest.getTeacher())
                 .orElseThrow(()->new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER_CODE));
-        Member staff = memberRepository.findById(courseRequest.getTeacher())
+        Member staff = memberRepository.findById(courseRequest.getStaff())
                 .orElseThrow(()->new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER_CODE));
         Classroom  classroom = classroomRepository.findById(courseRequest.getRoomCode())
                 .orElseThrow(()->new BadRequestException(ExceptionCode.NOT_FOUND_ROOM_CODE));
@@ -127,7 +127,7 @@ public class CourseService {
                 .orElseThrow(()->new BadRequestException(ExceptionCode.NOT_FOUND_LEC_CODE));
         Member teacher = memberRepository.findById(courseRequest.getTeacher())
                 .orElseThrow(()->new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER_CODE));
-        Member staff = memberRepository.findById(courseRequest.getTeacher())
+        Member staff = memberRepository.findById(courseRequest.getStaff())
                 .orElseThrow(()->new BadRequestException(ExceptionCode.NOT_FOUND_MEMBER_CODE));
         Classroom  classroom = classroomRepository.findById(courseRequest.getRoomCode())
                 .orElseThrow(()->new BadRequestException(ExceptionCode.NOT_FOUND_ROOM_CODE));
