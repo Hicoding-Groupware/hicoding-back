@@ -119,19 +119,28 @@ public class StudentService {
 
 
     /* 4. 일별 출석 조회 */
+    private LocalDate adjustToPreviousWeekend(LocalDate date) {
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+        int daysToSubtract = dayOfWeek == DayOfWeek.SUNDAY ? 1 : 2 + dayOfWeek.getValue();
+        return date.minusDays(daysToSubtract);
+    }
+
     @Transactional
     public List<DailyAttendanceResponse> getAttendanceForDay(Long cosCode, LocalDate atdDate, Long atdCode) {
         Course course = courseRepository.findById(cosCode)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_COS_CODE));
 
-        if(!isDateValidForDayStatus(atdDate, course.getDayStatus())) {
-            throw new InvalidDateException(INVALID_DATE_FOR_COURSE);
+        final LocalDate adjustedAtdDate;
+        if (!isDateValidForDayStatus(atdDate, course.getDayStatus())) {
+            adjustedAtdDate = adjustToPreviousWeekend(atdDate);
+        } else {
+            adjustedAtdDate = atdDate;
         }
 
-        List<Student> students = studentRepository.findStudentsBySignupStatus(cosCode, atdDate);
+        List<Student> students = studentRepository.findStudentsBySignupStatus(cosCode, adjustedAtdDate);
 
         return students.stream()
-                .map(student -> DailyAttendanceResponse.from(student, atdDate))
+                .map(student -> DailyAttendanceResponse.from(student, adjustedAtdDate))
                 .collect(Collectors.toList());
     }
 
