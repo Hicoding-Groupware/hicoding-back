@@ -50,12 +50,12 @@ public class AttendanceService {
         List<Long> savedAttendanceIds = new ArrayList<>();
 
         for (AttendanceRegistRequest registAttendance : registAttendances) {
-            validateAttendanceRequest(registAttendance); // 출석 등록 유효성 검증
+            validateAttendanceRequest(registAttendance);
 
             Student student = getStudent(registAttendance.getStdCode());
             Course cosCode = getCourse(registAttendance.getCosCode());
 
-            Attendance newAttendance = Attendance.of( // final?
+            Attendance newAttendance = Attendance.of(
                     student,
                     registAttendance.getStatus(),
                     cosCode
