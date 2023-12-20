@@ -9,7 +9,6 @@
 > Hicoding 그룹웨어를 사용하여 학원내 업무효율을 높일수 있습니다.
 ---
 <br>
-
 <div align="center">
     <table>
         <tr align="center">
@@ -164,19 +163,51 @@
 </div>  
 
 ## :link: ERD 설계
-* [학원ERD](https://github.com/didrlgus/springboot-shoppingmall/issues/1)
-
+<img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/138549261/93986b16-37f5-4370-9c48-1dae65e0d296" />
 
 # 화면
 
-- #### 메인화면
+- #### 🔓로그인
 
- <p align="center"><img src="" width="1000" height="800"/></p>
+ <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/138549261/e174fe9c-51bb-4f7d-a7c9-de8e91abd4ce" width="500" height="250"/></p>
+   - 로그인을 하지 않으면 다른 페이지로 이동할 수없다.<br/>
+  1️⃣로그인 : 전달받은 아이디와 비밀번호 를 입력시 메인페이지로 들어갈수 있다. 아이디 또는 비밀번호가 일치하지 않는 경우 toast warning 창을 띄운다.<br/>
+  2️⃣개인정보 입력 : 첫 로그인 회원일 경우 개인정보 입력 모달 창을 띄운다. 개인정보를 다 기입하지 않았을 경우에는 toast warning 창을 띄운다.  
 
 
+- #### 1.메인페이지
+  - 👷관리자 페이지
+    <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/138549261/136e6b92-46f0-4d5b-a96a-d16e62b4b8a5" width="500" height="250"/></p>
+  - 👩‍🏫선생님 페이지
+    <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/138549261/3c76ba8e-3b4b-4ccc-bdcc-c57c9c004297" width="500" height="250"/></p>
+  - 로그인 하자마자 바로 볼수있는 메인페이지 여러 기능들을 한눈에 볼수있도록 정리되어있다.
+  - 관리자와 선생님 메인페이지를 따로 지정해 소속부서별로 다른 메인페이지를 볼수 있다.
+ 
 
-- #### 1.
+- #### 2.마이페이지
+ - 👩‍🎓마이페이지
+    <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/138549261/b4bdca7b-f187-45a7-8dcd-f10cc592b2ca" width="500" height="250"/></p>
+  1️⃣ 개인정보 수정 : 개인정보 수정 버튼을 누르면 개인정보를 수정할 수 있는 모달창을 띄운다. 개인정보를 수정하지 않고 확인 버튼을 누를경우 toast warning 창을 띄운다.<br/>
+  2️⃣ 비밀번호 수정 : 비밀번호는 개인정보 수정과 달리 현재 비밀 번호를 입력받아 일치한 경우에만 수정 가능 하다. 또한 수정할 비밀번호가 현재 비밀 번호와 일치할 경우 toast warning 창이 뜬다. <br/>
+  3️⃣ 프로필 이미지 변경 : 프로필 이미지 우측하단에 카메라 버튼을 누르면 기본이미지 설정 사진등록 사진수정을 할 수 있다. <br/>
   
+- ####  직원관리
+
+  - #### 3-1.사원 생성
+ - 👩‍💼사원생성
+    <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/138549261/a3507ceb-805a-48e8-a4ab-51f0491453e2" width="500" height="250"/></p>
+  1️⃣ 
+  2️⃣ 
+  3️⃣ 
+
+   - #### 3-2.사원 생성
+ - 👩‍💼사원관리
+    <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/138549261/a3507ceb-805a-48e8-a4ab-51f0491453e2" width="500" height="250"/></p>
+  1️⃣ 
+  2️⃣ 
+  3️⃣ 
+ 
+  - 
 - ** 기능명 **
  <p align="left">
    <img src="" width="400" height="250"/>
