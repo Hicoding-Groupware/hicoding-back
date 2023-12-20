@@ -1,4 +1,4 @@
-![header](https://github.com/Hicoding-Groupware/hicoding-back/assets/138549261/0c49fd0a-fc57-4619-a922-8bc12dbfa6e8)
+<img src="https://capsule-render.vercel.app/api?type=waving&color=9370DB&height=200&section=header&text=Hook&fontSize=90&fontColor=FFFFFF" />
 
 # ✋ Hicoding
 
@@ -7,36 +7,139 @@
 </div>
 
 > Hicoding 그룹웨어를 사용하여 학원내 업무효율을 높일수 있습니다.
-
 ---
 <br>
 
 <div align="center">
-    name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    name &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    name &nbsp;&nbsp;&nbsp;
-    <br>
-    <br>
-    <img src="width="130" height="130"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="" width="130" height="130"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="" width="130" height="130"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="" width="130" height="130"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  </a>
+    <table>
+        <tr align="center">
+            <td>김동한</td>
+            <td>남궁혁</td>
+            <td>박미림</td>
+            <td>박민서</td>
+            <td>오형민</td>
+        </tr>
+        <tr align="center">
+            <td><img src=""width="130" height="130"/></td>
+            <td><img src=""width="130" height="130"/></td>
+            <td><img src=""width="130" height="130"/></td>
+            <td><img src=""width="130" height="130"/></td>
+            <td><img src=""width="130" height="130"/></td>
+        </tr>
+        <tr align="center">
+            <td>강의·과정 관리/일정조회</td>
+            <td>사원생성/게시판</td>
+            <td>내강의/출결관리</td>
+            <td>로그인/메인페이지/마이페이지</td>
+            <td>학원생 관리/쪽지</td>
+        </tr>
+    </table>
 </div>
 <br><br>
 
 ## :clipboard: 개요
-- 
-      <br>
 - 개발기간 : ~ 12.21(목)
-- 개발인원 : FullStack 5명     
+<div align=center>
+<table>
+    <tr>
+        <th colspan="12">프로젝트 진행 과정</th>
+    </tr>
+    <tr>
+        <td colspan="4" rowspan="2">프로젝트 내용</td>
+        <td colspan="2" rowspan="2">담당자</td>
+        <td colspan="3">11월</td>
+        <td colspan="3">12월</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+    </tr>
+    <tr>
+        <th colspan="12" fontWeight="bolder">사전 조사 및 설계 (11월 8일 ~ 11월 17일)</th>
+    </tr>
+    <tr>
+      <td colspan="4">프로젝트 주제 및 기능 분배</td>
+      <td colspan="2" rowspan="3">팀원 전체</td>
+      <td>·</td>
+        <td></td>
+        <td></td>
+        <td colspan="3" rowspan="3"></td>
+    </tr>
+    <tr>
+      <td colspan="4">프로토타이핑/ 업무 흐름도/ ERD</td>
+      <td>·</td>
+        <td>·</td>
+        <td></td>
+    </tr>
+    <tr>
+      <td colspan="4">REST API 설계/ DB 구축 / SPRINGBOOT / REACT 환경 가동</td
+        <td></td>
+        <td></td>
+        <td>·</td>
+    </tr>
+    <tr>
+        <th colspan="12" fontWeight="bolder">개발 및 단위 테스트 (11월 20일 ~ 12월 15일)</th>
+    </tr>
+    <tr>
+      <td colspan="4">SPRINGBOOT 코드 구현 POSTMAN 테스트</td>
+      <td colspan="2" rowspan="2">팀원 전체</td>
+        <td colspan="2"></td>
+        <td>·</td>
+        <td>·</td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td colspan="4">REACT 코드 구현</td>
+        <td colspan="3"></td>
+        <td></td>
+        <td>·</td>
+        <td>·</td>
+    </tr>
+    <tr>
+        <th colspan="12" fontWeight="bolder">통합 테스트 및 프로젝트 발표 준비 (12월 18일 ~ 12월 21일)</th>
+    </tr>
+    <tr>
+      <td colspan="4">통합 테스트 및 피드백</td>
+      <td colspan="2" rowspan="3">팀원 전체</td>
+        <td colspan="3" rowspan="3"></td>
+        <td></td>
+        <td></td>
+        <td>·</td>
+    </tr>
+    <tr>
+      <td colspan="4">프로젝트 관련 문서 작성</td>
+        <td></td>
+        <td></td>
+        <td>·</td>
+    </tr>
+    <tr>
+      <td colspan="4">PPT 준비 및 발표 리허설</td>
+        <td></td>
+        <td></td>
+        <td>·</td>
+    </tr>
+</table>  
+</div>
+ 
 
 ## :clipboard: 개발환경
-* IntelliJ
-* MySql
-* Spring
-* GitHub
+- ❤️software Tool : intellij / VSCode / Figma / Notion / Slack
+- 🧡TEST : Post Man
+- 💛DBMS : MySQL
+- 💚Server : Apache TOMCAT / Amazon Web Service / Docker
+- 🩵Language : JAVA 11 / javaScript / HTML / CSS
+- 💙형상관리 : Gti / GitHub
+- 💜Database : MySQL
+- 🩷화면구현 : Figma
+- 🤎커뮤니티 : Notion / Slack
+- 🖤API : FullCalender / Date picker / Daum address api
+- 🩶프레임워크 : SpringBoot / React
+
 <br>
 <div align=left><h2>📚 FRONT-END</h2></div>
 
@@ -59,13 +162,6 @@
   <img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> 
   <br>
 </div>  
-
-## 주요 기능
-- 
-- 
-- 로그인, 회원가입
-- 
-- 
 
 ## :link: ERD 설계
 * [학원ERD](https://github.com/didrlgus/springboot-shoppingmall/issues/1)
