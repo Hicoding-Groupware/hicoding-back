@@ -75,8 +75,6 @@ public class AttendanceController {
         LocalDate firstDayOfMonth = atdDate.withDayOfMonth(1);
         LocalDate lastDayOfMonth = atdDate.withDayOfMonth(atdDate.lengthOfMonth());
 
-        log.info("Fetching attendance data for course: {}, month: {}", cosCode, atdDate.getMonth());
-
         List<MonthAttendanceResponse> monthAttendanceResponses = attendanceService.getAttendanceForMonth(cosCode, firstDayOfMonth, lastDayOfMonth, atdDate);
 
         return ResponseEntity.ok(monthAttendanceResponses);
