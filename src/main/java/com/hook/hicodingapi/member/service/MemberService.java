@@ -355,32 +355,6 @@ public class MemberService {
 
 
 
-//    public void memberUpdate(MemberUpdateRequest memberUpdateRequest) {
-//
-//        Optional<Member> optionalMember = memberRepository.findByMemberId(memberUpdateRequest.getMemberId());
-//
-//
-//        if (optionalMember.isPresent()) {
-//            Member member = optionalMember.get();
-//             /* 업데이트 할때 비밀번호 암호화해줌 */
-//            member.update(
-//                    passwordEncoder.encode(memberUpdateRequest.getMemberPwd()),
-//                    memberUpdateRequest.getPostNo(),
-//                    memberUpdateRequest.getAddress(),
-//                    memberUpdateRequest.getDetailAddress(),
-//                    memberUpdateRequest.getMemberEmail(),
-//                    memberUpdateRequest.getMemberPhone(),
-//                    memberUpdateRequest.getMemberBirth(),
-//                    memberUpdateRequest.getMemberGender(),
-//                    "Y"
-//            );
-//        } else {
-//
-//            throw new NotFoundException(NOT_FOUND_MEMBER_ID);
-//
-//
-//        }
-//    }
 
 
 
