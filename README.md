@@ -23,7 +23,7 @@
             <td><img src=""width="130" height="130"/></td>
             <td><img src=""width="130" height="130"/></td>
             <td><img src=""width="130" height="130"/></td>
-            <td><img src=""width="130" height="130"/></td>
+            <td><img src="https://avatars.githubusercontent.com/u/138549251?v=4"width="130" height="130"/></td>
         </tr>
         <tr align="center">
             <td>강의·과정 관리/일정조회</td>
