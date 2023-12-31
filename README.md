@@ -16,7 +16,7 @@
             <td>남궁혁</td>
             <td>박미림</td>
             <td>박민서</td>
-            <td>[오형민](https://github.com/hyungmino)</td>
+            <td><a href="https://github.com/hyungmino" target="_blank">오형민</a></td>
         </tr>
         <tr align="center">
             <td><img src=""width="130" height="130"/></td>
