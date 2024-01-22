@@ -20,7 +20,7 @@
         </tr>
         <tr align="center">
             <td><img src=""width="130" height="130"/></td>
-            <td><img src=""width="130" height="130"/></td>
+            <td><img src="https://github.com/Hicoding-Groupware/hicoding-front/assets/63230518/32bf931c-93e2-4484-884d-8d55d7aeac86"width="130" height="130"/></td>
             <td><img src=""width="130" height="130"/></td>
             <td><img src=""width="130" height="130"/></td>
             <td><img src="https://avatars.githubusercontent.com/u/138549251?v=4"width="130" height="130"/></td>
@@ -193,19 +193,29 @@
   
 - ####  3. 직원관리
 
-  - #### 3-1.사원 생성
- - 👩‍💼사원생성
-    <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/138549261/a3507ceb-805a-48e8-a4ab-51f0491453e2" width="500" height="250"/></p>
-  1️⃣ 
-  2️⃣ 
-  3️⃣ 
+  - #### 3-1.사원 생성 알고리즘
+ - 👩‍💼사원생성 알고리즘
+    <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-front/assets/63230518/6beaf7db-562b-4ea3-bae1-1fabae4235a5" width="500" height="250"/></p>
+ 
+   - #### 3-2.사원 상세 조회
+ - 👩‍💼사원 상세 조회
+    <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-front/assets/63230518/2d731a0b-ee5a-4a20-864c-9284be55ff05" width="500" height="250"/></p>
 
-   - #### 3-2.사원 관리
- - 👩‍💼사원관리
-    <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/138549261/30d5caf6-7d8f-478f-8712-b3200c222334" width="500" height="250"/></p>
-  1️⃣ 
-  2️⃣ 
-  3️⃣ 
+  - #### 3-3.게시판 권한, 페이징 처리, 조회수와 좋아요
+ - 👩‍💼게시판 권한, 페이징 처리, 조회수와 좋아요
+    <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-front/assets/63230518/ebc8b582-6062-4de5-b9ba-83b31bdb2612" width="500" height="250"/></p>
+  
+  - #### 3-4.조회, 작성, 삭제 
+ - 👩‍💼조회, 작성, 삭제 
+    <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-front/assets/63230518/6382a9e1-5cf7-4030-b0a4-c95e9f4159a0" width="500" height="250"/></p>
+
+  - #### 3-5.답글, 수정, 삭제, 목록, 좋아요
+ - 👩‍💼답글, 수정, 삭제, 목록, 좋아요
+    <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-front/assets/63230518/c06e0334-56e5-4d15-921c-bea68b81205a" width="500" height="250"/></p>
+    
+  - #### 3-6.댓글, 대댓글, 수정, 삭제
+ - 👩‍💼댓글, 대댓글, 수정, 삭제
+    <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-front/assets/63230518/0709468c-67a0-4dfd-b9e6-05a7f671c9d2" width="500" height="250"/></p>
 
   - ####  4. 원생관리
 
