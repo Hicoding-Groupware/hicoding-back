@@ -291,6 +291,8 @@
    - #### 7-2.예정 강의
  - 👩‍💼예정 강의
     <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/138549261/38ba0134-c252-4674-afd5-5547a72f5550" width="500" height="250"/></p>
+    <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/134246945/90034008-8f46-472e-8f38-b0b5c28d51d7" width="500" height="250"/</p>
+
   1️⃣ 지난 강의 : 오늘 기준으로 기간이 지난 과정을 조회한다.
 
    - #### 7-3.지난 강의
