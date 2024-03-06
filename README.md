@@ -308,9 +308,9 @@
  - <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/134246945/d60b7877-10c3-4a8c-810c-edebca23ca03" width="500" height="250"/></p>
   - <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/134246945/be21e9b2-0723-4c5f-bfa4-64094f751cde" width="500" height="250"/></p>
    1️⃣ 일별 출석 관리 : 해당 과정의 일일 출석 관리를 한다. 출석에 필요한 간단한 학생의 정보와 함께 오늘 날짜로 조회되며 출석 상태 미입력 시 저장하기 버튼을 통해 출석, 결석, 지각을 리스트로 등록할 수 있다. 
-  - <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/134246945/a4a0a5b1-a038-4baa-9dda-d01604d30901" width="500" height="250"/></p>
+  - <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/134246945/a4a0a5b1-a038-4baa-9dda-d01604d30901" width="250" height="250"/></p>
    2️⃣ 출석 상태가 이미 입력되어있을 시 다시 저장하기 버튼을 통해 출석, 결석, 지각, 조퇴를 일부 수정하여 리스트로 등록할 수 있다. 
-    - <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/134246945/e459814f-f8e0-421f-9353-c1851556f70c" width="500" height="250"/></p>
+    - <p align="center"><img src="https://github.com/Hicoding-Groupware/hicoding-back/assets/134246945/e459814f-f8e0-421f-9353-c1851556f70c" width="250" height="250"/></p>
    3️⃣ 달력과 버튼을 통해 다른 날 조회가 가능하며, 미래 날짜로 미리 이동할 수 없다. 
    4️⃣ 평일반인 경우에는 주말 조회, 등록은 불가능하고 주말반인 경우 평일 조회, 등록이 불가능하다.
    
